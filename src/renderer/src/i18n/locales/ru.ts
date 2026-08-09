@@ -16,6 +16,7 @@ export default createLocale({
   sessions: {
     newSession: 'Новая сессия',
     renameSession: 'Переименовать сессию',
+    deleteAll: 'Удалить все сессии',
     emptyTitle: 'Сессий пока нет',
   },
   sidebar: { showSidebar: 'Показать боковую панель', hideSidebar: 'Скрыть боковую панель' },

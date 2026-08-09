@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-BaseApp is a secure, reusable Electron desktop starter at version 1.0.0. It is intentionally domain-neutral: there is no transcription, translation, audio capture, or provider-specific code. The retained application shell includes generic local session workspaces, compact mode, settings, localization, logging, privacy-bounded startup telemetry, tray behavior, durable window state, packaging, and GitHub-based updates.
+BaseApp is a secure, reusable Electron desktop starter at version 1.0.2. It is intentionally domain-neutral: there is no transcription, translation, audio capture, or provider-specific code. The retained application shell includes generic local session workspaces, compact mode, settings, localization, logging, privacy-bounded startup telemetry, tray behavior, durable window state, packaging, and GitHub-based updates.
 
 The project is designed to be copied or extended into other desktop products. Domain features should build on the existing process boundaries instead of weakening them.
 
@@ -65,8 +65,8 @@ BaseApp/
 │           ├── services/          # Renderer logger and settings persistence queue
 │           ├── store/             # Redux store and single app slice
 │           ├── types/             # Renderer global declarations
-│           └── utils/             # Date and session-summary helpers
-├── tests/                          # 14 Vitest files, currently 109 tests
+│           └── utils/             # Date, session-summary, and sidebar-sizing helpers
+├── tests/                          # 15 Vitest files, currently 114 tests
 ├── .node-version                  # Shared Node.js major for local tools
 ├── biome.json                     # Explicit lint policy; formatting stays with Prettier
 ├── SECURITY.md                    # Vulnerability-reporting policy
@@ -182,7 +182,7 @@ A session contains:
 - creation and update timestamps
 - a generic `Record<string, unknown>` data object
 
-The sidebar supports create, select, rename, and delete. There must always be at least one session; deleting the last session creates and returns a replacement. Session JSON access and settings writes are serialized to prevent concurrent updates from overwriting one another. Durable JSON documents are written to a temporary sibling and atomically renamed so a partial write cannot replace the last valid document.
+The sidebar supports create, select, rename, delete, and delete-all actions. It is pointer-resizable from 100 pixels while reserving at least 160 pixels for the workspace, shrinks to fit narrow windows, and persists its width in renderer-local storage. There must always be at least one session; deleting the last session or deleting all sessions creates and returns a replacement. Delete actions are disabled when the only remaining session is already empty. Session JSON access and settings writes are serialized to prevent concurrent updates from overwriting one another. Durable JSON documents are written to a temporary sibling and atomically renamed so a partial write cannot replace the last valid document.
 
 When adding downstream domain data, update `SessionData`, storage validation, IPC contracts, Redux state/actions, workspace UI, and tests together. Do not restore transcription-specific field names or services.
 
@@ -192,6 +192,7 @@ When adding downstream domain data, update `SessionData`, storage validation, IP
 - Top-level pages are `home` and `settings`.
 - Settings sections are general, display, updates, telemetry, logging, and about.
 - Compact mode hides the session sidebar and is intentionally retained.
+- Session timestamps use a four-digit year and honor the selected 12- or 24-hour clock.
 - Navigating away from the home workspace exits compact mode.
 - Settings writes pass through `SettingsPersistenceQueue` so rapid changes persist in order.
 - Theme modes are system, light, and dark.
@@ -282,12 +283,13 @@ When adding a UI key:
 
 ## Testing
 
-Vitest runs in the Node environment; `jsdom` is intentionally not installed. The current suite has 14 files and 109 tests:
+Vitest runs in the Node environment; `jsdom` is intentionally not installed. The current suite has 15 files and 114 tests:
 
 - Redux shell, session, compact-mode, and updater state
 - attended and unattended updater behavior
 - GitHub release validation, caching, architecture selection, download integrity, and repository URL restrictions
 - date/session formatters
+- session sidebar sizing limits
 - IPC channel naming and required surface
 - 10-locale resolution, explicit resource completeness, interpolation safety, and renderer key usage
 - logger behavior

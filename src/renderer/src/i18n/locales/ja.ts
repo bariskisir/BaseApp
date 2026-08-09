@@ -16,6 +16,7 @@ export default createLocale({
   sessions: {
     newSession: '新しいセッション',
     renameSession: 'セッション名を変更',
+    deleteAll: 'すべてのセッションを削除',
     emptyTitle: 'セッションはまだありません',
   },
   sidebar: { showSidebar: 'サイドバーを表示', hideSidebar: 'サイドバーを非表示' },

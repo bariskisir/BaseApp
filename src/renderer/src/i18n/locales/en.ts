@@ -18,6 +18,7 @@ export default createLocale({
   sessions: {
     newSession: 'New Session',
     renameSession: 'Rename session',
+    deleteAll: 'Delete all sessions',
     emptyTitle: 'No sessions yet',
   },
   sidebar: { showSidebar: 'Show sidebar', hideSidebar: 'Hide sidebar' },

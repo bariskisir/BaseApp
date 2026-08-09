@@ -1,10 +1,12 @@
-/* Styles the sessions sidebar with collapsible state. */
+/* Styles the sessions sidebar with collapsible and pointer-resizable states. */
 
 .container {
-  width: 190px;
+  position: relative;
+  width: attr(data-sidebar-width px, 266px);
   height: 100%;
+  min-width: 100px;
   min-height: 0;
-  flex: 0 0 190px;
+  flex: 0 0 attr(data-sidebar-width px, 266px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -18,8 +20,45 @@
 
 .collapsed {
   width: 0;
+  min-width: 0;
   flex-basis: 0;
   border-right-color: transparent;
+}
+
+:global(body.sessions-sidebar-resizing) {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.resizing {
+  transition: none;
+}
+
+.resizeHandle {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: -2px;
+  bottom: 0;
+  width: 5px;
+  cursor: col-resize;
+  touch-action: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 2px;
+    bottom: 0;
+    width: 1px;
+    background: transparent;
+    transition: background-color 120ms ease;
+  }
+
+  &:hover::before,
+  .container.resizing &::before {
+    background: var(--color-primary);
+  }
 }
 
 .header {
@@ -149,16 +188,4 @@
 
 .renameInput {
   margin-top: 8px;
-}
-
-@media (max-width: 980px) {
-  .container {
-    width: 205px;
-    flex-basis: 205px;
-  }
-
-  .container.collapsed {
-    width: 0;
-    flex-basis: 0;
-  }
 }

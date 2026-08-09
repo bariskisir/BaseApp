@@ -28,9 +28,10 @@
   - Window size, position, maximized state, and fullscreen state are restored only when they still fit a connected display.
 
 - **Generic session workspaces**
-  - The left session panel supports creating, selecting, renaming, and deleting local workspaces.
+  - The left session panel supports creating, selecting, renaming, deleting, and deleting all local workspaces.
+  - The panel can be resized within safe sidebar/workspace limits and remembers its width across restarts.
   - Each session provides a generic data object that downstream applications can extend with their own domain model.
-  - The final session cannot leave the application without a workspace; deleting it creates a clean replacement.
+  - Delete actions are disabled for the final empty session; other final-session and bulk deletions create a clean replacement.
   - Session and settings writes are serialized to prevent rapid operations from overwriting each other.
 
 - **Compact mode**
@@ -39,7 +40,7 @@
 
 - **General settings**
   - Interface localization for English, Turkish, German, French, Portuguese, Chinese, Spanish, Russian, Japanese, and Korean.
-  - Configurable 12-hour or 24-hour session timestamp display.
+  - Configurable 12-hour or 24-hour session timestamps with four-digit years.
 
 - **Display settings**
   - System, light, and dark themes with synchronized native window chrome.

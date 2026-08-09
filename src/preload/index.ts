@@ -27,6 +27,8 @@ const api: AppApi = {
   renameSession: (id, title) => ipcRenderer.invoke(IpcChannel.SessionRename, { id, title }),
   /** Deletes one local session. */
   deleteSession: (id) => ipcRenderer.invoke(IpcChannel.SessionDelete, id),
+  /** Deletes every local session and creates a fresh replacement. */
+  deleteAllSessions: () => ipcRenderer.invoke(IpcChannel.SessionDeleteAll),
   /** Changes the native always-on-top window state. */
   setAlwaysOnTop: (enabled) => ipcRenderer.invoke(IpcChannel.WindowAlwaysOnTop, enabled),
   /** Minimizes the main application window. */

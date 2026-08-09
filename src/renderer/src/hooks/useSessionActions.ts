@@ -13,6 +13,7 @@ import {
   replaceCurrentSession,
   replaceSessionSummary,
   setCurrentSession,
+  setSessions,
 } from '@renderer/store/appSlice'
 import { toSessionSummary } from '@renderer/utils/formatters'
 
@@ -24,6 +25,8 @@ interface SessionActions {
   createSession(): Promise<void>
   /** Deletes one session while retaining a usable workspace. */
   deleteSession(id: string): Promise<void>
+  /** Deletes every session while retaining a fresh usable workspace. */
+  deleteAllSessions(): Promise<void>
   /** Loads and selects one complete session. */
   openSession(id: string): Promise<void>
   /** Renames a session and reports whether persistence succeeded. */
@@ -107,5 +110,18 @@ export const useSessionActions = (): SessionActions => {
     [currentSessionId, dispatch, sessions, message, t],
   )
 
-  return { createSession, deleteSession, openSession, renameSession }
+  /** Deletes every session and selects the fresh replacement returned by storage. */
+  const deleteAllSessions = useCallback(async (): Promise<void> => {
+    const revision = ++selectionRevision
+    try {
+      const replacement = await window.app.deleteAllSessions()
+      dispatch(setSessions([toSessionSummary(replacement)]))
+      if (revision === selectionRevision) dispatch(setCurrentSession(replacement))
+    } catch (error) {
+      logger.error('Sessions could not be deleted.', error)
+      void message.error(t('errors.generic'))
+    }
+  }, [dispatch, message, t])
+
+  return { createSession, deleteAllSessions, deleteSession, openSession, renameSession }
 }

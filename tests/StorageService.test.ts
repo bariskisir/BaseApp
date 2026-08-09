@@ -118,6 +118,19 @@ describe('StorageService', () => {
     ])
   })
 
+  it('deletes every session and creates one fresh replacement', async () => {
+    const first = await service.createSession('First')
+    const second = await service.createSession('Second')
+    const replacement = await service.deleteAllSessions()
+    const sessions = await service.listSessions()
+
+    expect(sessions).toHaveLength(1)
+    expect(sessions[0]?.id).toBe(replacement.id)
+    expect(replacement.id).not.toBe(first.id)
+    expect(replacement.id).not.toBe(second.id)
+    expect(replacement.data).toEqual({})
+  })
+
   it('returns false for a valid unknown session identifier', async () => {
     const result = await service.deleteSession('550e8400-e29b-41d4-a716-446655440000')
     expect(result).toEqual({ deleted: false })

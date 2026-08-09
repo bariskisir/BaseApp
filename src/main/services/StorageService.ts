@@ -165,6 +165,23 @@ export default class StorageService {
     return replacement ? { deleted: true, replacement } : { deleted: true }
   }
 
+  /** Deletes every session and returns a fresh empty workspace as the replacement. */
+  public async deleteAllSessions(): Promise<SessionDocument> {
+    return this.withFileLock(this.sessionsPath, async () => {
+      const sessions = await this.listSessions()
+      const replacement = await this.createSession()
+      for (const session of sessions) {
+        const filePath = this.sessionPath(session.id)
+        try {
+          await this.withFileLock(filePath, () => unlink(filePath))
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+        }
+      }
+      return replacement
+    })
+  }
+
   /** Reads one session while tolerating malformed history entries. */
   private async tryReadSession(filePath: string): Promise<SessionDocument | null> {
     try {

@@ -10,6 +10,7 @@ export enum IpcChannel {
   SessionCreate = 'session:create',
   SessionRename = 'session:rename',
   SessionDelete = 'session:delete',
+  SessionDeleteAll = 'session:delete-all',
   WindowAlwaysOnTop = 'window:always-on-top',
   WindowMinimize = 'window:minimize',
   WindowToggleMaximize = 'window:toggle-maximize',

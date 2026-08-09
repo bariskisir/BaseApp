@@ -132,6 +132,10 @@ export const registerIpc = (window: BrowserWindow, services: IpcServices): void 
     assertSender(event)
     return services.storage.deleteSession(sessionIdSchema.parse(input))
   })
+  ipcMain.handle(IpcChannel.SessionDeleteAll, async (event) => {
+    assertSender(event)
+    return services.storage.deleteAllSessions()
+  })
 
   ipcMain.handle(IpcChannel.WindowAlwaysOnTop, (event, enabled: unknown) => {
     assertSender(event)

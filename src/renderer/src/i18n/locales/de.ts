@@ -16,6 +16,7 @@ export default createLocale({
   sessions: {
     newSession: 'Neue Sitzung',
     renameSession: 'Sitzung umbenennen',
+    deleteAll: 'Alle Sitzungen löschen',
     emptyTitle: 'Noch keine Sitzungen',
   },
   sidebar: { showSidebar: 'Seitenleiste anzeigen', hideSidebar: 'Seitenleiste ausblenden' },

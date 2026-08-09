@@ -13,7 +13,12 @@ export default createLocale({
     retry: '重试',
   },
   nav: { sessions: '会话', settings: '设置' },
-  sessions: { newSession: '新建会话', renameSession: '重命名会话', emptyTitle: '暂无会话' },
+  sessions: {
+    newSession: '新建会话',
+    renameSession: '重命名会话',
+    deleteAll: '删除所有会话',
+    emptyTitle: '暂无会话',
+  },
   sidebar: { showSidebar: '显示侧边栏', hideSidebar: '隐藏侧边栏' },
   workspace: {
     title: '您的下一个应用从这里开始',

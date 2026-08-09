@@ -133,6 +133,8 @@ export interface AppApi {
   renameSession(id: string, title: string): Promise<SessionDocument>
   /** Deletes one session while preserving the last-workspace invariant. */
   deleteSession(id: string): Promise<DeleteSessionResult>
+  /** Deletes every session and returns a fresh empty workspace. */
+  deleteAllSessions(): Promise<SessionDocument>
   /** Changes the native always-on-top state. */
   setAlwaysOnTop(enabled: boolean): Promise<void>
   /** Minimizes the main application window. */

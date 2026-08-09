@@ -9,7 +9,7 @@ export interface LocaleResource {
   app: Record<'name' | 'tagline', string>
   common: Record<'cancel' | 'rename' | 'delete' | 'loading' | 'retry', string>
   nav: Record<'sessions' | 'settings', string>
-  sessions: Record<'newSession' | 'renameSession' | 'emptyTitle', string>
+  sessions: Record<'newSession' | 'renameSession' | 'deleteAll' | 'emptyTitle', string>
   sidebar: Record<'showSidebar' | 'hideSidebar', string>
   workspace: Record<
     | 'title'

@@ -30,6 +30,7 @@ describe('IpcChannel', () => {
     expect(channels).toContain('session:get')
     expect(channels).toContain('session:rename')
     expect(channels).toContain('session:delete')
+    expect(channels).toContain('session:delete-all')
   })
 
   it('includes desktop shell, logging, and update channels', () => {

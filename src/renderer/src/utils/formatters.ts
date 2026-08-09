@@ -4,12 +4,12 @@
 
 import type { SessionDocument, SessionSummary, TimeFormat } from '@shared/types'
 
-/** Formats a stored ISO date as DD.MM.YY with the preferred 12- or 24-hour clock. */
+/** Formats a stored ISO date as DD.MM.YYYY with the preferred 12- or 24-hour clock. */
 export const formatDate = (isoDate: string, timeFormat: TimeFormat): string => {
   const date = new Date(isoDate)
   const day = date.getDate().toString().padStart(2, '0')
   const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const year = String(date.getFullYear()).slice(2)
+  const year = String(date.getFullYear())
   const minutes = date.getMinutes().toString().padStart(2, '0')
   const localHours = date.getHours()
 

@@ -16,6 +16,7 @@ export default createLocale({
   sessions: {
     newSession: 'Yeni Oturum',
     renameSession: 'Oturumu yeniden adlandır',
+    deleteAll: 'Tüm oturumları sil',
     emptyTitle: 'Henüz oturum yok',
   },
   sidebar: { showSidebar: 'Kenar çubuğunu göster', hideSidebar: 'Kenar çubuğunu gizle' },

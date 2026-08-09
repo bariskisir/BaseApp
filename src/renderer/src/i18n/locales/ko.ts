@@ -16,6 +16,7 @@ export default createLocale({
   sessions: {
     newSession: '새 세션',
     renameSession: '세션 이름 바꾸기',
+    deleteAll: '모든 세션 삭제',
     emptyTitle: '아직 세션이 없습니다',
   },
   sidebar: { showSidebar: '사이드바 표시', hideSidebar: '사이드바 숨기기' },

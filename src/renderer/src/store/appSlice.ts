@@ -11,6 +11,7 @@ import {
   type SessionSummary,
   type UpdateStateEvent,
 } from '@shared/types'
+import { DEFAULT_SESSIONS_SIDEBAR_WIDTH } from '@renderer/utils/sidebarSizing'
 
 /** Top-level application pages. */
 export type AppPage = 'home' | 'settings'
@@ -30,6 +31,7 @@ export interface AppState {
   currentSession: SessionDocument | null
   update: UpdateStateEvent
   sessionsSidebarOpen: boolean
+  sessionsSidebarWidth: number
   compactMode: boolean
 }
 
@@ -45,6 +47,7 @@ const initialState: AppState = {
   currentSession: null,
   update: { state: 'idle' },
   sessionsSidebarOpen: true,
+  sessionsSidebarWidth: DEFAULT_SESSIONS_SIDEBAR_WIDTH,
   compactMode: false,
 }
 
@@ -119,6 +122,10 @@ const appSlice = createSlice({
     setSessionsSidebarOpen(state, action: PayloadAction<boolean>) {
       state.sessionsSidebarOpen = action.payload
     },
+    /** Stores the current session sidebar width for layout and local persistence. */
+    setSessionsSidebarWidth(state, action: PayloadAction<number>) {
+      state.sessionsSidebarWidth = action.payload
+    },
     /** Toggles the distraction-free generic workspace view. */
     setCompactMode(state, action: PayloadAction<boolean>) {
       state.compactMode = action.payload
@@ -140,6 +147,7 @@ export const {
   setSettingsSection,
   setCompactMode,
   setSessionsSidebarOpen,
+  setSessionsSidebarWidth,
   setUpdateState,
 } = appSlice.actions
 

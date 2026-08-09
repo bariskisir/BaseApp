@@ -16,6 +16,7 @@ import reducer, {
   setPage,
   setSessions,
   setSessionsSidebarOpen,
+  setSessionsSidebarWidth,
   setSettings,
   setSettingsSection,
   setUpdateState,
@@ -79,6 +80,7 @@ describe('appSlice', () => {
     expect(state.page).toBe('home')
     expect(state.settings).toEqual(DEFAULT_SETTINGS)
     expect(state.compactMode).toBe(false)
+    expect(state.sessionsSidebarWidth).toBe(266)
   })
 
   it('records bootstrap failure and clears it after successful hydration', () => {
@@ -172,10 +174,12 @@ describe('appSlice', () => {
       setUpdateState({ state: 'downloading', percent: 42, version: '2.0.0' }),
     )
     const hidden = reducer(updating, setSessionsSidebarOpen(false))
-    const compact = reducer(hidden, setCompactMode(true))
+    const resized = reducer(hidden, setSessionsSidebarWidth(320))
+    const compact = reducer(resized, setCompactMode(true))
 
     expect(compact.update.percent).toBe(42)
     expect(compact.sessionsSidebarOpen).toBe(false)
+    expect(compact.sessionsSidebarWidth).toBe(320)
     expect(compact.compactMode).toBe(true)
   })
 })
