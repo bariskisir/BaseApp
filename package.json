@@ -1,0 +1,133 @@
+{
+  "name": "baseapp",
+  "version": "1.0.0",
+  "description": "Reusable Electron desktop application starter",
+  "keywords": [
+    "electron",
+    "react",
+    "typescript",
+    "desktop",
+    "starter"
+  ],
+  "homepage": "https://github.com/bariskisir/BaseApp#readme",
+  "bugs": "https://github.com/bariskisir/BaseApp/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bariskisir/BaseApp.git"
+  },
+  "main": "./out/main/index.js",
+  "author": "bariskisir",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "start": "npm run build && electron .",
+    "build": "npm run typecheck && vite build",
+    "verify": "npm run lint && npm run test && npm run format:check && npm run build",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json",
+    "lint": "biome lint src tests vite.config.mts vitest.config.mts",
+    "format": "prettier --write \"src/**/*.{ts,tsx,scss,html}\" \"tests/**/*.{ts,tsx}\" \"*.{ts,mts}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,scss,html}\" \"tests/**/*.{ts,tsx}\" \"*.{ts,mts}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "npm run build && electron-builder --dir",
+    "package:win": "npm run build && electron-builder --win nsis --x64 --publish never && electron-builder --win nsis --arm64 --publish never",
+    "package:win:x64": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "package:win:arm64": "npm run build && electron-builder --win nsis --arm64 --publish never",
+    "package:mac": "npm run build && electron-builder --mac dmg --x64 --publish never && electron-builder --mac dmg --arm64 --publish never",
+    "package:mac:x64": "npm run build && electron-builder --mac dmg --x64 --publish never",
+    "package:mac:arm64": "npm run build && electron-builder --mac dmg --arm64 --publish never",
+    "package:linux": "npm run build && electron-builder --linux --x64 --publish never && electron-builder --linux --arm64 --publish never",
+    "package:linux:x64": "npm run build && electron-builder --linux --x64 --publish never",
+    "package:linux:arm64": "npm run build && electron-builder --linux --arm64 --publish never",
+    "release": "npm run package:win && npm run package:linux"
+  },
+  "dependencies": {
+    "electron-log": "5.4.4",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.7",
+    "@reduxjs/toolkit": "2.12.0",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "antd": "6.5.4",
+    "electron": "43.3.0",
+    "electron-builder": "26.15.3",
+    "i18next": "26.3.6",
+    "lucide-react": "1.31.0",
+    "prettier": "3.9.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-i18next": "17.0.11",
+    "react-redux": "9.3.0",
+    "sass": "1.102.0",
+    "typescript": "7.0.2",
+    "vite": "8.2.1",
+    "vite-plugin-electron": "1.1.1",
+    "vitest": "4.1.10"
+  },
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
+  "packageManager": "npm@11.12.1",
+  "build": {
+    "appId": "com.bariskisir.baseapp",
+    "productName": "BaseApp",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json",
+      "LICENSE"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "signExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "artifactName": "${name}-${version}-windows-${arch}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "differentialPackage": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility",
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
+    }
+  }
+}
