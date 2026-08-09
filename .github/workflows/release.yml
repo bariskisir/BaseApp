@@ -95,13 +95,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Windows artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: windows-builds
           path: release
 
       - name: Download Linux artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: linux-builds
           path: release
