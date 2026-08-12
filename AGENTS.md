@@ -34,24 +34,45 @@ BaseApp/
 │   ├── shared/                    # Serializable cross-process contracts
 │   │   ├── appInfo.ts             # Application identity and telemetry fallback configuration
 │   │   ├── IpcChannel.ts          # Approved IPC command and event names
-│   │   └── types.ts               # Settings, sessions, updater events, and AppApi
+│   │   ├── ipcContract.ts         # Request, response, and event payload types per channel
+│   │   ├── api.ts                 # Desktop platform, bootstrap payload, and AppApi
+│   │   ├── settings.ts            # Settings values, defaults, and partial updates
+│   │   ├── session.ts             # Session documents, summaries, and shared limits
+│   │   ├── updates.ts             # Updater lifecycle states
+│   │   ├── logging.ts             # Log levels and renderer log entries
+│   │   └── types.ts               # Barrel re-exporting the complete shared surface
 │   ├── main/
-│   │   ├── index.ts               # Application lifecycle and service composition
-│   │   ├── ipc.ts                 # Validated IPC handlers
+│   │   ├── index.ts               # Main-process entry point
+│   │   ├── Application.ts         # Application lifecycle and service composition
 │   │   ├── ApplicationPaths.ts    # Data, Logs, Runtime, and Session paths
-│   │   ├── settingsSchema.ts      # Complete and partial settings validation
+│   │   ├── settingsSchema.ts      # Complete, partial, and persisted settings validation
 │   │   ├── windowState.ts         # Durable window-bounds validation and fitting
+│   │   ├── titleBarOverlay.ts     # Native title-bar colors for each resolved theme
+│   │   ├── ipc/
+│   │   │   ├── index.ts           # Composition of every registered channel group
+│   │   │   ├── IpcRegistrar.ts    # Sender-checked, schema-validated registration
+│   │   │   ├── schemas.ts         # Zod schemas for accepted IPC payloads
+│   │   │   ├── appIpc.ts          # Bootstrap and settings persistence
+│   │   │   ├── sessionIpc.ts      # Generic session commands
+│   │   │   ├── windowIpc.ts       # Native window state and theme
+│   │   │   └── systemIpc.ts       # External URLs, logs, and updates
 │   │   ├── security/
+│   │   │   ├── ExternalUrlPolicy.ts
 │   │   │   └── RendererNavigationPolicy.ts
-│   │   ├── services/
-│   │   │   ├── AppUpdater.ts
-│   │   │   ├── GitHubReleaseClient.ts
-│   │   │   ├── LoggerService.ts
-│   │   │   ├── StorageService.ts
-│   │   │   ├── TrayService.ts
-│   │   │   └── WindowService.ts
-│   │   └── telemetry/
-│   │       └── telemetry.service.ts
+│   │   ├── storage/
+│   │   │   ├── atomicJson.ts      # Atomic JSON reads, writes, and cleanup
+│   │   │   ├── FileOperationQueue.ts
+│   │   │   ├── SettingsRepository.ts
+│   │   │   └── SessionRepository.ts
+│   │   └── services/
+│   │       ├── AppUpdater.ts
+│   │       ├── GitHubReleaseClient.ts
+│   │       ├── LoggerService.ts
+│   │       ├── StorageService.ts  # Facade over the storage repositories
+│   │       ├── TelemetryService.ts
+│   │       ├── TrayService.ts
+│   │       ├── WindowService.ts
+│   │       └── WindowStateStore.ts
 │   ├── preload/
 │   │   └── index.ts               # Typed contextBridge implementation
 │   └── renderer/
@@ -59,14 +80,14 @@ BaseApp/
 │       └── src/
 │           ├── components/        # Titlebar, navigation, window controls, sessions
 │           ├── context/           # Theme and Ant Design providers
-│           ├── hooks/             # Initialization and renderer action boundaries
+│           ├── hooks/             # Initialization, action boundaries, and UI helpers
 │           ├── i18n/              # Initialization and 10 locale resources
 │           ├── pages/             # Generic workspace and settings
 │           ├── services/          # Renderer logger and settings persistence queue
 │           ├── store/             # Redux store and single app slice
 │           ├── types/             # Renderer global declarations
-│           └── utils/             # Date, session-summary, and sidebar-sizing helpers
-├── tests/                          # 15 Vitest files, currently 114 tests
+│           └── utils/             # Class-name, date, and sidebar-sizing helpers
+├── tests/                          # 21 Vitest files, currently 148 tests
 ├── .node-version                  # Shared Node.js major for local tools
 ├── biome.json                     # Explicit lint policy; formatting stays with Prettier
 ├── SECURITY.md                    # Vulnerability-reporting policy
@@ -147,11 +168,12 @@ The renderer must not import Node.js or Electron APIs.
 ### IPC and Security
 
 - All channel names are enumerated in `src/shared/IpcChannel.ts` using `namespace:action`.
-- Request/response calls use `ipcRenderer.invoke` and `ipcMain.handle`.
+- `src/shared/ipcContract.ts` types the request, response, and event payload of every channel, and fails to compile when an enumerated channel has no contract entry.
+- Request/response calls use `ipcRenderer.invoke` and `ipcMain.handle`; the preload bridge and main handlers are typed from the same contract.
 - Main-to-renderer events cover updater state, native maximize state, and tray-requested settings navigation.
-- IPC inputs are validated with Zod or explicit primitive checks.
-- Every handler verifies both the active window's `webContents` and its main frame.
-- External navigation is limited to GitHub and the configured author origin.
+- Handlers are registered through `IpcRegistrar`, which verifies both the active window's `webContents` and its main frame before any handler runs, and parses untrusted payloads with the Zod schemas in `src/main/ipc/schemas.ts`. Register new channels through it instead of calling `ipcMain` directly.
+- Renderer messages that fail validation are dropped instead of crashing the main process.
+- External navigation is limited to GitHub and the configured author origin by `ExternalUrlPolicy`.
 - Renderer navigation accepts only the packaged renderer document or the exact Vite development origin.
 - Popups are denied, all renderer permission requests are denied, context isolation and sandboxing are enabled, and Node integration is disabled.
 
@@ -182,13 +204,18 @@ A session contains:
 - creation and update timestamps
 - a generic `Record<string, unknown>` data object
 
-The sidebar supports create, select, rename, delete, and delete-all actions. It is pointer-resizable from 100 pixels while reserving at least 160 pixels for the workspace, shrinks to fit narrow windows, and persists its width in renderer-local storage. There must always be at least one session; deleting the last session or deleting all sessions creates and returns a replacement. Delete actions are disabled when the only remaining session is already empty. Session JSON access and settings writes are serialized to prevent concurrent updates from overwriting one another. Durable JSON documents are written to a temporary sibling and atomically renamed so a partial write cannot replace the last valid document.
+The sidebar supports create, select, rename, delete, and delete-all actions. It is pointer-resizable from 100 pixels while reserving at least 160 pixels for the workspace, shrinks to fit narrow windows, and persists its width in renderer-local storage. There must always be at least one session; deleting the last session or deleting all sessions creates and returns a replacement. Delete actions are disabled when the only remaining session is already empty.
+
+`StorageService` is a facade over `SettingsRepository` and `SessionRepository` in `src/main/storage/`. Both serialize file access through `FileOperationQueue`, so concurrent updates to one document cannot overwrite one another, and both persist through `atomicJson`, which writes a temporary sibling and atomically renames it so a partial write cannot replace the last valid document. Reuse these primitives for new durable documents instead of calling `node:fs` directly.
 
 When adding downstream domain data, update `SessionData`, storage validation, IPC contracts, Redux state/actions, workspace UI, and tests together. Do not restore transcription-specific field names or services.
 
 ## Renderer State and UI
 
 - `appSlice.ts` is the single Redux slice.
+- Components read settings and commands from hooks (`useSettingsActions`, `useSessionActions`, `useDesktopActions`) instead of receiving them as props.
+- Failed renderer commands are reported through `useFailureReporter`, which logs the failure and shows one shared error notice.
+- Compose class names with `cx` from `utils/classNames.ts`, highlight buttons with `useAccentButtonProps`, and build settings controls with the `SettingRow` primitive.
 - Top-level pages are `home` and `settings`.
 - Settings sections are general, display, updates, telemetry, logging, and about.
 - Compact mode hides the session sidebar and is intentionally retained.
@@ -219,7 +246,7 @@ Fresh installations use these notable defaults:
 | Anonymous startup telemetry | Off |
 | Log level | Info |
 
-Linux disables tray UI behavior at the IPC boundary. A new setting requires synchronized changes to the shared type/defaults, Zod schemas and persisted parsing, UI controls, localization, relevant service application, and tests.
+Linux disables tray UI behavior at the IPC boundary. A new setting requires synchronized changes to the shared type in `src/shared/settings.ts`, its default, the field schema in `settingsSchema.ts`, UI controls, localization, relevant service application, and tests. Persisted parsing is derived from the field schema: `parsePersistedSettings` validates each stored field independently and falls back to its default, so an obsolete or corrupted value never discards the remaining settings.
 
 ## Updates
 
@@ -283,25 +310,31 @@ When adding a UI key:
 
 ## Testing
 
-Vitest runs in the Node environment; `jsdom` is intentionally not installed. The current suite has 15 files and 114 tests:
+Vitest runs in the Node environment; `jsdom` is intentionally not installed. The current suite has 21 files and 148 tests:
 
 - Redux shell, session, compact-mode, and updater state
 - attended and unattended updater behavior
 - GitHub release validation, caching, architecture selection, download integrity, and repository URL restrictions
-- date/session formatters
+- session timestamp formatting
 - session sidebar sizing limits
 - IPC channel naming and required surface
+- IPC sender rejection, payload validation, event delivery, and handler removal
+- external URL allow-list enforcement
 - 10-locale resolution, explicit resource completeness, interpolation safety, and renderer key usage
 - logger behavior
 - renderer navigation policy
 - serialized renderer settings persistence
 - persisted settings validation
 - generic session and settings storage
+- atomic JSON writes and interrupted-write cleanup
+- per-key serialization of durable file operations
+- shared platform and session-summary helpers
+- renderer class-name composition
 - privacy-bounded telemetry
 - tray lifecycle and menu behavior
 - durable window-state restoration
 
-Use isolated temporary directories or explicit filesystem mocks. Tests must not depend on real AppData, live GitHub releases, or telemetry network access. When modifying currently uncovered boundaries such as `GitHubReleaseClient`, complete IPC handler behavior, preload wiring, or `WindowService`, add focused tests with injected dependencies or Electron mocks.
+Use isolated temporary directories or explicit filesystem mocks. Tests must not depend on real AppData, live GitHub releases, or telemetry network access. When modifying currently uncovered boundaries such as `WindowService`, `WindowStateStore`, preload wiring, or the individual IPC handler modules, add focused tests with injected dependencies or Electron mocks.
 
 Before release, run:
 

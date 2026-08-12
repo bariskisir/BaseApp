@@ -9,7 +9,7 @@ import { APP_AUTHOR, APP_AUTHOR_URL, APP_REPO, APP_REPO_URL } from '@shared/appI
 import logoUrl from '../../../../../../build/icon.svg'
 import { useDesktopActions } from '@renderer/hooks/useDesktopActions'
 import { useAppSelector } from '@renderer/store'
-import SettingLabel from '../components/SettingLabel'
+import SettingRow from '../components/SettingRow'
 import styles from '../SettingsPage.module.scss'
 
 /** Displays reusable application metadata and project links. */
@@ -27,24 +27,22 @@ const AboutSettingsSection = (): React.JSX.Element => {
         <Tag>v{version}</Tag>
       </div>
       <section className={styles.settingGroup}>
-        <div className={styles.settingRow}>
-          <SettingLabel title={t('settings.author')} description={APP_AUTHOR} />
+        <SettingRow title={t('settings.author')} description={APP_AUTHOR}>
           <Button
             type="text"
             aria-label={`${t('settings.author')}: ${APP_AUTHOR}`}
             icon={<ExternalLink size={14} />}
             onClick={() => void desktopActions.openExternal(APP_AUTHOR_URL)}
           />
-        </div>
-        <div className={styles.settingRow}>
-          <SettingLabel title={t('settings.sourceCode')} description={APP_REPO} />
+        </SettingRow>
+        <SettingRow title={t('settings.sourceCode')} description={APP_REPO}>
           <Button
             type="text"
             aria-label={`${t('settings.sourceCode')}: ${APP_REPO}`}
             icon={<ExternalLink size={14} />}
             onClick={() => void desktopActions.openExternal(APP_REPO_URL)}
           />
-        </div>
+        </SettingRow>
       </section>
     </div>
   )

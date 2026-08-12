@@ -9,7 +9,8 @@ import { LOG_LEVELS } from '@shared/types'
 import { useDesktopActions } from '@renderer/hooks/useDesktopActions'
 import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import { useAppSelector } from '@renderer/store'
-import SettingLabel from '../components/SettingLabel'
+import { cx } from '@renderer/utils/classNames'
+import SettingRow from '../components/SettingRow'
 import styles from '../SettingsPage.module.scss'
 
 /** Displays diagnostic logging preferences. */
@@ -23,37 +24,25 @@ const LoggingSettingsSection = (): React.JSX.Element => {
     <div className={styles.settingContainer}>
       <h2 className={styles.groupTitle}>{t('settings.logging')}</h2>
       <section className={styles.settingGroup}>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.logLevel')}
-            description={t('settings.logLevelDescription')}
+        <SettingRow title={t('settings.logLevel')} description={t('settings.logLevelDescription')}>
+          <Select
+            className={cx(styles.compactControl)}
+            value={settings.logLevel}
+            options={LOG_LEVELS.map((level) => ({
+              value: level,
+              label: t(`settings.logLevels.${level}`),
+            }))}
+            onChange={(logLevel) => void settingsActions.saveSettings({ logLevel })}
           />
-          <div className={styles.settingControl}>
-            <Select
-              className={styles.compactControl ?? ''}
-              value={settings.logLevel}
-              options={LOG_LEVELS.map((level) => ({
-                value: level,
-                label: t(`settings.logLevels.${level}`),
-              }))}
-              onChange={(logLevel) => void settingsActions.saveSettings({ logLevel })}
-            />
-          </div>
-        </div>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.logFiles')}
-            description={t('settings.logFilesDescription')}
-          />
-          <div className={styles.settingControl}>
-            <Button
-              icon={<FolderOpen size={14} />}
-              onClick={() => void desktopActions.openLogsDirectory()}
-            >
-              {t('settings.openLogs')}
-            </Button>
-          </div>
-        </div>
+        </SettingRow>
+        <SettingRow title={t('settings.logFiles')} description={t('settings.logFilesDescription')}>
+          <Button
+            icon={<FolderOpen size={14} />}
+            onClick={() => void desktopActions.openLogsDirectory()}
+          >
+            {t('settings.openLogs')}
+          </Button>
+        </SettingRow>
       </section>
     </div>
   )

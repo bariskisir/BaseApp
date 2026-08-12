@@ -3,8 +3,7 @@
  */
 
 import { useCallback } from 'react'
-import { App as AntdApp } from 'antd'
-import { useTranslation } from 'react-i18next'
+import { toSessionSummary } from '@shared/types'
 import { createLogger } from '@renderer/services/LoggerService'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
@@ -15,10 +14,20 @@ import {
   setCurrentSession,
   setSessions,
 } from '@renderer/store/appSlice'
-import { toSessionSummary } from '@renderer/utils/formatters'
+import { useFailureReporter } from './useFailureReporter'
 
 const logger = createLogger('SessionActions')
-let selectionRevision = 0
+
+let latestSelectionRevision = 0
+
+/** Claims the newest selection so a slower load cannot replace a later choice. */
+const beginSelection = (): number => {
+  latestSelectionRevision += 1
+  return latestSelectionRevision
+}
+
+/** Reports whether a selection is still the one the user is waiting for. */
+const isLatestSelection = (revision: number): boolean => revision === latestSelectionRevision
 
 interface SessionActions {
   /** Creates and selects a generic session workspace. */
@@ -38,37 +47,34 @@ export const useSessionActions = (): SessionActions => {
   const dispatch = useAppDispatch()
   const sessions = useAppSelector((state) => state.app.sessions)
   const currentSessionId = useAppSelector((state) => state.app.currentSession?.id ?? null)
-  const { message } = AntdApp.useApp()
-  const { t } = useTranslation()
+  const reportFailure = useFailureReporter(logger)
 
   /** Loads a complete session from local storage. */
   const openSession = useCallback(
     async (id: string): Promise<void> => {
-      const revision = ++selectionRevision
+      const revision = beginSelection()
       try {
         const session = await window.app.getSession(id)
-        if (revision === selectionRevision) dispatch(setCurrentSession(session))
+        if (isLatestSelection(revision)) dispatch(setCurrentSession(session))
       } catch (error) {
-        if (revision !== selectionRevision) return
-        logger.error('Session could not be loaded.', error)
-        void message.error(t('errors.generic'))
+        if (!isLatestSelection(revision)) return
+        reportFailure('Session could not be loaded.', error)
       }
     },
-    [dispatch, message, t],
+    [dispatch, reportFailure],
   )
 
   /** Creates and selects a new session workspace. */
   const createSession = useCallback(async (): Promise<void> => {
-    const revision = ++selectionRevision
+    const revision = beginSelection()
     try {
       const session = await window.app.createSession()
       dispatch(addSessionSummary(toSessionSummary(session)))
-      if (revision === selectionRevision) dispatch(setCurrentSession(session))
+      if (isLatestSelection(revision)) dispatch(setCurrentSession(session))
     } catch (error) {
-      logger.error('Session workspace could not be created.', error)
-      void message.error(t('errors.generic'))
+      reportFailure('Session workspace could not be created.', error)
     }
-  }, [dispatch, message, t])
+  }, [dispatch, reportFailure])
 
   /** Renames a session and synchronizes the active document and summary. */
   const renameSession = useCallback(
@@ -79,18 +85,17 @@ export const useSessionActions = (): SessionActions => {
         dispatch(replaceSessionSummary(toSessionSummary(session)))
         return true
       } catch (error) {
-        logger.error('Session could not be renamed.', error)
-        void message.error(t('errors.generic'))
+        reportFailure('Session could not be renamed.', error)
         return false
       }
     },
-    [dispatch, message, t],
+    [dispatch, reportFailure],
   )
 
   /** Deletes one session while preserving and selecting a ready workspace. */
   const deleteSession = useCallback(
     async (id: string): Promise<void> => {
-      const revision = ++selectionRevision
+      const revision = beginSelection()
       try {
         const result = await window.app.deleteSession(id)
         if (!result.deleted) return
@@ -101,27 +106,25 @@ export const useSessionActions = (): SessionActions => {
         if (currentSessionId !== id) return
         const nextSession =
           result.replacement ?? (remaining[0] ? await window.app.getSession(remaining[0].id) : null)
-        if (revision === selectionRevision) dispatch(setCurrentSession(nextSession))
+        if (isLatestSelection(revision)) dispatch(setCurrentSession(nextSession))
       } catch (error) {
-        logger.error('Session could not be deleted.', error)
-        void message.error(t('errors.generic'))
+        reportFailure('Session could not be deleted.', error)
       }
     },
-    [currentSessionId, dispatch, sessions, message, t],
+    [currentSessionId, dispatch, reportFailure, sessions],
   )
 
   /** Deletes every session and selects the fresh replacement returned by storage. */
   const deleteAllSessions = useCallback(async (): Promise<void> => {
-    const revision = ++selectionRevision
+    const revision = beginSelection()
     try {
       const replacement = await window.app.deleteAllSessions()
       dispatch(setSessions([toSessionSummary(replacement)]))
-      if (revision === selectionRevision) dispatch(setCurrentSession(replacement))
+      if (isLatestSelection(revision)) dispatch(setCurrentSession(replacement))
     } catch (error) {
-      logger.error('Sessions could not be deleted.', error)
-      void message.error(t('errors.generic'))
+      reportFailure('Sessions could not be deleted.', error)
     }
-  }, [dispatch, message, t])
+  }, [dispatch, reportFailure])
 
   return { createSession, deleteAllSessions, deleteSession, openSession, renameSession }
 }

@@ -15,7 +15,8 @@ export const toErrorMessage = (error: unknown): string => {
   }
 }
 
-class RendererLogger {
+/** Writes bounded diagnostics for one renderer module through the preload bridge. */
+export class RendererLogger {
   /** Creates a logger scoped to one renderer module. */
   public constructor(private readonly module: string) {}
 

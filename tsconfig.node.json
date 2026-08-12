@@ -29,6 +29,7 @@
     "src/renderer/src/i18n/locales/*.ts",
     "src/renderer/src/store/appSlice.ts",
     "src/renderer/src/services/SettingsPersistenceQueue.ts",
+    "src/renderer/src/utils/classNames.ts",
     "src/renderer/src/utils/formatters.ts",
     "src/renderer/src/utils/sidebarSizing.ts",
     "src/shared/**/*.ts",

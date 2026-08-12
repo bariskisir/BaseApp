@@ -4,16 +4,17 @@
 
 import type { PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import type { ThemeMode } from '@shared/types'
+import type { ResolvedThemeMode, ThemeMode } from '@shared/types'
 import { createLogger } from '@renderer/services/LoggerService'
 import { useAppSelector } from '@renderer/store'
 
-type ResolvedTheme = Exclude<ThemeMode, 'system'>
-
+/** Theme values shared with every component below the provider. */
 interface ThemeContextValue {
-  theme: ResolvedTheme
+  theme: ResolvedThemeMode
   configuredTheme: ThemeMode
 }
+
+const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)'
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: 'dark',
@@ -24,13 +25,13 @@ const logger = createLogger('ThemeProvider')
 /** Supplies active theme values to descendants and synchronizes global and native chrome. */
 export const ThemeProvider = ({ children }: PropsWithChildren): React.JSX.Element => {
   const configuredTheme = useAppSelector((state) => state.app.settings.theme)
-  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+  const [systemTheme, setSystemTheme] = useState<ResolvedThemeMode>(
+    window.matchMedia(DARK_SCHEME_QUERY).matches ? 'dark' : 'light',
   )
   const theme = configuredTheme === 'system' ? systemTheme : configuredTheme
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    const media = window.matchMedia(DARK_SCHEME_QUERY)
     /** Applies operating-system theme changes while system mode is selected. */
     const handleChange = (event: MediaQueryListEvent): void => {
       setSystemTheme(event.matches ? 'dark' : 'light')

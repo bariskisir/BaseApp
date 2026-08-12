@@ -4,23 +4,18 @@
 
 import { lazy, Suspense } from 'react'
 import { Button, Spin } from 'antd'
-import { Download } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import logoUrl from '../../../build/icon.svg'
 import styles from './App.module.scss'
 import AppSidebar from '@renderer/components/app/AppSidebar'
+import StartupScreen from '@renderer/components/app/StartupScreen'
 import Titlebar from '@renderer/components/app/Titlebar'
+import UpdateNotice from '@renderer/components/app/UpdateNotice'
 import { useAppInit } from '@renderer/hooks/useAppInit'
-import { useDesktopActions } from '@renderer/hooks/useDesktopActions'
-import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import HomePage from '@renderer/pages/home/HomePage'
 import { useAppSelector } from '@renderer/store'
+import { cx } from '@renderer/utils/classNames'
 
 const SettingsPage = lazy(() => import('@renderer/pages/settings/SettingsPage'))
-
-/** Determines whether the current updater state needs a persistent action notice. */
-const showUpdateNotice = (update: { state: string; pageUrl?: string }) =>
-  update.state === 'downloaded' || (update.state === 'available' && update.pageUrl !== undefined)
 
 /** Renders application pages after main-process bootstrap completes. */
 const App = (): React.JSX.Element => {
@@ -30,72 +25,40 @@ const App = (): React.JSX.Element => {
   const page = useAppSelector((state) => state.app.page)
   const compactMode = useAppSelector((state) => state.app.compactMode)
   const navbarPosition = useAppSelector((state) => state.app.settings.navbarPosition)
-  const update = useAppSelector((state) => state.app.update)
-  const desktopActions = useDesktopActions()
-  const settingsActions = useSettingsActions()
   const { t } = useTranslation()
 
   if (initializationError) {
     return (
-      <div className={styles.loadingScreen} role="alert">
-        <img className={styles.loadingLogo} src={logoUrl} alt="" />
-        <span>{t('errors.startup')}</span>
-        <Button size="small" onClick={() => window.location.reload()}>
-          {t('common.retry')}
-        </Button>
-      </div>
+      <StartupScreen
+        alert
+        message={t('errors.startup')}
+        action={
+          <Button size="small" onClick={() => window.location.reload()}>
+            {t('common.retry')}
+          </Button>
+        }
+      />
     )
   }
 
-  if (!initialized) {
-    return (
-      <div className={styles.loadingScreen}>
-        <img className={styles.loadingLogo} src={logoUrl} alt="" />
-        <span>{t('common.loading')}</span>
-      </div>
-    )
-  }
+  if (!initialized) return <StartupScreen message={t('common.loading')} />
 
   return (
     <div className={styles.shell}>
-      <Titlebar onSettingsChange={settingsActions.saveSettings} />
+      <Titlebar />
       <div className={styles.body}>
-        {!compactMode && navbarPosition === 'left' && (
-          <AppSidebar onSettingsChange={settingsActions.saveSettings} />
-        )}
+        {!compactMode && navbarPosition === 'left' && <AppSidebar />}
         <div className={styles.workspace}>
           {page === 'home' ? (
             <HomePage />
           ) : (
-            <Suspense fallback={<Spin className={styles.pageSpinner ?? ''} size="small" />}>
+            <Suspense fallback={<Spin className={cx(styles.pageSpinner)} size="small" />}>
               <SettingsPage />
             </Suspense>
           )}
         </div>
       </div>
-      {showUpdateNotice(update) && (
-        <div className={styles.updateNotice}>
-          <Download size={15} />
-          <span>
-            {update.state === 'downloaded'
-              ? t('settings.readyToInstall', { version: update.version })
-              : t('settings.updateAvailable', { version: update.version })}
-          </span>
-          <Button
-            size="small"
-            type="primary"
-            onClick={() =>
-              update.state === 'downloaded'
-                ? void desktopActions.installUpdate()
-                : update.pageUrl && void desktopActions.openExternal(update.pageUrl)
-            }
-          >
-            {update.state === 'downloaded'
-              ? t('settings.installNow')
-              : t('settings.openDownloadPage')}
-          </Button>
-        </div>
-      )}
+      <UpdateNotice />
     </div>
   )
 }

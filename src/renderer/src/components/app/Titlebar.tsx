@@ -7,18 +7,40 @@ import { PanelLeftClose, PanelRightClose, PanelTopClose, PanelTopOpen } from 'lu
 import { useTranslation } from 'react-i18next'
 import logoUrl from '../../../../../build/icon.svg'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
-import type { AppSettingsPatch } from '@shared/types'
 import { setCompactMode, setPage, setSessionsSidebarOpen } from '@renderer/store/appSlice'
+import { cx } from '@renderer/utils/classNames'
 import AppNavigationActions from './AppNavigationActions'
 import WindowControls from './WindowControls'
 import styles from './Titlebar.module.scss'
 
-interface TitlebarProps {
-  onSettingsChange: (patch: AppSettingsPatch) => Promise<void>
+interface TitlebarActionProps {
+  label: string
+  icon: React.ReactNode
+  disabled?: boolean
+  onClick: () => void
 }
 
+/** Renders one labelled title-bar action with consistent tooltip placement. */
+const TitlebarAction = ({
+  label,
+  icon,
+  disabled = false,
+  onClick,
+}: TitlebarActionProps): React.JSX.Element => (
+  <Tooltip placement="bottom" title={label}>
+    <Button
+      className={cx(styles.titleButton)}
+      type="text"
+      aria-label={label}
+      disabled={disabled}
+      icon={icon}
+      onClick={onClick}
+    />
+  </Tooltip>
+)
+
 /** Places primary navigation and the session-sidebar control in the desktop title bar. */
-const Titlebar = ({ onSettingsChange }: TitlebarProps): React.JSX.Element => {
+const Titlebar = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const page = useAppSelector((state) => state.app.page)
   const sidebarOpen = useAppSelector((state) => state.app.sessionsSidebarOpen)
@@ -29,52 +51,36 @@ const Titlebar = ({ onSettingsChange }: TitlebarProps): React.JSX.Element => {
 
   return (
     <header
-      className={`${styles.container} ${platform === 'darwin' ? styles.nativeWindowControls : ''} drag-region`}
+      className={cx(
+        styles.container,
+        platform === 'darwin' && styles.nativeWindowControls,
+        'drag-region',
+      )}
     >
-      <div className={`${styles.topActions} no-drag`}>
-        <Tooltip placement="bottom" title={t('app.name')}>
-          <Button
-            className={styles.titleButton ?? ''}
-            type="text"
-            aria-label={t('app.name')}
-            icon={<img className={styles.titleLogo} src={logoUrl} alt="" />}
-            onClick={() => dispatch(setPage('home'))}
-          />
-        </Tooltip>
+      <div className={cx(styles.topActions, 'no-drag')}>
+        <TitlebarAction
+          label={t('app.name')}
+          icon={<img className={styles.titleLogo} src={logoUrl} alt="" />}
+          onClick={() => dispatch(setPage('home'))}
+        />
         {page === 'home' && (
           <>
-            <Tooltip
-              placement="bottom"
-              title={t(sidebarOpen ? 'sidebar.hideSidebar' : 'sidebar.showSidebar')}
-            >
-              <Button
-                className={styles.titleButton ?? ''}
-                type="text"
-                aria-label={t(sidebarOpen ? 'sidebar.hideSidebar' : 'sidebar.showSidebar')}
-                disabled={compactMode}
-                icon={sidebarOpen ? <PanelLeftClose size={18} /> : <PanelRightClose size={18} />}
-                onClick={() => dispatch(setSessionsSidebarOpen(!sidebarOpen))}
-              />
-            </Tooltip>
-            <Tooltip
-              placement="bottom"
-              title={t(compactMode ? 'workspace.fullView' : 'workspace.compactView')}
-            >
-              <Button
-                className={styles.titleButton ?? ''}
-                type="text"
-                aria-label={t(compactMode ? 'workspace.fullView' : 'workspace.compactView')}
-                icon={compactMode ? <PanelTopOpen size={18} /> : <PanelTopClose size={18} />}
-                onClick={() => dispatch(setCompactMode(!compactMode))}
-              />
-            </Tooltip>
+            <TitlebarAction
+              label={t(sidebarOpen ? 'sidebar.hideSidebar' : 'sidebar.showSidebar')}
+              disabled={compactMode}
+              icon={sidebarOpen ? <PanelLeftClose size={18} /> : <PanelRightClose size={18} />}
+              onClick={() => dispatch(setSessionsSidebarOpen(!sidebarOpen))}
+            />
+            <TitlebarAction
+              label={t(compactMode ? 'workspace.fullView' : 'workspace.compactView')}
+              icon={compactMode ? <PanelTopOpen size={18} /> : <PanelTopClose size={18} />}
+              onClick={() => dispatch(setCompactMode(!compactMode))}
+            />
           </>
         )}
       </div>
       <div className={styles.rightActions}>
-        {navbarPosition === 'top' && !compactMode && (
-          <AppNavigationActions placement="top" onSettingsChange={onSettingsChange} />
-        )}
+        {navbarPosition === 'top' && !compactMode && <AppNavigationActions placement="top" />}
         <WindowControls />
       </div>
     </header>

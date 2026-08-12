@@ -4,61 +4,86 @@
 
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 import { IpcChannel } from '@shared/IpcChannel'
-import type { AppApi, UpdateStateEvent } from '@shared/types'
+import type {
+  IpcEventChannel,
+  IpcEventPayload,
+  IpcInvokeArguments,
+  IpcInvokeChannel,
+  IpcResponse,
+  IpcSendChannel,
+  IpcSendPayload,
+} from '@shared/ipcContract'
+import type { AppApi, Unsubscribe } from '@shared/types'
+
+/** Invokes one approved command and resolves with the value declared by its contract. */
+const invoke = <Channel extends IpcInvokeChannel>(
+  channel: Channel,
+  ...request: IpcInvokeArguments<Channel>
+): Promise<IpcResponse<Channel>> => ipcRenderer.invoke(channel, ...request)
+
+/** Sends one approved message that the main process answers only through its own events. */
+const send = <Channel extends IpcSendChannel>(
+  channel: Channel,
+  payload: IpcSendPayload<Channel>,
+): void => {
+  ipcRenderer.send(channel, payload)
+}
 
 /** Subscribes to one approved event and returns a cleanup callback. */
-const subscribe = <T>(channel: IpcChannel, listener: (payload: T) => void): (() => void) => {
+const subscribe = <Channel extends IpcEventChannel>(
+  channel: Channel,
+  listener: (payload: IpcEventPayload<Channel>) => void,
+): Unsubscribe => {
   /** Drops Electron event metadata before forwarding the typed payload. */
-  const handler = (_event: IpcRendererEvent, payload: T): void => listener(payload)
+  const handler = (_event: IpcRendererEvent, payload: IpcEventPayload<Channel>): void =>
+    listener(payload)
   ipcRenderer.on(channel, handler)
   return () => ipcRenderer.removeListener(channel, handler)
 }
 
 const api: AppApi = {
   /** Loads settings, generic sessions, and application metadata. */
-  bootstrap: () => ipcRenderer.invoke(IpcChannel.AppBootstrap),
+  bootstrap: () => invoke(IpcChannel.AppBootstrap),
   /** Atomically merges validated application settings fields. */
-  saveSettings: (patch) => ipcRenderer.invoke(IpcChannel.SettingsSave, patch),
+  saveSettings: (patch) => invoke(IpcChannel.SettingsSave, patch),
   /** Creates one empty local session. */
-  createSession: () => ipcRenderer.invoke(IpcChannel.SessionCreate),
+  createSession: () => invoke(IpcChannel.SessionCreate),
   /** Loads one complete local session. */
-  getSession: (id) => ipcRenderer.invoke(IpcChannel.SessionGet, id),
+  getSession: (id) => invoke(IpcChannel.SessionGet, id),
   /** Renames one local session. */
-  renameSession: (id, title) => ipcRenderer.invoke(IpcChannel.SessionRename, { id, title }),
+  renameSession: (id, title) => invoke(IpcChannel.SessionRename, { id, title }),
   /** Deletes one local session. */
-  deleteSession: (id) => ipcRenderer.invoke(IpcChannel.SessionDelete, id),
+  deleteSession: (id) => invoke(IpcChannel.SessionDelete, id),
   /** Deletes every local session and creates a fresh replacement. */
-  deleteAllSessions: () => ipcRenderer.invoke(IpcChannel.SessionDeleteAll),
+  deleteAllSessions: () => invoke(IpcChannel.SessionDeleteAll),
   /** Changes the native always-on-top window state. */
-  setAlwaysOnTop: (enabled) => ipcRenderer.invoke(IpcChannel.WindowAlwaysOnTop, enabled),
+  setAlwaysOnTop: (enabled) => invoke(IpcChannel.WindowAlwaysOnTop, enabled),
   /** Minimizes the main application window. */
-  minimizeWindow: () => ipcRenderer.invoke(IpcChannel.WindowMinimize),
+  minimizeWindow: () => invoke(IpcChannel.WindowMinimize),
   /** Toggles the main application window between maximized and restored states. */
-  toggleMaximizeWindow: () => ipcRenderer.invoke(IpcChannel.WindowToggleMaximize),
+  toggleMaximizeWindow: () => invoke(IpcChannel.WindowToggleMaximize),
   /** Closes the main application window. */
-  closeWindow: () => ipcRenderer.invoke(IpcChannel.WindowClose),
+  closeWindow: () => invoke(IpcChannel.WindowClose),
   /** Retrieves the main application window's maximized state. */
-  isWindowMaximized: () => ipcRenderer.invoke(IpcChannel.WindowIsMaximized),
+  isWindowMaximized: () => invoke(IpcChannel.WindowIsMaximized),
   /** Synchronizes native title-bar colors with the renderer theme. */
-  setTheme: (theme) => ipcRenderer.invoke(IpcChannel.ThemeSet, theme),
+  setTheme: (theme) => invoke(IpcChannel.ThemeSet, theme),
   /** Opens one allow-listed HTTPS URL in the system browser. */
-  openExternal: (url) => ipcRenderer.invoke(IpcChannel.ShellOpenExternal, url),
+  openExternal: (url) => invoke(IpcChannel.ShellOpenExternal, url),
   /** Opens the AppData log directory in the operating-system file manager. */
-  openLogsDirectory: () => ipcRenderer.invoke(IpcChannel.LogsOpenDirectory),
+  openLogsDirectory: () => invoke(IpcChannel.LogsOpenDirectory),
   /** Forwards one renderer diagnostic to the configured main logger. */
-  writeLog: (entry) => ipcRenderer.send(IpcChannel.LogWrite, entry),
+  writeLog: (entry) => send(IpcChannel.LogWrite, entry),
   /** Checks GitHub Releases for a newer application version. */
-  checkForUpdates: () => ipcRenderer.invoke(IpcChannel.UpdatesCheck),
+  checkForUpdates: () => invoke(IpcChannel.UpdatesCheck),
   /** Restarts and installs a downloaded update. */
-  installUpdate: () => ipcRenderer.invoke(IpcChannel.UpdatesInstall),
+  installUpdate: () => invoke(IpcChannel.UpdatesInstall),
   /** Subscribes to updater lifecycle progress. */
-  onUpdateState: (listener) => subscribe<UpdateStateEvent>(IpcChannel.UpdateState, listener),
+  onUpdateState: (listener) => subscribe(IpcChannel.UpdateState, listener),
   /** Subscribes to maximize and restore state changes. */
-  onWindowMaximizedChange: (listener) =>
-    subscribe<boolean>(IpcChannel.WindowMaximizedChanged, listener),
+  onWindowMaximizedChange: (listener) => subscribe(IpcChannel.WindowMaximizedChanged, listener),
   /** Subscribes to settings navigation requested by the tray menu. */
-  onSettingsOpenRequested: (listener) =>
-    subscribe<void>(IpcChannel.SettingsOpenRequested, listener),
+  onSettingsOpenRequested: (listener) => subscribe(IpcChannel.SettingsOpenRequested, listener),
 }
 
 contextBridge.exposeInMainWorld('app', api)

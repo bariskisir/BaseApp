@@ -5,15 +5,16 @@
 import { Button, Tooltip } from 'antd'
 import { Monitor, Moon, Pin, PinOff, Settings, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from '@renderer/context/ThemeProvider'
-import type { AppSettingsPatch, NavbarPosition, ThemeMode } from '@shared/types'
+import type { NavbarPosition, ThemeMode } from '@shared/types'
+import { useAccentButtonProps } from '@renderer/hooks/useAccentButtonProps'
+import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setPage } from '@renderer/store/appSlice'
+import { cx } from '@renderer/utils/classNames'
 import styles from './AppNavigationActions.module.scss'
 
 interface AppNavigationActionsProps {
   placement: NavbarPosition
-  onSettingsChange: (patch: AppSettingsPatch) => Promise<void>
 }
 
 const NEXT_THEME: Record<ThemeMode, ThemeMode> = {
@@ -22,56 +23,50 @@ const NEXT_THEME: Record<ThemeMode, ThemeMode> = {
   dark: 'system',
 }
 
+const THEME_ICONS: Record<ThemeMode, typeof Monitor> = {
+  system: Monitor,
+  light: Sun,
+  dark: Moon,
+}
+
 /** Displays pinning, theme, and settings actions in the configured navbar. */
-const AppNavigationActions = ({
-  placement,
-  onSettingsChange,
-}: AppNavigationActionsProps): React.JSX.Element => {
+const AppNavigationActions = ({ placement }: AppNavigationActionsProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const page = useAppSelector((state) => state.app.page)
   const settings = useAppSelector((state) => state.app.settings)
+  const settingsActions = useSettingsActions()
   const { t } = useTranslation()
-  const { theme } = useTheme()
-  const light = theme === 'light'
+  const pinnedProps = useAccentButtonProps(settings.alwaysOnTop)
+  const settingsPageProps = useAccentButtonProps(page === 'settings')
   const tooltipPlacement = placement === 'left' ? 'right' : 'bottom'
   const iconSize = placement === 'top' ? 16 : 18
-
-  /** Returns the icon matching the persisted theme preference. */
-  const themeIcon = (): React.JSX.Element => {
-    if (settings.theme === 'light') return <Sun size={iconSize} />
-    if (settings.theme === 'dark') return <Moon size={iconSize} />
-    return <Monitor size={iconSize} />
-  }
+  const ThemeIcon = THEME_ICONS[settings.theme]
 
   return (
-    <div className={`${styles.container} ${styles[placement]} no-drag`}>
+    <div className={cx(styles.container, styles[placement], 'no-drag')}>
       <Tooltip placement={tooltipPlacement} title={t('settings.alwaysOnTop')}>
         <Button
-          className={styles.actionButton ?? ''}
+          className={cx(styles.actionButton)}
           aria-label={t('settings.alwaysOnTop')}
-          {...(settings.alwaysOnTop
-            ? { type: 'primary' as const, ...(light ? { ghost: true as const } : {}) }
-            : { type: 'text' as const })}
+          {...pinnedProps}
           icon={settings.alwaysOnTop ? <Pin size={iconSize} /> : <PinOff size={iconSize} />}
-          onClick={() => void onSettingsChange({ alwaysOnTop: !settings.alwaysOnTop })}
+          onClick={() => void settingsActions.saveSettings({ alwaysOnTop: !settings.alwaysOnTop })}
         />
       </Tooltip>
       <Tooltip placement={tooltipPlacement} title={t(`themes.${settings.theme}`)}>
         <Button
-          className={styles.actionButton ?? ''}
+          className={cx(styles.actionButton)}
           aria-label={t(`themes.${settings.theme}`)}
           type="text"
-          icon={themeIcon()}
-          onClick={() => void onSettingsChange({ theme: NEXT_THEME[settings.theme] })}
+          icon={<ThemeIcon size={iconSize} />}
+          onClick={() => void settingsActions.saveSettings({ theme: NEXT_THEME[settings.theme] })}
         />
       </Tooltip>
       <Tooltip placement={tooltipPlacement} title={t('nav.settings')}>
         <Button
-          className={styles.actionButton ?? ''}
+          className={cx(styles.actionButton)}
           aria-label={t('nav.settings')}
-          {...(page === 'settings'
-            ? { type: 'primary' as const, ...(light ? { ghost: true as const } : {}) }
-            : { type: 'text' as const })}
+          {...settingsPageProps}
           icon={<Settings size={iconSize} />}
           onClick={() => dispatch(setPage('settings'))}
         />

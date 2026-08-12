@@ -1,32 +1,24 @@
 /**
- * Provides consistent date formatting and session-summary helpers.
+ * Formats stored timestamps with the clock format selected in settings.
  */
 
-import type { SessionDocument, SessionSummary, TimeFormat } from '@shared/types'
+import type { TimeFormat } from '@shared/types'
+
+/** Pads one date part to the two digits used by the shared timestamp format. */
+const pad = (value: number): string => value.toString().padStart(2, '0')
 
 /** Formats a stored ISO date as DD.MM.YYYY with the preferred 12- or 24-hour clock. */
 export const formatDate = (isoDate: string, timeFormat: TimeFormat): string => {
   const date = new Date(isoDate)
-  const day = date.getDate().toString().padStart(2, '0')
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = pad(date.getDate())
+  const month = pad(date.getMonth() + 1)
   const year = String(date.getFullYear())
-  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const minutes = pad(date.getMinutes())
   const localHours = date.getHours()
 
   if (timeFormat === '12-hour') {
-    const hours = (localHours % 12 || 12).toString().padStart(2, '0')
     const period = localHours >= 12 ? 'PM' : 'AM'
-    return `${day}.${month}.${year} ${hours}:${minutes} ${period}`
+    return `${day}.${month}.${year} ${pad(localHours % 12 || 12)}:${minutes} ${period}`
   }
-
-  return `${day}.${month}.${year} ${localHours.toString().padStart(2, '0')}:${minutes}`
+  return `${day}.${month}.${year} ${pad(localHours)}:${minutes}`
 }
-
-/** Converts a complete session into compact sidebar metadata. */
-export const toSessionSummary = (session: SessionDocument): SessionSummary => ({
-  id: session.id,
-  title: session.title,
-  isDefaultTitle: session.isDefaultTitle,
-  createdAt: session.createdAt,
-  updatedAt: session.updatedAt,
-})

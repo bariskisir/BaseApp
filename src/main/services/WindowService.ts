@@ -2,31 +2,29 @@
  * Owns the main Electron window, navigation policy, and permission boundary.
  */
 
-import { renameSync, writeFileSync } from 'node:fs'
-import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { app, BrowserWindow, screen } from 'electron'
+import { app, BrowserWindow, screen, type BrowserWindowConstructorOptions } from 'electron'
 import { APP_NAME } from '@shared/appInfo'
 import { isTrustedRendererNavigation } from '../security/RendererNavigationPolicy'
-import {
-  fitWindowBoundsToDisplays,
-  parsePersistedWindowState,
-  type PersistedWindowState,
-} from '../windowState'
+import { getTitleBarOverlay } from '../titleBarOverlay'
+import type { WindowBounds } from '../windowState'
 import type LoggerService from './LoggerService'
+import WindowStateStore from './WindowStateStore'
+
+/** Window size used before a previous session's placement is restored. */
+const DEFAULT_WINDOW_SIZE = { width: 1180, height: 760 }
+/** Delay that lets the renderer mount before its health is verified. */
+const RENDERER_MOUNT_CHECK_DELAY_MS = 1_000
 
 /** Creates and secures the main window while persisting its desktop state. */
 export default class WindowService {
   private mainWindow: BrowserWindow | null = null
   private readonly rendererPath = join(__dirname, '../renderer/index.html')
-  private readonly statePath: string
-  private state: PersistedWindowState | null = null
-  private stateSaveTimer: ReturnType<typeof setTimeout> | null = null
-  private logger: LoggerService | null = null
+  private readonly stateStore: WindowStateStore
 
   /** Creates a window owner that persists shell state in the durable application data directory. */
   public constructor(dataRoot: string) {
-    this.statePath = join(dataRoot, 'window-state.json')
+    this.stateStore = new WindowStateStore(join(dataRoot, 'window-state.json'))
   }
 
   /** Returns the active main window when it is still alive. */
@@ -36,26 +34,38 @@ export default class WindowService {
 
   /** Creates and loads a hardened desktop window. */
   public async createWindow(logger: LoggerService): Promise<BrowserWindow> {
-    this.logger = logger
-    const storedState = await this.loadWindowState()
-    const restoredBounds = storedState
-      ? fitWindowBoundsToDisplays(
-          storedState.bounds,
-          screen.getAllDisplays().map((display) => display.workArea),
-        )
-      : null
-    const window = new BrowserWindow({
-      ...(restoredBounds ?? { width: 1180, height: 760 }),
+    const restored = await this.stateStore.load(
+      screen.getAllDisplays().map((display) => display.workArea),
+    )
+    const window = new BrowserWindow(this.buildWindowOptions(restored?.bounds ?? null))
+    this.mainWindow = window
+
+    this.stateStore.track(window, restored, logger)
+    this.configureRendererDiagnostics(window, logger)
+    this.configureSecurity(window)
+    window.once('ready-to-show', () => {
+      if (restored?.fullScreen) window.setFullScreen(true)
+      else if (restored?.maximized) window.maximize()
+      window.show()
+    })
+    window.once('closed', () => {
+      if (this.mainWindow === window) this.mainWindow = null
+    })
+    await this.loadRenderer(window)
+    return window
+  }
+
+  /** Builds hardened window options that keep Node.js capabilities out of the renderer. */
+  private buildWindowOptions(bounds: WindowBounds | null): BrowserWindowConstructorOptions {
+    return {
+      ...(bounds ?? DEFAULT_WINDOW_SIZE),
       minWidth: 450,
       minHeight: 300,
       show: false,
       backgroundColor: '#181818',
       title: APP_NAME,
       ...(process.platform === 'darwin'
-        ? {
-            titleBarStyle: 'hidden' as const,
-            titleBarOverlay: { color: '#1f1f1f', symbolColor: '#ffffff99', height: 42 },
-          }
+        ? { titleBarStyle: 'hidden' as const, titleBarOverlay: getTitleBarOverlay('dark') }
         : { frame: false }),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
@@ -66,90 +76,6 @@ export default class WindowService {
         devTools: !app.isPackaged,
         partition: `${app.name}-session`,
       },
-    })
-    this.mainWindow = window
-    this.state = {
-      revision: 1,
-      bounds: restoredBounds ?? window.getBounds(),
-      maximized: storedState?.maximized ?? false,
-      fullScreen: storedState?.fullScreen ?? false,
-    }
-    this.configureRendererDiagnostics(window, logger)
-    this.configureSecurity(window)
-    this.configureWindowStatePersistence(window)
-    window.once('ready-to-show', () => {
-      if (storedState?.fullScreen) window.setFullScreen(true)
-      else if (storedState?.maximized) window.maximize()
-      window.show()
-    })
-    window.once('closed', () => {
-      if (this.stateSaveTimer) clearTimeout(this.stateSaveTimer)
-      this.stateSaveTimer = null
-      if (this.mainWindow === window) this.mainWindow = null
-    })
-    await this.loadRenderer(window)
-    return window
-  }
-
-  /** Loads the last valid window state without preventing startup after read or parse failures. */
-  private async loadWindowState(): Promise<PersistedWindowState | null> {
-    try {
-      return parsePersistedWindowState(
-        JSON.parse(await readFile(this.statePath, 'utf8')) as unknown,
-      )
-    } catch {
-      return null
-    }
-  }
-
-  /** Tracks normal bounds, maximized state, and native fullscreen state for later launches. */
-  private configureWindowStatePersistence(window: BrowserWindow): void {
-    window.on('move', () => this.scheduleWindowStateSave(window))
-    window.on('resize', () => this.scheduleWindowStateSave(window))
-    window.on('maximize', () => this.scheduleWindowStateSave(window))
-    window.on('unmaximize', () => this.scheduleWindowStateSave(window))
-    window.on('enter-full-screen', () => this.scheduleWindowStateSave(window))
-    window.on('leave-full-screen', () => this.scheduleWindowStateSave(window))
-    window.on('close', () => {
-      if (this.stateSaveTimer) clearTimeout(this.stateSaveTimer)
-      this.stateSaveTimer = null
-      this.captureWindowState(window)
-      this.persistWindowState()
-    })
-  }
-
-  /** Debounces frequent move and resize events before saving the latest state. */
-  private scheduleWindowStateSave(window: BrowserWindow): void {
-    this.captureWindowState(window)
-    if (this.stateSaveTimer) clearTimeout(this.stateSaveTimer)
-    this.stateSaveTimer = setTimeout(() => {
-      this.stateSaveTimer = null
-      this.captureWindowState(window)
-      this.persistWindowState()
-    }, 250)
-  }
-
-  /** Captures normal bounds while retaining them when maximized or fullscreen. */
-  private captureWindowState(window: BrowserWindow): void {
-    if (window.isDestroyed()) return
-    const maximized = window.isMaximized()
-    const fullScreen = window.isFullScreen()
-    const bounds =
-      maximized || fullScreen
-        ? (this.state?.bounds ?? window.getNormalBounds())
-        : window.getBounds()
-    this.state = { revision: 1, bounds, maximized, fullScreen }
-  }
-
-  /** Atomically writes the small window-state document so close events cannot lose a last move. */
-  private persistWindowState(): void {
-    if (!this.state) return
-    const temporaryPath = `${this.statePath}.tmp`
-    try {
-      writeFileSync(temporaryPath, `${JSON.stringify(this.state, null, 2)}\n`, 'utf8')
-      renameSync(temporaryPath, this.statePath)
-    } catch (error) {
-      this.logger?.warn('WindowService', 'Window state could not be persisted.', error)
     }
   }
 
@@ -180,7 +106,10 @@ export default class WindowService {
       })
     })
     window.webContents.on('did-finish-load', () => {
-      setTimeout(() => void this.verifyRendererMounted(window, logger), 1_000)
+      setTimeout(
+        () => void this.verifyRendererMounted(window, logger),
+        RENDERER_MOUNT_CHECK_DELAY_MS,
+      )
     })
   }
 

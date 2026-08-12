@@ -10,6 +10,13 @@ import { notBundle } from 'vite-plugin-electron/plugin'
 
 const repositoryRoot = resolve('.')
 
+/** Keeps every process bundle resolving the same source aliases as the TypeScript projects. */
+const alias = {
+  '@main': resolve(repositoryRoot, 'src/main'),
+  '@shared': resolve(repositoryRoot, 'src/shared'),
+  '@renderer': resolve(repositoryRoot, 'src/renderer/src'),
+}
+
 /** Starts Electron from the repository root without weakening its sandbox flags. */
 const startElectron = async ({
   startup,
@@ -35,12 +42,7 @@ export default defineConfig({
         vite: {
           root: repositoryRoot,
           plugins: [notBundle({})],
-          resolve: {
-            alias: {
-              '@main': resolve(repositoryRoot, 'src/main'),
-              '@shared': resolve(repositoryRoot, 'src/shared'),
-            },
-          },
+          resolve: { alias },
           build: {
             outDir: resolve(repositoryRoot, 'out/main'),
             emptyOutDir: true,
@@ -53,11 +55,7 @@ export default defineConfig({
         vite: {
           root: repositoryRoot,
           plugins: [notBundle({})],
-          resolve: {
-            alias: {
-              '@shared': resolve(repositoryRoot, 'src/shared'),
-            },
-          },
+          resolve: { alias },
           build: {
             outDir: resolve(repositoryRoot, 'out/preload'),
             emptyOutDir: true,
@@ -66,12 +64,7 @@ export default defineConfig({
       },
     }),
   ],
-  resolve: {
-    alias: {
-      '@renderer': resolve(repositoryRoot, 'src/renderer/src'),
-      '@shared': resolve(repositoryRoot, 'src/shared'),
-    },
-  },
+  resolve: { alias },
   build: {
     outDir: resolve(repositoryRoot, 'out/renderer'),
     emptyOutDir: true,

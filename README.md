@@ -71,7 +71,7 @@
 
 - **Security defaults**
   - Context isolation, renderer sandboxing, disabled Node integration, denied permission requests, and blocked popups.
-  - Validated IPC input and active-renderer sender checks for privileged commands.
+  - A typed IPC contract shared by the preload bridge and the main process, with sender checks and schema validation applied to every privileged command.
   - Allow-listed renderer navigation and external URLs.
 
 - **Starter-friendly engineering**
@@ -132,7 +132,7 @@ src/
 ├── main/       Electron lifecycle, storage, updates, telemetry, tray, and window security
 ├── preload/    Capability-limited contextBridge API exposed as window.app
 ├── renderer/   Sandboxed React UI, Redux state, settings, sessions, and localization
-└── shared/     Serializable types, IPC channels, identity, and shared configuration
+└── shared/     Serializable types, IPC channels and payload contracts, identity, and shared configuration
 ```
 
 The renderer cannot access Node.js, Electron, or the filesystem directly. New privileged capabilities should be implemented in the main process, exposed through a narrow preload method, validated at the IPC boundary, and represented in shared types.

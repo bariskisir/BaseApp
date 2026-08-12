@@ -1,18 +1,21 @@
-/** Sends one privacy-bounded startup event to Microsoft Application Insights. */
+/**
+ * Sends one privacy-bounded startup event to Microsoft Application Insights.
+ */
 
 import { randomUUID } from 'node:crypto'
-import { readFile, rename, unlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { resolveApplicationInsightsConnectionString } from '@shared/appInfo'
 import type { AppLocale } from '@shared/types'
 import { z } from 'zod'
+import { readJsonFile, writeJsonFile } from '../storage/atomicJson'
 
 const telemetryIdentitySchema = z.object({
   revision: z.literal(1),
   installationId: z.uuid(),
 })
 
-interface StartupTelemetry {
+/** Bounded startup facts reported when a user opts in to telemetry. */
+export interface StartupTelemetry {
   appName: string
   enabled: boolean
   version: string
@@ -20,6 +23,7 @@ interface StartupTelemetry {
   locale: AppLocale
 }
 
+/** Ingestion identity and endpoint extracted from a connection string. */
 interface ApplicationInsightsConnection {
   instrumentationKey: string
   ingestionUrl: string
@@ -50,6 +54,35 @@ const parseConnectionString = (connectionString: string): ApplicationInsightsCon
   }
 }
 
+/** Builds the ingestion envelope without location, network, or session content. */
+const buildStartupEnvelope = (
+  connection: ApplicationInsightsConnection,
+  startup: StartupTelemetry,
+  installationId: string,
+): string =>
+  JSON.stringify({
+    name: `Microsoft.ApplicationInsights.${connection.instrumentationKey.replaceAll('-', '')}.Event`,
+    time: new Date().toISOString(),
+    iKey: connection.instrumentationKey,
+    tags: {
+      'ai.application.ver': startup.version,
+      'ai.user.id': installationId,
+    },
+    data: {
+      baseType: 'EventData',
+      baseData: {
+        ver: 2,
+        name: 'app.startup',
+        properties: {
+          appName: startup.appName,
+          version: startup.version,
+          platform: startup.platform,
+          locale: startup.locale,
+        },
+      },
+    },
+  })
+
 /** Sends the opt-in startup event and persists its anonymous installation identity. */
 export default class TelemetryService {
   private readonly identityPath: string
@@ -64,39 +97,18 @@ export default class TelemetryService {
   }
 
   /** Sends at most one startup event per process when telemetry is enabled. */
-  public async trackStartup(input: StartupTelemetry): Promise<void> {
-    if (!input.enabled || this.startupTracked) return
+  public async trackStartup(startup: StartupTelemetry): Promise<void> {
+    if (!startup.enabled || this.startupTracked) return
     this.startupTracked = true
 
-    const applicationInsights = parseConnectionString(
+    const connection = parseConnectionString(
       resolveApplicationInsightsConnectionString(process.env),
     )
     const installationId = await this.loadInstallationId()
-    const response = await this.fetcher(applicationInsights.ingestionUrl, {
+    const response = await this.fetcher(connection.ingestionUrl, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        name: `Microsoft.ApplicationInsights.${applicationInsights.instrumentationKey.replaceAll('-', '')}.Event`,
-        time: new Date().toISOString(),
-        iKey: applicationInsights.instrumentationKey,
-        tags: {
-          'ai.application.ver': input.version,
-          'ai.user.id': installationId,
-        },
-        data: {
-          baseType: 'EventData',
-          baseData: {
-            ver: 2,
-            name: 'app.startup',
-            properties: {
-              appName: input.appName,
-              version: input.version,
-              platform: input.platform,
-              locale: input.locale,
-            },
-          },
-        },
-      }),
+      body: buildStartupEnvelope(connection, startup, installationId),
     })
     if (!response.ok) {
       throw new Error(`Application Insights ingestion failed with HTTP ${response.status}.`)
@@ -106,20 +118,11 @@ export default class TelemetryService {
   /** Loads the durable anonymous identifier or creates it after missing/malformed data. */
   private async loadInstallationId(): Promise<string> {
     try {
-      const persisted = telemetryIdentitySchema.parse(
-        JSON.parse(await readFile(this.identityPath, 'utf8')),
-      )
+      const persisted = telemetryIdentitySchema.parse(await readJsonFile(this.identityPath))
       return persisted.installationId
     } catch {
       const identity = telemetryIdentitySchema.parse({ revision: 1, installationId: randomUUID() })
-      const temporaryPath = `${this.identityPath}.${randomUUID()}.tmp`
-      try {
-        await writeFile(temporaryPath, `${JSON.stringify(identity, null, 2)}\n`, 'utf8')
-        await rename(temporaryPath, this.identityPath)
-      } catch (error) {
-        await unlink(temporaryPath).catch(() => undefined)
-        throw error
-      }
+      await writeJsonFile(this.identityPath, identity)
       return identity.installationId
     }
   }

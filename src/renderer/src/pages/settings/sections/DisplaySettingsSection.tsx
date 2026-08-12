@@ -8,8 +8,23 @@ import { useTranslation } from 'react-i18next'
 import { PAGE_ZOOM_LIMITS, type NavbarPosition, type ThemeMode } from '@shared/types'
 import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import { useAppSelector } from '@renderer/store'
-import SettingLabel from '../components/SettingLabel'
+import SettingRow from '../components/SettingRow'
 import styles from '../SettingsPage.module.scss'
+
+/** Builds one segmented option that pairs an icon with its localized label. */
+const segmentedOption = <Value extends string>(
+  value: Value,
+  Icon: typeof Monitor,
+  label: string,
+): { value: Value; label: React.JSX.Element } => ({
+  value,
+  label: (
+    <span className={styles.segmentedOption}>
+      <Icon size={15} />
+      {label}
+    </span>
+  ),
+})
 
 /** Displays theme, navbar, page zoom, and system-tray controls. */
 const DisplaySettingsSection = (): React.JSX.Element => {
@@ -17,6 +32,7 @@ const DisplaySettingsSection = (): React.JSX.Element => {
   const platform = useAppSelector((state) => state.app.platform)
   const settingsActions = useSettingsActions()
   const { t } = useTranslation()
+  const trayUnavailable = platform === 'linux'
 
   /** Persists a bounded page zoom change at the same tenth-step used by Electron. */
   const changePageZoom = (delta: number): void => {
@@ -47,154 +63,100 @@ const DisplaySettingsSection = (): React.JSX.Element => {
     <div className={styles.settingContainer}>
       <h2 className={styles.groupTitle}>{t('settings.displaySettings')}</h2>
       <section className={styles.settingGroup}>
-        <div className={styles.settingRow}>
-          <SettingLabel title={t('settings.theme')} description={t('settings.themeDescription')} />
-          <div className={styles.settingControl}>
-            <Segmented
-              value={settings.theme}
-              options={[
-                {
-                  value: 'light',
-                  label: (
-                    <span className={styles.segmentedOption}>
-                      <Sun size={15} />
-                      {t('themes.light')}
-                    </span>
-                  ),
-                },
-                {
-                  value: 'dark',
-                  label: (
-                    <span className={styles.segmentedOption}>
-                      <Moon size={15} />
-                      {t('themes.dark')}
-                    </span>
-                  ),
-                },
-                {
-                  value: 'system',
-                  label: (
-                    <span className={styles.segmentedOption}>
-                      <Monitor size={15} />
-                      {t('themes.system')}
-                    </span>
-                  ),
-                },
-              ]}
-              onChange={(theme) => void settingsActions.saveSettings({ theme: theme as ThemeMode })}
-            />
-          </div>
-        </div>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.navbarPosition')}
-            description={t('settings.navbarPositionDescription')}
+        <SettingRow title={t('settings.theme')} description={t('settings.themeDescription')}>
+          <Segmented
+            value={settings.theme}
+            options={[
+              segmentedOption('light', Sun, t('themes.light')),
+              segmentedOption('dark', Moon, t('themes.dark')),
+              segmentedOption('system', Monitor, t('themes.system')),
+            ]}
+            onChange={(theme: ThemeMode) => void settingsActions.saveSettings({ theme })}
           />
-          <div className={styles.settingControl}>
-            <Segmented
-              value={settings.navbarPosition}
-              options={[
-                {
-                  value: 'left',
-                  label: (
-                    <span className={styles.segmentedOption}>
-                      <PanelLeft size={15} />
-                      {t('settings.navbarPositions.left')}
-                    </span>
-                  ),
-                },
-                {
-                  value: 'top',
-                  label: (
-                    <span className={styles.segmentedOption}>
-                      <PanelTop size={15} />
-                      {t('settings.navbarPositions.top')}
-                    </span>
-                  ),
-                },
-              ]}
-              onChange={(navbarPosition) =>
-                void settingsActions.saveSettings({
-                  navbarPosition: navbarPosition as NavbarPosition,
-                })
-              }
-            />
-          </div>
-        </div>
+        </SettingRow>
+        <SettingRow
+          title={t('settings.navbarPosition')}
+          description={t('settings.navbarPositionDescription')}
+        >
+          <Segmented
+            value={settings.navbarPosition}
+            options={[
+              segmentedOption('left', PanelLeft, t('settings.navbarPositions.left')),
+              segmentedOption('top', PanelTop, t('settings.navbarPositions.top')),
+            ]}
+            onChange={(navbarPosition: NavbarPosition) =>
+              void settingsActions.saveSettings({ navbarPosition })
+            }
+          />
+        </SettingRow>
       </section>
+
       <h2 className={styles.groupTitle}>{t('settings.zoomSettings')}</h2>
       <section className={styles.settingGroup}>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.pageZoom')}
-            description={t('settings.pageZoomDescription')}
-          />
-          <div className={styles.zoomControl}>
-            <Tooltip title={t('settings.zoomOut')}>
-              <Button
-                type="text"
-                aria-label={t('settings.zoomOut')}
-                disabled={settings.pageZoom <= PAGE_ZOOM_LIMITS.min}
-                icon={<Minus size={15} />}
-                onClick={() => changePageZoom(-PAGE_ZOOM_LIMITS.step)}
-              />
-            </Tooltip>
-            <span className={styles.zoomValue}>{Math.round(settings.pageZoom * 100)}%</span>
-            <Tooltip title={t('settings.zoomIn')}>
-              <Button
-                type="text"
-                aria-label={t('settings.zoomIn')}
-                disabled={settings.pageZoom >= PAGE_ZOOM_LIMITS.max}
-                icon={<Plus size={15} />}
-                onClick={() => changePageZoom(PAGE_ZOOM_LIMITS.step)}
-              />
-            </Tooltip>
-            <Tooltip title={t('settings.resetZoom')}>
-              <Button
-                type="text"
-                aria-label={t('settings.resetZoom')}
-                disabled={settings.pageZoom === PAGE_ZOOM_LIMITS.default}
-                icon={<RotateCcw size={15} />}
-                onClick={() =>
-                  void settingsActions.saveSettings({ pageZoom: PAGE_ZOOM_LIMITS.default })
-                }
-              />
-            </Tooltip>
-          </div>
-        </div>
+        <SettingRow
+          title={t('settings.pageZoom')}
+          description={t('settings.pageZoomDescription')}
+          controlClassName={styles.zoomControl}
+        >
+          <Tooltip title={t('settings.zoomOut')}>
+            <Button
+              type="text"
+              aria-label={t('settings.zoomOut')}
+              disabled={settings.pageZoom <= PAGE_ZOOM_LIMITS.min}
+              icon={<Minus size={15} />}
+              onClick={() => changePageZoom(-PAGE_ZOOM_LIMITS.step)}
+            />
+          </Tooltip>
+          <span className={styles.zoomValue}>{Math.round(settings.pageZoom * 100)}%</span>
+          <Tooltip title={t('settings.zoomIn')}>
+            <Button
+              type="text"
+              aria-label={t('settings.zoomIn')}
+              disabled={settings.pageZoom >= PAGE_ZOOM_LIMITS.max}
+              icon={<Plus size={15} />}
+              onClick={() => changePageZoom(PAGE_ZOOM_LIMITS.step)}
+            />
+          </Tooltip>
+          <Tooltip title={t('settings.resetZoom')}>
+            <Button
+              type="text"
+              aria-label={t('settings.resetZoom')}
+              disabled={settings.pageZoom === PAGE_ZOOM_LIMITS.default}
+              icon={<RotateCcw size={15} />}
+              onClick={() =>
+                void settingsActions.saveSettings({ pageZoom: PAGE_ZOOM_LIMITS.default })
+              }
+            />
+          </Tooltip>
+        </SettingRow>
       </section>
+
       <h2 className={styles.groupTitle}>{t('settings.traySettings')}</h2>
       <section className={styles.settingGroup}>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.showTrayIcon')}
-            description={t('settings.showTrayIconDescription')}
-          />
-          <div className={styles.settingControl}>
-            <Tooltip title={platform === 'linux' ? t('settings.trayUnavailable') : undefined}>
-              <Switch
-                checked={settings.showTrayIcon}
-                disabled={platform === 'linux'}
-                onChange={changeTrayIcon}
-              />
-            </Tooltip>
-          </div>
-        </div>
-        <div className={styles.settingRow}>
-          <SettingLabel
-            title={t('settings.minimizeToTrayOnClose')}
-            description={t('settings.minimizeToTrayOnCloseDescription')}
-          />
-          <div className={styles.settingControl}>
-            <Tooltip title={platform === 'linux' ? t('settings.trayUnavailable') : undefined}>
-              <Switch
-                checked={settings.minimizeToTrayOnClose}
-                disabled={platform === 'linux'}
-                onChange={changeMinimizeToTray}
-              />
-            </Tooltip>
-          </div>
-        </div>
+        <SettingRow
+          title={t('settings.showTrayIcon')}
+          description={t('settings.showTrayIconDescription')}
+        >
+          <Tooltip title={trayUnavailable ? t('settings.trayUnavailable') : undefined}>
+            <Switch
+              checked={settings.showTrayIcon}
+              disabled={trayUnavailable}
+              onChange={changeTrayIcon}
+            />
+          </Tooltip>
+        </SettingRow>
+        <SettingRow
+          title={t('settings.minimizeToTrayOnClose')}
+          description={t('settings.minimizeToTrayOnCloseDescription')}
+        >
+          <Tooltip title={trayUnavailable ? t('settings.trayUnavailable') : undefined}>
+            <Switch
+              checked={settings.minimizeToTrayOnClose}
+              disabled={trayUnavailable}
+              onChange={changeMinimizeToTray}
+            />
+          </Tooltip>
+        </SettingRow>
       </section>
     </div>
   )

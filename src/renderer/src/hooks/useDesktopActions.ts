@@ -3,9 +3,8 @@
  */
 
 import { useCallback } from 'react'
-import { App as AntdApp } from 'antd'
-import { useTranslation } from 'react-i18next'
 import { createLogger } from '@renderer/services/LoggerService'
+import { useFailureReporter } from './useFailureReporter'
 
 const logger = createLogger('DesktopActions')
 
@@ -22,8 +21,7 @@ interface DesktopActions {
 
 /** Returns safe commands for external links, logs, and application updates. */
 export const useDesktopActions = (): DesktopActions => {
-  const { message } = AntdApp.useApp()
-  const { t } = useTranslation()
+  const reportFailure = useFailureReporter(logger)
 
   /** Opens an allow-listed external URL in the operating-system browser. */
   const openExternal = useCallback(
@@ -31,11 +29,10 @@ export const useDesktopActions = (): DesktopActions => {
       try {
         await window.app.openExternal(url)
       } catch (error) {
-        logger.error('External URL could not be opened.', error)
-        void message.error(t('errors.generic'))
+        reportFailure('External URL could not be opened.', error)
       }
     },
-    [message, t],
+    [reportFailure],
   )
 
   /** Opens the application log directory in the operating-system file manager. */
@@ -43,12 +40,11 @@ export const useDesktopActions = (): DesktopActions => {
     try {
       await window.app.openLogsDirectory()
     } catch (error) {
-      logger.error('Log directory could not be opened.', error)
-      void message.error(t('errors.generic'))
+      reportFailure('Log directory could not be opened.', error)
     }
-  }, [message, t])
+  }, [reportFailure])
 
-  /** Checks GitHub Releases while preventing rejected IPC calls from escaping the UI. */
+  /** Checks GitHub Releases while keeping a rejected check out of the user's way. */
   const checkForUpdates = useCallback(async (): Promise<void> => {
     try {
       await window.app.checkForUpdates()
@@ -62,10 +58,9 @@ export const useDesktopActions = (): DesktopActions => {
     try {
       await window.app.installUpdate()
     } catch (error) {
-      logger.error('Downloaded application update could not be installed.', error)
-      void message.error(t('errors.generic'))
+      reportFailure('Downloaded application update could not be installed.', error)
     }
-  }, [message, t])
+  }, [reportFailure])
 
   return { checkForUpdates, installUpdate, openExternal, openLogsDirectory }
 }

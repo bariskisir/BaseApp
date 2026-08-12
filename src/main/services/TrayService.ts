@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { app, Menu, nativeImage, Tray, type BrowserWindow } from 'electron'
 import { IpcChannel } from '@shared/IpcChannel'
 import { APP_NAME } from '@shared/appInfo'
-import type { AppSettings } from '@shared/types'
+import type { AppSettings, DesktopPlatform } from '@shared/types'
 import type LoggerService from './LoggerService'
 
 type TraySettings = Pick<AppSettings, 'showTrayIcon' | 'minimizeToTrayOnClose'>
@@ -22,7 +22,7 @@ export default class TrayService {
     private readonly window: BrowserWindow,
     settings: TraySettings,
     private readonly logger: LoggerService,
-    private readonly platform: NodeJS.Platform = process.platform,
+    private readonly platform: DesktopPlatform,
   ) {
     this.settings = this.normalizeSettings(settings)
     this.updateTrayIcon()
@@ -76,7 +76,7 @@ export default class TrayService {
       const sourceImage = nativeImage.createFromPath(iconPath)
       if (sourceImage.isEmpty()) throw new Error(`Tray icon could not be read from ${iconPath}.`)
       const trayImage =
-        process.platform === 'win32' ? sourceImage : sourceImage.resize({ width: 16, height: 16 })
+        this.platform === 'win32' ? sourceImage : sourceImage.resize({ width: 16, height: 16 })
       const tray = new Tray(trayImage)
       tray.setToolTip(APP_NAME)
       tray.setContextMenu(

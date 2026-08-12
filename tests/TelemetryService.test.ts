@@ -4,7 +4,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import TelemetryService from '@main/telemetry/telemetry.service'
+import TelemetryService from '@main/services/TelemetryService'
 import { APP_NAME } from '@shared/appInfo'
 
 const temporaryDirectories: string[] = []

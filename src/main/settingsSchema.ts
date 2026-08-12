@@ -11,6 +11,7 @@ import {
   TIME_FORMATS,
   THEME_MODES,
   type AppSettings,
+  type DesktopPlatform,
 } from '@shared/types'
 import { z } from 'zod'
 
@@ -51,69 +52,32 @@ export const settingsPatchSchema = settingsFieldsSchema
 /** Disables unsupported tray behavior without changing the persisted cross-platform preference. */
 export const normalizeSettingsForPlatform = (
   settings: AppSettings,
-  platform: NodeJS.Platform,
+  platform: DesktopPlatform,
 ): AppSettings =>
   platform === 'linux'
     ? { ...settings, showTrayIcon: false, minimizeToTrayOnClose: false }
     : settings
 
-/** Returns an object record only when a persisted value can contain named settings. */
-const asRecord = (value: unknown): Record<string, unknown> | null =>
-  value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : null
+/** Returns named settings only when the persisted document can contain them. */
+const asSettingsRecord = (input: unknown): Record<string, unknown> =>
+  input && typeof input === 'object' && !Array.isArray(input)
+    ? (input as Record<string, unknown>)
+    : {}
 
-/** Preserves individually valid shell preferences while discarding obsolete feature fields. */
+/**
+ * Restores every individually valid shell preference, falls back per field for obsolete or
+ * corrupted values, and drops fields that the current shell no longer owns.
+ */
 export const parsePersistedSettings = (input: unknown): AppSettings => {
-  const persisted = asRecord(input)
-  if (!persisted) return structuredClone(DEFAULT_SETTINGS)
-
-  /** Keeps a persisted enum-like value only when it belongs to the supported set. */
-  const pick = <T>(value: unknown, allowed: readonly T[], fallback: T): T =>
-    allowed.includes(value as T) ? (value as T) : fallback
-  const showTrayIcon =
-    typeof persisted.showTrayIcon === 'boolean'
-      ? persisted.showTrayIcon
-      : DEFAULT_SETTINGS.showTrayIcon
-  const minimizeToTrayOnClose =
-    showTrayIcon && typeof persisted.minimizeToTrayOnClose === 'boolean'
-      ? persisted.minimizeToTrayOnClose
-      : showTrayIcon && DEFAULT_SETTINGS.minimizeToTrayOnClose
-
+  const persisted = asSettingsRecord(input)
+  const restored: Record<string, unknown> = {}
+  for (const [field, fieldSchema] of Object.entries(settingsFieldsSchema.shape)) {
+    const parsed = fieldSchema.safeParse(persisted[field])
+    restored[field] = parsed.success ? parsed.data : DEFAULT_SETTINGS[field as keyof AppSettings]
+  }
   return settingsSchema.parse({
-    settingsRevision: 1,
-    uiLanguage: pick(persisted.uiLanguage, APP_LOCALES, DEFAULT_SETTINGS.uiLanguage),
-    theme: pick(persisted.theme, THEME_MODES, DEFAULT_SETTINGS.theme),
-    navbarPosition: pick(
-      persisted.navbarPosition,
-      NAVBAR_POSITIONS,
-      DEFAULT_SETTINGS.navbarPosition,
-    ),
-    pageZoom:
-      typeof persisted.pageZoom === 'number' &&
-      persisted.pageZoom >= PAGE_ZOOM_LIMITS.min &&
-      persisted.pageZoom <= PAGE_ZOOM_LIMITS.max
-        ? persisted.pageZoom
-        : DEFAULT_SETTINGS.pageZoom,
-    timeFormat: pick(persisted.timeFormat, TIME_FORMATS, DEFAULT_SETTINGS.timeFormat),
-    alwaysOnTop:
-      typeof persisted.alwaysOnTop === 'boolean'
-        ? persisted.alwaysOnTop
-        : DEFAULT_SETTINGS.alwaysOnTop,
-    showTrayIcon,
-    minimizeToTrayOnClose,
-    autoUpdate:
-      typeof persisted.autoUpdate === 'boolean'
-        ? persisted.autoUpdate
-        : DEFAULT_SETTINGS.autoUpdate,
-    unattendedUpdates:
-      typeof persisted.unattendedUpdates === 'boolean'
-        ? persisted.unattendedUpdates
-        : DEFAULT_SETTINGS.unattendedUpdates,
-    telemetryEnabled:
-      typeof persisted.telemetryEnabled === 'boolean'
-        ? persisted.telemetryEnabled
-        : DEFAULT_SETTINGS.telemetryEnabled,
-    logLevel: pick(persisted.logLevel, LOG_LEVELS, DEFAULT_SETTINGS.logLevel),
+    ...restored,
+    minimizeToTrayOnClose:
+      restored.showTrayIcon === true && restored.minimizeToTrayOnClose === true,
   })
 }
