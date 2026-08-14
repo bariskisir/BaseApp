@@ -15,6 +15,8 @@ import WindowStateStore from './WindowStateStore'
 const DEFAULT_WINDOW_SIZE = { width: 1180, height: 760 }
 /** Delay that lets the renderer mount before its health is verified. */
 const RENDERER_MOUNT_CHECK_DELAY_MS = 1_000
+/** Fallback that reveals the window when the ready-to-show event never fires. */
+const REVEAL_WINDOW_FALLBACK_MS = 250
 
 /** Creates and secures the main window while persisting its desktop state. */
 export default class WindowService {
@@ -43,12 +45,19 @@ export default class WindowService {
     this.stateStore.track(window, restored, logger)
     this.configureRendererDiagnostics(window, logger)
     this.configureSecurity(window)
+    const revealWindow = (): void => {
+      if (window.isDestroyed() || window.isVisible()) return
+      if (startMinimized) window.hide()
+      else window.show()
+    }
     window.once('ready-to-show', () => {
       if (restored?.fullScreen) window.setFullScreen(true)
       else if (restored?.maximized) window.maximize()
-      if (startMinimized) window.hide()
-      else window.show()
+      revealWindow()
     })
+    window.webContents.on('did-finish-load', () =>
+      setTimeout(revealWindow, REVEAL_WINDOW_FALLBACK_MS),
+    )
     window.once('closed', () => {
       if (this.mainWindow === window) this.mainWindow = null
     })

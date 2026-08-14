@@ -14,8 +14,14 @@ const electronMocks = vi.hoisted(() => {
     public static instances: MockBrowserWindow[] = []
     public readonly options: unknown
     private readonly eventListeners = new Map<string, () => void>()
-    public readonly show = vi.fn()
-    public readonly hide = vi.fn()
+    private visible = false
+    public readonly show = vi.fn(() => {
+      this.visible = true
+    })
+    public readonly hide = vi.fn(() => {
+      this.visible = false
+    })
+    public readonly isVisible = vi.fn(() => this.visible)
     public readonly minimize = vi.fn()
     public readonly maximize = vi.fn()
     public readonly restore = vi.fn()
@@ -29,19 +35,36 @@ const electronMocks = vi.hoisted(() => {
     public readonly isFullScreen = vi.fn(() => false)
     public readonly loadFile = vi.fn(async () => undefined)
     public readonly loadURL = vi.fn(async () => undefined)
-    public readonly webContents = {
-      on: vi.fn(),
-      setWindowOpenHandler: vi.fn(),
-      executeJavaScript: vi.fn(async () => 1),
+    public readonly webContents: {
+      eventListeners: Map<string, () => void>
+      on: (event: string, listener: () => void) => void
+      emit: (event: string) => void
+      setWindowOpenHandler: ReturnType<typeof vi.fn>
+      executeJavaScript: ReturnType<typeof vi.fn>
       session: {
-        setPermissionRequestHandler: vi.fn(),
-        setPermissionCheckHandler: vi.fn(),
-      },
+        setPermissionRequestHandler: ReturnType<typeof vi.fn>
+        setPermissionCheckHandler: ReturnType<typeof vi.fn>
+      }
     }
 
     /** Records each created window so tests can trigger lifecycle events. */
     public constructor(options: unknown) {
       this.options = options
+      this.webContents = {
+        eventListeners: new Map<string, () => void>(),
+        on: (event: string, listener: () => void) => {
+          this.webContents.eventListeners.set(event, listener)
+        },
+        emit: (event: string) => {
+          this.webContents.eventListeners.get(event)?.()
+        },
+        setWindowOpenHandler: vi.fn(),
+        executeJavaScript: vi.fn(async () => 1),
+        session: {
+          setPermissionRequestHandler: vi.fn(),
+          setPermissionCheckHandler: vi.fn(),
+        },
+      }
       MockBrowserWindow.instances.push(this)
     }
 
@@ -151,5 +174,55 @@ describe('WindowService', () => {
 
     expect(window?.setFullScreen).toHaveBeenCalledWith(true)
     expect(window?.show).toHaveBeenCalledOnce()
+  })
+
+  it('reveals the window through the load fallback when ready-to-show never fires', async () => {
+    vi.useFakeTimers()
+    try {
+      const service = new WindowService(dataRoot)
+      await service.createWindow(createLogger())
+      const window = electronMocks.MockBrowserWindow.instances[0]
+
+      window?.webContents.emit('did-finish-load')
+      vi.advanceTimersByTime(250)
+
+      expect(window?.show).toHaveBeenCalledOnce()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('keeps the window hidden when minimized startup is enabled and ready-to-show never fires', async () => {
+    vi.useFakeTimers()
+    try {
+      const service = new WindowService(dataRoot)
+      await service.createWindow(createLogger(), true)
+      const window = electronMocks.MockBrowserWindow.instances[0]
+
+      window?.webContents.emit('did-finish-load')
+      vi.advanceTimersByTime(250)
+
+      expect(window?.hide).toHaveBeenCalledOnce()
+      expect(window?.show).not.toHaveBeenCalled()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not re-reveal a window that was already shown by ready-to-show', async () => {
+    vi.useFakeTimers()
+    try {
+      const service = new WindowService(dataRoot)
+      await service.createWindow(createLogger())
+      const window = electronMocks.MockBrowserWindow.instances[0]
+
+      window?.emit('ready-to-show')
+      window?.webContents.emit('did-finish-load')
+      vi.advanceTimersByTime(250)
+
+      expect(window?.show).toHaveBeenCalledOnce()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
