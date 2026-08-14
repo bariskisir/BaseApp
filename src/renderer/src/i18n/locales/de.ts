@@ -57,12 +57,16 @@ export default createLocale({
     zoomIn: 'Vergrößern',
     resetZoom: 'Zoom zurücksetzen',
     traySettings: 'Infobereich-Einstellungen',
+    tray: 'Infobereich',
     trayUnavailable: 'Unter Linux nicht verfügbar',
     showTrayIcon: 'Symbol im Infobereich anzeigen',
     showTrayIconDescription: `${APP_NAME} im Infobereich anzeigen.`,
     minimizeToTrayOnClose: 'Beim Schließen in den Infobereich minimieren',
     minimizeToTrayOnCloseDescription:
       'Blenden Sie das Fenster im Infobereich aus, anstatt die Anwendung zu beenden.',
+    startMinimized: 'Minimiert starten',
+    startMinimizedDescription:
+      'Startet die Anwendung im Infobereich ausgeblendet, ohne das Fenster anzuzeigen.',
     updates: 'Updates',
     telemetry: 'Telemetrie',
     about: 'Über',

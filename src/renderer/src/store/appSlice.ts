@@ -16,7 +16,8 @@ import { DEFAULT_SESSIONS_SIDEBAR_WIDTH } from '@renderer/utils/sidebarSizing'
 /** Top-level application pages. */
 export type AppPage = 'home' | 'settings'
 /** Settings categories available in the reusable shell. */
-export type SettingsSection = 'general' | 'display' | 'updates' | 'telemetry' | 'about' | 'logging'
+export type SettingsSection =
+  'general' | 'display' | 'tray' | 'updates' | 'telemetry' | 'about' | 'logging'
 
 /** Complete renderer state owned by the application slice. */
 export interface AppState {

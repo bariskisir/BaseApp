@@ -13,12 +13,25 @@ import { DEFAULT_SETTINGS, type AppSettings } from '../src/shared/types'
 
 describe('normalizeSettingsForPlatform', () => {
   it('disables unsupported tray behavior on Linux without mutating persisted settings', () => {
-    const persisted = { ...DEFAULT_SETTINGS, showTrayIcon: true, minimizeToTrayOnClose: true }
+    const persisted = {
+      ...DEFAULT_SETTINGS,
+      showTrayIcon: true,
+      minimizeToTrayOnClose: true,
+      startMinimized: true,
+    }
 
     const normalized = normalizeSettingsForPlatform(persisted, 'linux')
 
-    expect(normalized).toMatchObject({ showTrayIcon: false, minimizeToTrayOnClose: false })
-    expect(persisted).toMatchObject({ showTrayIcon: true, minimizeToTrayOnClose: true })
+    expect(normalized).toMatchObject({
+      showTrayIcon: false,
+      minimizeToTrayOnClose: false,
+      startMinimized: false,
+    })
+    expect(persisted).toMatchObject({
+      showTrayIcon: true,
+      minimizeToTrayOnClose: true,
+      startMinimized: true,
+    })
   })
 
   it('preserves tray preferences on supported desktop platforms', () => {
@@ -95,6 +108,15 @@ describe('parsePersistedSettings', () => {
     expect(result.showTrayIcon).toBe(false)
     expect(result.minimizeToTrayOnClose).toBe(false)
   })
+
+  it('disables minimized startup when the tray icon is disabled', () => {
+    const result = parsePersistedSettings({
+      showTrayIcon: false,
+      startMinimized: true,
+    })
+    expect(result.showTrayIcon).toBe(false)
+    expect(result.startMinimized).toBe(false)
+  })
 })
 
 describe('settingsSchema', () => {
@@ -116,6 +138,16 @@ describe('settingsSchema', () => {
         ...DEFAULT_SETTINGS,
         showTrayIcon: false,
         minimizeToTrayOnClose: true,
+      }).success,
+    ).toBe(false)
+  })
+
+  it('rejects minimized startup without a tray icon', () => {
+    expect(
+      settingsSchema.safeParse({
+        ...DEFAULT_SETTINGS,
+        showTrayIcon: false,
+        startMinimized: true,
       }).success,
     ).toBe(false)
   })

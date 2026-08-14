@@ -42,11 +42,14 @@ export interface LocaleResource {
     zoomIn: string
     resetZoom: string
     traySettings: string
+    tray: string
     trayUnavailable: string
     showTrayIcon: string
     showTrayIconDescription: string
     minimizeToTrayOnClose: string
     minimizeToTrayOnCloseDescription: string
+    startMinimized: string
+    startMinimizedDescription: string
     updates: string
     telemetry: string
     about: string

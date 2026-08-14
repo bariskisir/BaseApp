@@ -217,7 +217,7 @@ When adding downstream domain data, update `SessionData`, storage validation, IP
 - Failed renderer commands are reported through `useFailureReporter`, which logs the failure and shows one shared error notice.
 - Compose class names with `cx` from `utils/classNames.ts`, highlight buttons with `useAccentButtonProps`, and build settings controls with the `SettingRow` primitive.
 - Top-level pages are `home` and `settings`.
-- Settings sections are general, display, updates, telemetry, logging, and about.
+- Settings sections are general, display, tray, updates, telemetry, logging, and about.
 - Compact mode hides the session sidebar and is intentionally retained.
 - Session timestamps use a four-digit year and honor the selected 12- or 24-hour clock.
 - Navigating away from the home workspace exits compact mode.
@@ -239,8 +239,9 @@ Fresh installations use these notable defaults:
 | Page zoom | 100% |
 | Time format | 24-hour |
 | Always on top | Off |
-| Show tray icon | On |
-| Minimize to tray on close | On |
+| Show tray icon | Off |
+| Minimize to tray on close | Off |
+| Start minimized | Off |
 | Check for updates on startup | On |
 | Unattended updates | Off |
 | Anonymous startup telemetry | Off |

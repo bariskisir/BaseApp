@@ -1,6 +1,6 @@
 {
   "name": "baseapp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Reusable Electron desktop application starter",
   "keywords": [
     "electron",
@@ -70,6 +70,9 @@
     "vite": "8.2.1",
     "vite-plugin-electron": "1.1.1",
     "vitest": "4.1.10"
+  },
+  "overrides": {
+    "nanoid": "3.3.18"
   },
   "engines": {
     "node": ">=24.0.0",

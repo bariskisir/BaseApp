@@ -35,6 +35,7 @@ export interface AppSettings {
   alwaysOnTop: boolean
   showTrayIcon: boolean
   minimizeToTrayOnClose: boolean
+  startMinimized: boolean
   autoUpdate: boolean
   unattendedUpdates: boolean
   telemetryEnabled: boolean
@@ -55,8 +56,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   pageZoom: PAGE_ZOOM_LIMITS.default,
   timeFormat: '24-hour',
   alwaysOnTop: false,
-  showTrayIcon: true,
-  minimizeToTrayOnClose: true,
+  showTrayIcon: false,
+  minimizeToTrayOnClose: false,
+  startMinimized: false,
   autoUpdate: true,
   unattendedUpdates: false,
   telemetryEnabled: false,

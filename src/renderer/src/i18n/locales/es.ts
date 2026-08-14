@@ -59,12 +59,16 @@ export default createLocale({
     zoomIn: 'Acercar',
     resetZoom: 'Restablecer zoom',
     traySettings: 'Ajustes del área de notificación',
+    tray: 'Área de notificación',
     trayUnavailable: 'No disponible en Linux',
     showTrayIcon: 'Mostrar icono en el área de notificación',
     showTrayIconDescription: `Mostrar ${APP_NAME} en el área de notificación.`,
     minimizeToTrayOnClose: 'Minimizar al área de notificación al cerrar',
     minimizeToTrayOnCloseDescription:
       'Oculta la ventana en el área de notificación en lugar de salir cuando se cierre.',
+    startMinimized: 'Iniciar minimizado',
+    startMinimizedDescription:
+      'Inicia la aplicación oculta en el área de notificación en lugar de mostrar su ventana.',
     updates: 'Actualizaciones',
     telemetry: 'Telemetría',
     about: 'Acerca de',

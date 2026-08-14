@@ -58,12 +58,16 @@ export default createLocale({
     zoomIn: 'Zoom in',
     resetZoom: 'Reset zoom',
     traySettings: 'Tray Settings',
+    tray: 'Tray',
     trayUnavailable: 'Not available on Linux',
     showTrayIcon: 'Show tray icon',
     showTrayIconDescription: `Show ${APP_NAME} in the system tray.`,
     minimizeToTrayOnClose: 'Minimize to tray on close',
     minimizeToTrayOnCloseDescription:
       'Hide the window in the system tray instead of quitting when it is closed.',
+    startMinimized: 'Start minimized',
+    startMinimizedDescription:
+      'Start the application hidden in the system tray instead of showing its window.',
     updates: 'Updates',
     telemetry: 'Telemetry',
     about: 'About',

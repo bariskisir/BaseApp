@@ -70,6 +70,7 @@ export const registerAppIpc = (
     if (platform === 'linux') {
       delete patch.showTrayIcon
       delete patch.minimizeToTrayOnClose
+      delete patch.startMinimized
     }
     const settings = normalizeSettingsForPlatform(
       await services.storage.updateSettings(patch),

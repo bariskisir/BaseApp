@@ -71,7 +71,10 @@ export default class Application {
 
     const updater = new AppUpdater(logger)
     updater.applySettings(settings)
-    const window = await this.windowService.createWindow(logger)
+    const window = await this.windowService.createWindow(
+      logger,
+      settings.showTrayIcon && settings.startMinimized,
+    )
     this.tray?.dispose()
     const tray = new TrayService(window, settings, logger, this.platform)
     this.tray = tray
@@ -105,8 +108,8 @@ export default class Application {
   private focusMainWindow(): void {
     const window = this.windowService.getMainWindow()
     if (!window) return
-    if (window.isMinimized()) window.restore()
     window.show()
+    if (window.isMinimized()) window.restore()
     window.focus()
   }
 

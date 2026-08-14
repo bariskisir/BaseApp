@@ -25,6 +25,7 @@ const settingsFieldsSchema = z.object({
   alwaysOnTop: z.boolean(),
   showTrayIcon: z.boolean(),
   minimizeToTrayOnClose: z.boolean(),
+  startMinimized: z.boolean(),
   autoUpdate: z.boolean(),
   unattendedUpdates: z.boolean(),
   telemetryEnabled: z.boolean(),
@@ -38,6 +39,13 @@ export const settingsSchema = settingsFieldsSchema.superRefine((settings, contex
       code: 'custom',
       path: ['minimizeToTrayOnClose'],
       message: 'Minimize to tray requires the tray icon to be enabled.',
+    })
+  }
+  if (settings.startMinimized && !settings.showTrayIcon) {
+    context.addIssue({
+      code: 'custom',
+      path: ['startMinimized'],
+      message: 'Starting minimized requires the tray icon to be enabled.',
     })
   }
 })
@@ -55,7 +63,12 @@ export const normalizeSettingsForPlatform = (
   platform: DesktopPlatform,
 ): AppSettings =>
   platform === 'linux'
-    ? { ...settings, showTrayIcon: false, minimizeToTrayOnClose: false }
+    ? {
+        ...settings,
+        showTrayIcon: false,
+        minimizeToTrayOnClose: false,
+        startMinimized: false,
+      }
     : settings
 
 /** Returns named settings only when the persisted document can contain them. */
@@ -79,5 +92,6 @@ export const parsePersistedSettings = (input: unknown): AppSettings => {
     ...restored,
     minimizeToTrayOnClose:
       restored.showTrayIcon === true && restored.minimizeToTrayOnClose === true,
+    startMinimized: restored.showTrayIcon === true && restored.startMinimized === true,
   })
 }

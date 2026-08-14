@@ -58,12 +58,16 @@ export default createLocale({
     zoomIn: '拡大',
     resetZoom: 'ズームをリセット',
     traySettings: 'システムトレイ設定',
+    tray: 'トレイ',
     trayUnavailable: 'Linux では利用できません',
     showTrayIcon: 'トレイアイコンを表示',
     showTrayIconDescription: `${APP_NAME} をシステムトレイに表示します。`,
     minimizeToTrayOnClose: '閉じるときにトレイへ最小化',
     minimizeToTrayOnCloseDescription:
       'ウィンドウを閉じたときに終了せず、システムトレイに隠します。',
+    startMinimized: '最小化して起動',
+    startMinimizedDescription:
+      'ウィンドウを表示せず、システムトレイに隠してアプリケーションを起動します。',
     updates: '更新',
     telemetry: 'テレメトリ',
     about: '情報',

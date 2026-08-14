@@ -32,8 +32,8 @@ export default class WindowService {
     return this.mainWindow && !this.mainWindow.isDestroyed() ? this.mainWindow : null
   }
 
-  /** Creates and loads a hardened desktop window. */
-  public async createWindow(logger: LoggerService): Promise<BrowserWindow> {
+  /** Creates and loads a hardened desktop window, optionally hidden to the system tray. */
+  public async createWindow(logger: LoggerService, startMinimized = false): Promise<BrowserWindow> {
     const restored = await this.stateStore.load(
       screen.getAllDisplays().map((display) => display.workArea),
     )
@@ -46,7 +46,8 @@ export default class WindowService {
     window.once('ready-to-show', () => {
       if (restored?.fullScreen) window.setFullScreen(true)
       else if (restored?.maximized) window.maximize()
-      window.show()
+      if (startMinimized) window.hide()
+      else window.show()
     })
     window.once('closed', () => {
       if (this.mainWindow === window) this.mainWindow = null

@@ -58,12 +58,16 @@ export default createLocale({
     zoomIn: 'Увеличить',
     resetZoom: 'Сбросить масштаб',
     traySettings: 'Настройки области уведомлений',
+    tray: 'Область уведомлений',
     trayUnavailable: 'Недоступно в Linux',
     showTrayIcon: 'Показывать значок в области уведомлений',
     showTrayIconDescription: `Показывать ${APP_NAME} в области уведомлений.`,
     minimizeToTrayOnClose: 'Сворачивать в область уведомлений при закрытии',
     minimizeToTrayOnCloseDescription:
       'Скрывайте окно в области уведомлений вместо выхода при его закрытии.',
+    startMinimized: 'Запускать свёрнутым',
+    startMinimizedDescription:
+      'Запускает приложение скрытым в области уведомлений, не показывая его окно.',
     updates: 'Обновления',
     telemetry: 'Телеметрия',
     about: 'О приложении',
