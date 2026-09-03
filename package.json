@@ -56,7 +56,7 @@
     "@types/react-dom": "19.2.5",
     "@vitejs/plugin-react": "6.0.5",
     "antd": "6.6.1",
-    "electron": "43.3.0",
+    "electron": "44.0.0",
     "electron-builder": "26.15.3",
     "i18next": "26.3.6",
     "lucide-react": "1.34.0",
