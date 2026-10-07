@@ -35,6 +35,8 @@ describe('IpcChannel', () => {
 
   it('includes desktop shell, logging, and update channels', () => {
     expect(channels).toContain('window:always-on-top')
+    expect(channels).toContain('window:set-opacity')
+    expect(channels).toContain('window:get-opacity')
     expect(channels).toContain('window:toggle-maximize')
     expect(channels).toContain('theme:set')
     expect(channels).toContain('shell:open-external')

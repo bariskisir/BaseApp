@@ -29,6 +29,9 @@ export interface AppIpcServices {
 /** Applies the window preferences that Electron cannot restore on its own. */
 const applyWindowSettings = (window: BrowserWindow, settings: AppSettings): void => {
   window.setAlwaysOnTop(settings.alwaysOnTop)
+  window.setContentProtection(settings.contentProtection)
+  window.setOpacity(settings.windowOpacity)
+  window.setSkipTaskbar(!settings.showTaskbar)
   window.webContents.setZoomFactor(settings.pageZoom)
 }
 
@@ -71,6 +74,7 @@ export const registerAppIpc = (
       delete patch.showTrayIcon
       delete patch.minimizeToTrayOnClose
       delete patch.startMinimized
+      delete patch.showTaskbar
     }
     const settings = normalizeSettingsForPlatform(
       await services.storage.updateSettings(patch),

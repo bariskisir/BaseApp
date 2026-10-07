@@ -2,8 +2,9 @@
  * Renders system-tray icon and tray-dependent startup preferences.
  */
 
-import { Switch, Tooltip } from 'antd'
+import { Select, Switch, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
+import type { TrayIconPreset } from '@shared/types'
 import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import { useAppSelector } from '@renderer/store'
 import SettingRow from '../components/SettingRow'
@@ -41,6 +42,11 @@ const TraySettingsSection = (): React.JSX.Element => {
     })
   }
 
+  /** Hides the taskbar entry independently of the tray icon. */
+  const changeShowTaskbar = (showTaskbar: boolean): void => {
+    void settingsActions.saveSettings({ showTaskbar })
+  }
+
   return (
     <div className={styles.settingContainer}>
       <h2 className={styles.groupTitle}>{t('settings.traySettings')}</h2>
@@ -56,6 +62,21 @@ const TraySettingsSection = (): React.JSX.Element => {
               onChange={changeTrayIcon}
             />
           </Tooltip>
+        </SettingRow>
+        <SettingRow title={t('settings.trayIcon')} description={t('settings.trayIconDescription')}>
+          <Select
+            value={settings.trayIcon}
+            disabled={trayUnavailable || !settings.showTrayIcon}
+            style={{ width: 180 }}
+            options={[
+              { value: 'default', label: t('settings.trayIconDefault') },
+              { value: 'bluetooth', label: t('settings.trayIconBluetooth') },
+              { value: 'weather', label: t('settings.trayIconWeather') },
+            ]}
+            onChange={(trayIcon) =>
+              void settingsActions.saveSettings({ trayIcon: trayIcon as TrayIconPreset })
+            }
+          />
         </SettingRow>
         <SettingRow
           title={t('settings.minimizeToTrayOnClose')}
@@ -78,6 +99,18 @@ const TraySettingsSection = (): React.JSX.Element => {
               checked={settings.startMinimized}
               disabled={trayUnavailable}
               onChange={changeStartMinimized}
+            />
+          </Tooltip>
+        </SettingRow>
+        <SettingRow
+          title={t('settings.showTaskbar')}
+          description={t('settings.showTaskbarDescription')}
+        >
+          <Tooltip title={trayUnavailable ? t('settings.trayUnavailable') : undefined}>
+            <Switch
+              checked={settings.showTaskbar}
+              disabled={trayUnavailable}
+              onChange={changeShowTaskbar}
             />
           </Tooltip>
         </SettingRow>

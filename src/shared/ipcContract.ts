@@ -25,6 +25,8 @@ export interface IpcInvokeContract {
   [IpcChannel.SessionDelete]: IpcCommand<string, DeleteSessionResult>
   [IpcChannel.SessionDeleteAll]: IpcCommand<void, SessionDocument>
   [IpcChannel.WindowAlwaysOnTop]: IpcCommand<boolean, void>
+  [IpcChannel.WindowSetOpacity]: IpcCommand<number, number>
+  [IpcChannel.WindowGetOpacity]: IpcCommand<void, number>
   [IpcChannel.WindowMinimize]: IpcCommand<void, void>
   [IpcChannel.WindowToggleMaximize]: IpcCommand<void, boolean>
   [IpcChannel.WindowClose]: IpcCommand<void, void>

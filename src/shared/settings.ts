@@ -9,6 +9,12 @@ export const THEME_MODES = ['system', 'light', 'dark'] as const
 export const NAVBAR_POSITIONS = ['left', 'top'] as const
 /** Defines the supported page zoom range and control increment. */
 export const PAGE_ZOOM_LIMITS = { min: 0.5, max: 2, step: 0.1, default: 1 } as const
+/** Defines the supported window opacity range, slider step, and default. */
+export const WINDOW_OPACITY_LIMITS = { min: 0.1, max: 1, step: 0.1, default: 1 } as const
+/** Identifies the selectable system tray icon styles. */
+export const TRAY_ICON_PRESETS = ['default', 'bluetooth', 'weather'] as const
+/** Selectable system tray icon style. */
+export type TrayIconPreset = (typeof TRAY_ICON_PRESETS)[number]
 export const TIME_FORMATS = ['24-hour', '12-hour'] as const
 
 /** Supported renderer locale code. */
@@ -33,6 +39,10 @@ export interface AppSettings {
   pageZoom: number
   timeFormat: TimeFormat
   alwaysOnTop: boolean
+  contentProtection: boolean
+  windowOpacity: number
+  trayIcon: TrayIconPreset
+  showTaskbar: boolean
   showTrayIcon: boolean
   minimizeToTrayOnClose: boolean
   startMinimized: boolean
@@ -56,6 +66,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   pageZoom: PAGE_ZOOM_LIMITS.default,
   timeFormat: '24-hour',
   alwaysOnTop: false,
+  contentProtection: true,
+  windowOpacity: WINDOW_OPACITY_LIMITS.default,
+  trayIcon: 'default',
+  showTaskbar: true,
   showTrayIcon: false,
   minimizeToTrayOnClose: false,
   startMinimized: false,

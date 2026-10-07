@@ -38,6 +38,15 @@ describe('normalizeSettingsForPlatform', () => {
     expect(normalizeSettingsForPlatform(DEFAULT_SETTINGS, 'win32')).toBe(DEFAULT_SETTINGS)
     expect(normalizeSettingsForPlatform(DEFAULT_SETTINGS, 'darwin')).toBe(DEFAULT_SETTINGS)
   })
+
+  it('forces the taskbar entry on Linux without mutating persisted settings', () => {
+    const persisted = { ...DEFAULT_SETTINGS, showTaskbar: false }
+
+    const normalized = normalizeSettingsForPlatform(persisted, 'linux')
+
+    expect(normalized.showTaskbar).toBe(true)
+    expect(persisted.showTaskbar).toBe(false)
+  })
 })
 
 describe('parsePersistedSettings', () => {
@@ -150,6 +159,26 @@ describe('settingsSchema', () => {
         startMinimized: true,
       }).success,
     ).toBe(false)
+  })
+
+  it('accepts hiding both the taskbar entry and the tray icon', () => {
+    expect(
+      settingsSchema.safeParse({
+        ...DEFAULT_SETTINGS,
+        showTaskbar: false,
+        showTrayIcon: false,
+      }).success,
+    ).toBe(true)
+  })
+
+  it('accepts the taskbar alone when the tray icon is disabled', () => {
+    expect(
+      settingsSchema.safeParse({
+        ...DEFAULT_SETTINGS,
+        showTaskbar: true,
+        showTrayIcon: false,
+      }).success,
+    ).toBe(true)
   })
 
   it('strips unknown full-document properties', () => {

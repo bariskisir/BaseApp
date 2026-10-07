@@ -58,6 +58,10 @@ const api: AppApi = {
   deleteAllSessions: () => invoke(IpcChannel.SessionDeleteAll),
   /** Changes the native always-on-top window state. */
   setAlwaysOnTop: (enabled) => invoke(IpcChannel.WindowAlwaysOnTop, enabled),
+  /** Applies a live window opacity without persisting it. Returns the applied value. */
+  setWindowOpacity: (opacity) => invoke(IpcChannel.WindowSetOpacity, opacity),
+  /** Reports the current native window opacity. */
+  getWindowOpacity: () => invoke(IpcChannel.WindowGetOpacity),
   /** Minimizes the main application window. */
   minimizeWindow: () => invoke(IpcChannel.WindowMinimize),
   /** Toggles the main application window between maximized and restored states. */

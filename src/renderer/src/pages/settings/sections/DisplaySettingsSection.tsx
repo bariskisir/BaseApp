@@ -2,10 +2,15 @@
  * Renders theme, navbar, and page-zoom display preferences.
  */
 
-import { Button, Segmented, Tooltip } from 'antd'
+import { Button, Segmented, Slider, Switch, Tooltip } from 'antd'
 import { Minus, Monitor, Moon, PanelLeft, PanelTop, Plus, RotateCcw, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { PAGE_ZOOM_LIMITS, type NavbarPosition, type ThemeMode } from '@shared/types'
+import {
+  PAGE_ZOOM_LIMITS,
+  WINDOW_OPACITY_LIMITS,
+  type NavbarPosition,
+  type ThemeMode,
+} from '@shared/types'
 import { useSettingsActions } from '@renderer/hooks/useSettingsActions'
 import { useAppSelector } from '@renderer/store'
 import SettingRow from '../components/SettingRow'
@@ -70,6 +75,34 @@ const DisplaySettingsSection = (): React.JSX.Element => {
               void settingsActions.saveSettings({ navbarPosition })
             }
           />
+        </SettingRow>
+        <SettingRow
+          title={t('settings.contentProtection')}
+          description={t('settings.contentProtectionDescription')}
+        >
+          <Switch
+            checked={settings.contentProtection}
+            onChange={(contentProtection) =>
+              void settingsActions.saveSettings({ contentProtection })
+            }
+          />
+        </SettingRow>
+        <SettingRow
+          title={t('settings.windowOpacity')}
+          description={t('settings.windowOpacityDescription')}
+        >
+          <Slider
+            min={Math.round(WINDOW_OPACITY_LIMITS.min * 100)}
+            max={Math.round(WINDOW_OPACITY_LIMITS.max * 100)}
+            step={Math.round(WINDOW_OPACITY_LIMITS.step * 100)}
+            value={Math.round(settings.windowOpacity * 100)}
+            tooltip={{ formatter: (value) => `${value}%` }}
+            style={{ width: 160 }}
+            onChange={(percent) =>
+              void settingsActions.saveSettings({ windowOpacity: percent / 100 })
+            }
+          />
+          <span className={styles.zoomValue}>{Math.round(settings.windowOpacity * 100)}%</span>
         </SettingRow>
       </section>
 

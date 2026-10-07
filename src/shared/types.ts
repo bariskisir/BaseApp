@@ -16,6 +16,8 @@ export {
   PAGE_ZOOM_LIMITS,
   THEME_MODES,
   TIME_FORMATS,
+  TRAY_ICON_PRESETS,
+  WINDOW_OPACITY_LIMITS,
 } from './settings'
 export type {
   AppLocale,
@@ -25,6 +27,7 @@ export type {
   ResolvedThemeMode,
   ThemeMode,
   TimeFormat,
+  TrayIconPreset,
 } from './settings'
 export { UPDATE_STATES } from './updates'
 export type { UpdateState, UpdateStateEvent } from './updates'

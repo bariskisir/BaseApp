@@ -75,6 +75,9 @@ export default class Application {
       logger,
       settings.showTrayIcon && settings.startMinimized,
     )
+    window.setContentProtection(settings.contentProtection)
+    window.setOpacity(settings.windowOpacity)
+    window.setSkipTaskbar(!settings.showTaskbar)
     this.tray?.dispose()
     const tray = new TrayService(window, settings, logger, this.platform)
     this.tray = tray

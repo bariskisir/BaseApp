@@ -56,6 +56,11 @@ export default createLocale({
     zoomOut: 'Verkleinern',
     zoomIn: 'Vergrößern',
     resetZoom: 'Zoom zurücksetzen',
+    contentProtection: 'Inhaltsschutz',
+    contentProtectionDescription:
+      'Fenster vor Bildschirmfreigabe, Screenshots und Aufnahmen verbergen.',
+    windowOpacity: 'Fensterdeckkraft',
+    windowOpacityDescription: 'Fenster halbtransparent machen, um Inhalte dahinter zu sehen.',
     traySettings: 'Infobereich-Einstellungen',
     tray: 'Infobereich',
     trayUnavailable: 'Unter Linux nicht verfügbar',
@@ -64,6 +69,13 @@ export default createLocale({
     minimizeToTrayOnClose: 'Beim Schließen in den Infobereich minimieren',
     minimizeToTrayOnCloseDescription:
       'Blenden Sie das Fenster im Infobereich aus, anstatt die Anwendung zu beenden.',
+    trayIcon: 'Tray-Symbol',
+    trayIconDescription: 'Stil des Taskleistensymbols wählen.',
+    trayIconDefault: 'Standard',
+    trayIconBluetooth: 'Bluetooth',
+    trayIconWeather: 'Wetter',
+    showTaskbar: 'In Taskleiste anzeigen',
+    showTaskbarDescription: `${APP_NAME} in der Taskleiste anzeigen.`,
     startMinimized: 'Minimiert starten',
     startMinimizedDescription:
       'Startet die Anwendung im Infobereich ausgeblendet, ohne das Fenster anzuzeigen.',

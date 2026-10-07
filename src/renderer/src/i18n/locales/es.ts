@@ -58,6 +58,11 @@ export default createLocale({
     zoomOut: 'Alejar',
     zoomIn: 'Acercar',
     resetZoom: 'Restablecer zoom',
+    contentProtection: 'Protección de contenido',
+    contentProtectionDescription:
+      'Oculta la ventana del uso compartido de pantalla, capturas y grabaciones.',
+    windowOpacity: 'Opacidad de la ventana',
+    windowOpacityDescription: 'Haz la ventana semitransparente para ver el contenido detrás.',
     traySettings: 'Ajustes del área de notificación',
     tray: 'Área de notificación',
     trayUnavailable: 'No disponible en Linux',
@@ -66,6 +71,13 @@ export default createLocale({
     minimizeToTrayOnClose: 'Minimizar al área de notificación al cerrar',
     minimizeToTrayOnCloseDescription:
       'Oculta la ventana en el área de notificación en lugar de salir cuando se cierre.',
+    trayIcon: 'Icono de bandeja',
+    trayIconDescription: 'Elige el estilo del icono del sistema.',
+    trayIconDefault: 'Predeterminado',
+    trayIconBluetooth: 'Bluetooth',
+    trayIconWeather: 'Clima',
+    showTaskbar: 'Mostrar en la barra de tareas',
+    showTaskbarDescription: `Mostrar ${APP_NAME} en la barra de tareas.`,
     startMinimized: 'Iniciar minimizado',
     startMinimizedDescription:
       'Inicia la aplicación oculta en el área de notificación en lugar de mostrar su ventana.',

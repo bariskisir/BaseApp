@@ -12,6 +12,8 @@ export enum IpcChannel {
   SessionDelete = 'session:delete',
   SessionDeleteAll = 'session:delete-all',
   WindowAlwaysOnTop = 'window:always-on-top',
+  WindowSetOpacity = 'window:set-opacity',
+  WindowGetOpacity = 'window:get-opacity',
   WindowMinimize = 'window:minimize',
   WindowToggleMaximize = 'window:toggle-maximize',
   WindowClose = 'window:close',

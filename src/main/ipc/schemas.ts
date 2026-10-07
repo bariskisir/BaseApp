@@ -24,6 +24,8 @@ export const rendererLogSchema = z.object({
 
 export const alwaysOnTopSchema = z.boolean({ error: 'Invalid window preference.' })
 
+export const windowOpacitySchema = z.number({ error: 'Invalid window opacity.' })
+
 export const resolvedThemeSchema = z.enum(['light', 'dark'], { error: 'Invalid theme.' })
 
 export const externalUrlSchema = z.string({ error: 'Invalid external URL.' })

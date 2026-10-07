@@ -57,6 +57,11 @@ export default createLocale({
     zoomOut: 'Dézoomer',
     zoomIn: 'Zoomer',
     resetZoom: 'Réinitialiser le zoom',
+    contentProtection: 'Protection du contenu',
+    contentProtectionDescription:
+      'Masquer la fenêtre du partage d’écran, des captures et des enregistrements.',
+    windowOpacity: 'Opacité de la fenêtre',
+    windowOpacityDescription: 'Rendre la fenêtre semi-transparente pour voir le contenu derrière.',
     traySettings: 'Paramètres de la zone de notification',
     tray: 'Zone de notification',
     trayUnavailable: 'Non disponible sous Linux',
@@ -65,6 +70,13 @@ export default createLocale({
     minimizeToTrayOnClose: 'Réduire dans la zone de notification à la fermeture',
     minimizeToTrayOnCloseDescription:
       'Masquez la fenêtre dans la zone de notification au lieu de quitter à sa fermeture.',
+    trayIcon: 'Icône de la barre',
+    trayIconDescription: 'Choisir le style de l’icône système.',
+    trayIconDefault: 'Par défaut',
+    trayIconBluetooth: 'Bluetooth',
+    trayIconWeather: 'Météo',
+    showTaskbar: 'Afficher dans la barre des tâches',
+    showTaskbarDescription: `Afficher ${APP_NAME} dans la barre des tâches.`,
     startMinimized: 'Démarrer réduit',
     startMinimizedDescription:
       'Démarrez l’application cachée dans la zone de notification au lieu d’afficher sa fenêtre.',

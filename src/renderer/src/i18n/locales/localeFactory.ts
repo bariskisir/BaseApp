@@ -41,6 +41,10 @@ export interface LocaleResource {
     zoomOut: string
     zoomIn: string
     resetZoom: string
+    contentProtection: string
+    contentProtectionDescription: string
+    windowOpacity: string
+    windowOpacityDescription: string
     traySettings: string
     tray: string
     trayUnavailable: string
@@ -48,6 +52,13 @@ export interface LocaleResource {
     showTrayIconDescription: string
     minimizeToTrayOnClose: string
     minimizeToTrayOnCloseDescription: string
+    trayIcon: string
+    trayIconDescription: string
+    trayIconDefault: string
+    trayIconBluetooth: string
+    trayIconWeather: string
+    showTaskbar: string
+    showTaskbarDescription: string
     startMinimized: string
     startMinimizedDescription: string
     updates: string
