@@ -16,14 +16,16 @@ import type AppUpdater from '../services/AppUpdater'
 import type LoggerService from '../services/LoggerService'
 import type StorageService from '../services/StorageService'
 import type TrayService from '../services/TrayService'
+import type WindowService from '../services/WindowService'
 import type IpcRegistrar from './IpcRegistrar'
 
-/** Services reconfigured whenever the renderer persists new settings. */
+/** Services backing bootstrap and the settings write. */
 export interface AppIpcServices {
   storage: StorageService
   tray: TrayService
   updater: AppUpdater
   logger: LoggerService
+  windowService: WindowService
 }
 
 /** Applies the window preferences that Electron cannot restore on its own. */
@@ -63,6 +65,7 @@ export const registerAppIpc = (
     return {
       settings,
       ...(await resolveWorkspace(services.storage, persistedSessions)),
+      sidebar: services.windowService.getSidebarState(),
       platform,
       version: app.getVersion(),
     }

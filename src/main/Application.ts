@@ -87,7 +87,11 @@ export default class Application {
       event.preventDefault()
       window.hide()
     })
-    registerIpc(window, { storage, tray, updater, logger }, this.platform)
+    registerIpc(
+      window,
+      { storage, tray, updater, logger, windowService: this.windowService },
+      this.platform,
+    )
 
     logger.info('Application', `${APP_NAME} desktop started.`, {
       version: app.getVersion(),

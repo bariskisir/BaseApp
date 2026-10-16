@@ -3,7 +3,7 @@
  */
 
 export { DESKTOP_PLATFORMS, toDesktopPlatform } from './api'
-export type { AppApi, BootstrapPayload, DesktopPlatform, Unsubscribe } from './api'
+export type { AppApi, BootstrapPayload, DesktopPlatform, SidebarState, Unsubscribe } from './api'
 export { LOG_LEVELS } from './logging'
 export type { LogLevel, RendererLogEntry } from './logging'
 export { MAX_SESSION_TITLE_LENGTH, toSessionSummary } from './session'

@@ -67,6 +67,7 @@ const makeBootstrapPayload = (overrides: Partial<BootstrapPayload> = {}): Bootst
   settings: makeSettings(),
   sessions: [],
   currentSession: makeSessionDocument(),
+  sidebar: null,
   platform: 'win32',
   version: '1.0.0',
   ...overrides,
@@ -112,6 +113,25 @@ describe('appSlice', () => {
     expect(second.platform).toBe('darwin')
     expect(second.currentSession?.title).toBe('Active')
     expect(second.version).toBe('2.0.0')
+  })
+
+  it('hydrates persisted sidebar and compact mode when present', () => {
+    const state = reducer(
+      undefined,
+      hydrate(makeBootstrapPayload({ sidebar: { open: false, width: 320, compact: true } })),
+    )
+
+    expect(state.sessionsSidebarOpen).toBe(false)
+    expect(state.sessionsSidebarWidth).toBe(320)
+    expect(state.compactMode).toBe(true)
+  })
+
+  it('keeps the workspace defaults when no sidebar state was persisted', () => {
+    const state = reducer(undefined, hydrate(makeBootstrapPayload({ sidebar: null })))
+
+    expect(state.sessionsSidebarOpen).toBe(true)
+    expect(state.sessionsSidebarWidth).toBe(266)
+    expect(state.compactMode).toBe(false)
   })
 
   it('navigates pages and exits compact mode outside the workspace', () => {

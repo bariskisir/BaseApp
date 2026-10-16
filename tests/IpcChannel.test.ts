@@ -38,6 +38,7 @@ describe('IpcChannel', () => {
     expect(channels).toContain('window:set-opacity')
     expect(channels).toContain('window:get-opacity')
     expect(channels).toContain('window:toggle-maximize')
+    expect(channels).toContain('window:sidebar-state-set')
     expect(channels).toContain('theme:set')
     expect(channels).toContain('shell:open-external')
     expect(channels).toContain('logs:write')

@@ -6,14 +6,21 @@ import type { BrowserWindow } from 'electron'
 import { IpcChannel } from '@shared/IpcChannel'
 import { WINDOW_OPACITY_LIMITS, type DesktopPlatform } from '@shared/types'
 import { getTitleBarOverlay } from '../titleBarOverlay'
+import type WindowService from '../services/WindowService'
 import type IpcRegistrar from './IpcRegistrar'
-import { alwaysOnTopSchema, resolvedThemeSchema, windowOpacitySchema } from './schemas'
+import {
+  alwaysOnTopSchema,
+  resolvedThemeSchema,
+  sidebarStateSchema,
+  windowOpacitySchema,
+} from './schemas'
 
 /** Exposes frameless-window controls and keeps the renderer aware of native state. */
 export const registerWindowIpc = (
   registrar: IpcRegistrar,
   window: BrowserWindow,
   platform: DesktopPlatform,
+  windowService: WindowService,
 ): void => {
   window.on('maximize', () => registrar.send(IpcChannel.WindowMaximizedChanged, true))
   window.on('unmaximize', () => registrar.send(IpcChannel.WindowMaximizedChanged, false))
@@ -45,6 +52,9 @@ export const registerWindowIpc = (
     window.close()
   })
   registrar.handle(IpcChannel.WindowIsMaximized, () => window.isMaximized())
+  registrar.handle(IpcChannel.WindowSidebarStateSet, sidebarStateSchema, (state) => {
+    windowService.setSidebarState(state)
+  })
   registrar.handle(IpcChannel.ThemeSet, resolvedThemeSchema, (theme) => {
     if (platform === 'darwin') window.setTitleBarOverlay(getTitleBarOverlay(theme))
   })

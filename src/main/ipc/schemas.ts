@@ -24,6 +24,12 @@ export const rendererLogSchema = z.object({
 
 export const alwaysOnTopSchema = z.boolean({ error: 'Invalid window preference.' })
 
+export const sidebarStateSchema = z.object({
+  open: z.boolean({ error: 'Invalid sidebar visibility.' }),
+  width: z.number({ error: 'Invalid sidebar width.' }).min(1).max(100_000),
+  compact: z.boolean({ error: 'Invalid compact mode.' }),
+})
+
 export const windowOpacitySchema = z.number({ error: 'Invalid window opacity.' })
 
 export const resolvedThemeSchema = z.enum(['light', 'dark'], { error: 'Invalid theme.' })

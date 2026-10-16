@@ -16,11 +16,23 @@ export type DesktopPlatform = (typeof DESKTOP_PLATFORMS)[number]
 export const toDesktopPlatform = (platform: string): DesktopPlatform =>
   DESKTOP_PLATFORMS.includes(platform as DesktopPlatform) ? (platform as DesktopPlatform) : 'linux'
 
+/** Stores the session sidebar collapse state, width, and workspace density persisted with window geometry. */
+export interface SidebarState {
+  /** Whether the session sidebar is expanded. */
+  open: boolean
+  /** Sidebar width in renderer pixels. */
+  width: number
+  /** Whether the distraction-free workspace view is active. */
+  compact: boolean
+}
+
 /** Initial renderer state returned by the main process. */
 export interface BootstrapPayload {
   settings: AppSettings
   sessions: SessionSummary[]
   currentSession: SessionDocument
+  /** Session sidebar state persisted by a previous session, or null before the first report. */
+  sidebar: SidebarState | null
   platform: DesktopPlatform
   version: string
 }
@@ -58,6 +70,8 @@ export interface AppApi {
   closeWindow(): Promise<void>
   /** Reports whether the main application window is maximized. */
   isWindowMaximized(): Promise<boolean>
+  /** Persists the session sidebar collapse state, width, and compact mode with window geometry. */
+  setSidebarState(state: SidebarState): Promise<void>
   /** Synchronizes native window chrome with the resolved renderer theme. */
   setTheme(theme: ResolvedThemeMode): Promise<void>
   /** Opens an allow-listed URL in the system browser. */

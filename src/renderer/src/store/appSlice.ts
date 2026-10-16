@@ -66,6 +66,11 @@ const appSlice = createSlice({
       state.version = action.payload.version
       state.sessions = action.payload.sessions
       state.currentSession = action.payload.currentSession
+      if (action.payload.sidebar) {
+        state.sessionsSidebarOpen = action.payload.sidebar.open
+        state.sessionsSidebarWidth = action.payload.sidebar.width
+        state.compactMode = action.payload.sidebar.compact
+      }
     },
     /** Records whether main-process bootstrap failed before the shell became usable. */
     setInitializationError(state, action: PayloadAction<boolean>) {
@@ -123,7 +128,7 @@ const appSlice = createSlice({
     setSessionsSidebarOpen(state, action: PayloadAction<boolean>) {
       state.sessionsSidebarOpen = action.payload
     },
-    /** Stores the current session sidebar width for layout and local persistence. */
+    /** Stores the current session sidebar width for layout and window-state persistence. */
     setSessionsSidebarWidth(state, action: PayloadAction<number>) {
       state.sessionsSidebarWidth = action.payload
     },

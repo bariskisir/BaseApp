@@ -5,6 +5,7 @@
 import { join } from 'node:path'
 import { app, BrowserWindow, screen, type BrowserWindowConstructorOptions } from 'electron'
 import { APP_NAME } from '@shared/appInfo'
+import type { SidebarState } from '@shared/types'
 import { isTrustedRendererNavigation } from '../security/RendererNavigationPolicy'
 import { getTitleBarOverlay } from '../titleBarOverlay'
 import type { WindowBounds } from '../windowState'
@@ -32,6 +33,16 @@ export default class WindowService {
   /** Returns the active main window when it is still alive. */
   public getMainWindow(): BrowserWindow | null {
     return this.mainWindow && !this.mainWindow.isDestroyed() ? this.mainWindow : null
+  }
+
+  /** Reports the persisted session sidebar state for renderer bootstrap. */
+  public getSidebarState(): SidebarState | null {
+    return this.stateStore.getSidebarState()
+  }
+
+  /** Records the session sidebar collapse state, width, and compact mode chosen by the renderer. */
+  public setSidebarState(state: SidebarState): void {
+    this.stateStore.setSidebarState(state)
   }
 
   /** Creates and loads a hardened desktop window, optionally hidden to the system tray. */

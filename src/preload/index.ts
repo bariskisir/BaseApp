@@ -70,6 +70,8 @@ const api: AppApi = {
   closeWindow: () => invoke(IpcChannel.WindowClose),
   /** Retrieves the main application window's maximized state. */
   isWindowMaximized: () => invoke(IpcChannel.WindowIsMaximized),
+  /** Persists the session sidebar collapse state, width, and compact mode with window geometry. */
+  setSidebarState: (state) => invoke(IpcChannel.WindowSidebarStateSet, state),
   /** Synchronizes native title-bar colors with the renderer theme. */
   setTheme: (theme) => invoke(IpcChannel.ThemeSet, theme),
   /** Opens one allow-listed HTTPS URL in the system browser. */

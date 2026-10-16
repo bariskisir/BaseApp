@@ -8,19 +8,34 @@ import { APP_NAME } from '@shared/appInfo'
 import i18n from '@renderer/i18n'
 import { createLogger } from '@renderer/services/LoggerService'
 import { hydrate, setInitializationError, setPage, setUpdateState } from '@renderer/store/appSlice'
-import { useAppDispatch } from '@renderer/store'
+import { useAppDispatch, useAppSelector } from '@renderer/store'
 
 const logger = createLogger('AppInit')
 
 /** Loads persisted state and maintains typed IPC subscriptions for the app lifetime. */
 export const useAppInit = (): void => {
   const dispatch = useAppDispatch()
+  const initialized = useAppSelector((state) => state.app.initialized)
+  const sessionsSidebarOpen = useAppSelector((state) => state.app.sessionsSidebarOpen)
+  const sessionsSidebarWidth = useAppSelector((state) => state.app.sessionsSidebarWidth)
+  const compactMode = useAppSelector((state) => state.app.compactMode)
   const { message } = AntdApp.useApp()
   const messageRef = useRef(message)
 
   useEffect(() => {
     messageRef.current = message
   }, [message])
+
+  useEffect(() => {
+    if (!initialized) return
+    void window.app
+      .setSidebarState({
+        open: sessionsSidebarOpen,
+        width: sessionsSidebarWidth,
+        compact: compactMode,
+      })
+      .catch((error) => logger.warn('Session sidebar state could not be persisted.', error))
+  }, [initialized, sessionsSidebarOpen, sessionsSidebarWidth, compactMode])
 
   useEffect(() => {
     let active = true

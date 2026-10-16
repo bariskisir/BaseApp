@@ -3,7 +3,7 @@
  */
 
 import { IpcChannel } from './IpcChannel'
-import type { BootstrapPayload } from './api'
+import type { BootstrapPayload, SidebarState } from './api'
 import type { RendererLogEntry } from './logging'
 import type { DeleteSessionResult, SessionDocument } from './session'
 import type { AppSettings, AppSettingsPatch, ResolvedThemeMode } from './settings'
@@ -31,6 +31,7 @@ export interface IpcInvokeContract {
   [IpcChannel.WindowToggleMaximize]: IpcCommand<void, boolean>
   [IpcChannel.WindowClose]: IpcCommand<void, void>
   [IpcChannel.WindowIsMaximized]: IpcCommand<void, boolean>
+  [IpcChannel.WindowSidebarStateSet]: IpcCommand<SidebarState, void>
   [IpcChannel.ThemeSet]: IpcCommand<ResolvedThemeMode, void>
   [IpcChannel.ShellOpenExternal]: IpcCommand<string, void>
   [IpcChannel.LogsOpenDirectory]: IpcCommand<void, void>

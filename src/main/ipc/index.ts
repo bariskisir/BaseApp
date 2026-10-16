@@ -28,6 +28,6 @@ export const registerIpc = (
   services.updater.initialize((event) => registrar.send(IpcChannel.UpdateState, event))
   registerAppIpc(registrar, window, services, platform)
   registerSessionIpc(registrar, services.storage)
-  registerWindowIpc(registrar, window, platform)
+  registerWindowIpc(registrar, window, platform, services.windowService)
   registerSystemIpc(registrar, services)
 }

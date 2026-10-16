@@ -5,7 +5,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import IpcRegistrar, { removeIpcHandlers } from '../src/main/ipc/IpcRegistrar'
-import { alwaysOnTopSchema, rendererLogSchema } from '../src/main/ipc/schemas'
+import { alwaysOnTopSchema, rendererLogSchema, sidebarStateSchema } from '../src/main/ipc/schemas'
 import { IpcChannel } from '../src/shared/IpcChannel'
 
 type InvokeHandler = (event: unknown, input: unknown) => unknown
@@ -101,6 +101,20 @@ describe('IpcRegistrar', () => {
     await expect(invoke(createEvent(), 'yes')).rejects.toThrow()
 
     expect(handler).toHaveBeenCalledExactlyOnceWith(true)
+  })
+
+  it('accepts a bounded sidebar payload and rejects malformed sidebar fields', async () => {
+    const { window } = createWindow()
+    const handler = vi.fn()
+    new IpcRegistrar(window).handle(IpcChannel.WindowSidebarStateSet, sidebarStateSchema, handler)
+    const invoke = getHandler(ipcMocks.invokeHandlers, IpcChannel.WindowSidebarStateSet)
+    const state = { open: false, width: 320, compact: true }
+
+    await invoke(createEvent(), state)
+    await expect(invoke(createEvent(), { ...state, width: 0 })).rejects.toThrow()
+    await expect(invoke(createEvent(), { ...state, compact: 'yes' })).rejects.toThrow()
+
+    expect(handler).toHaveBeenCalledExactlyOnceWith(state)
   })
 
   it('drops messages with an untrusted sender or an unacceptable payload', () => {
