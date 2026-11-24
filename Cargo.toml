@@ -1,0 +1,66 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/baseapp-base",
+    "crates/baseapp-platform",
+    "crates/baseapp-ui",
+    "crates/baseapp-workbench",
+    "crates/baseapp-app",
+]
+
+[workspace.package]
+version = "3.0.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/bariskisir/BaseApp"
+authors = ["Barış Kısır"]
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+todo = "warn"
+unimplemented = "warn"
+
+[workspace.dependencies]
+baseapp-base = { path = "crates/baseapp-base" }
+baseapp-platform = { path = "crates/baseapp-platform" }
+baseapp-ui = { path = "crates/baseapp-ui" }
+baseapp-workbench = { path = "crates/baseapp-workbench" }
+
+gpui = { package = "gpui-pre", version = "=0.3.14" }
+gpui_platform = { package = "gpui-pre-platform", version = "=0.3.14" }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+anyhow = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+url = "2"
+semver = "1"
+sha2 = "0.10"
+directories = "6"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+ureq = { version = "3", features = ["json"] }
+open = "5"
+rfd = "0.18"
+tray-icon = "0.26"
+auto-launch = "0.6"
+single-instance = "0.3"
+image = { version = "0.25", default-features = false, features = ["png"] }
+raw-window-handle = "0.6"
+tempfile = "3"
+winresource = "0.1"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_System_Com",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }

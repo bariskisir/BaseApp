@@ -1,7 +1,6 @@
-node_modules/
-out/
+/target
 release/
-coverage/
+**/*.rs.bk
 *.log
 *.tsbuildinfo
 .DS_Store

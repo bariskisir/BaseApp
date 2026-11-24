@@ -1,0 +1,27 @@
+[package]
+name = "baseapp-workbench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+baseapp-base.workspace = true
+baseapp-platform.workspace = true
+baseapp-ui.workspace = true
+chrono.workspace = true
+gpui.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+raw-window-handle.workspace = true
+tempfile.workspace = true

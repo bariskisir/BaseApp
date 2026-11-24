@@ -1,0 +1,828 @@
+{
+  "defaultConfiguration": {
+    "settingsRevision": 1,
+    "uiLanguage": "en",
+    "theme": "system",
+    "sideBarLocation": "left",
+    "statusBarVisible": true,
+    "zoomLevel": 0,
+    "dateFormat": "dmy",
+    "timeFormat": "24-hour",
+    "launchAtStartup": false,
+    "hardwareAcceleration": true,
+    "alwaysOnTop": false,
+    "contentProtection": true,
+    "windowOpacity": 1,
+    "trayIcon": "default",
+    "showTaskbar": true,
+    "showTrayIcon": false,
+    "minimizeToTrayOnClose": false,
+    "startMinimized": false,
+    "autoUpdate": true,
+    "unattendedUpdates": false,
+    "telemetryEnabled": false,
+    "logLevel": "info"
+  },
+  "limits": {
+    "zoomLevel": {
+      "min": -8,
+      "max": 8,
+      "step": 1,
+      "default": 0
+    },
+    "windowOpacity": {
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 1
+    }
+  },
+  "parsePersistedConfigCases": [
+    {
+      "name": "empty object",
+      "input": {},
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "null input",
+      "input": null,
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "array input",
+      "input": [],
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "primitive input",
+      "input": "bad",
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "partial valid overrides",
+      "input": {
+        "uiLanguage": "tr",
+        "theme": "dark",
+        "sideBarLocation": "right",
+        "statusBarVisible": false,
+        "zoomLevel": 2,
+        "windowOpacity": 0.8,
+        "logLevel": "debug"
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "tr",
+        "theme": "dark",
+        "sideBarLocation": "right",
+        "statusBarVisible": false,
+        "zoomLevel": 2,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 0.8,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "debug"
+      }
+    },
+    {
+      "name": "legacy pageZoom 1.44 migration",
+      "input": {
+        "pageZoom": 1.44
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 2,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "legacy pageZoom 0.5 migration",
+      "input": {
+        "pageZoom": 0.5
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": -4,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "legacy pageZoom ignored when zoomLevel present",
+      "input": {
+        "pageZoom": 1.44,
+        "zoomLevel": -2
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": -2,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "legacy pageZoom invalid falls back to default",
+      "input": {
+        "pageZoom": -3
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "minimizeToTrayOnClose without showTrayIcon forced false",
+      "input": {
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": true
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "startMinimized without showTrayIcon forced false",
+      "input": {
+        "showTrayIcon": false,
+        "startMinimized": true
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "both tray flags kept when showTrayIcon is true",
+      "input": {
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "out-of-range zoomLevel and windowOpacity fall back to defaults",
+      "input": {
+        "zoomLevel": 99,
+        "windowOpacity": 0.01
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "negative out-of-range zoomLevel and >1 opacity fall back",
+      "input": {
+        "zoomLevel": -9,
+        "windowOpacity": 1.5
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "name": "invalid enum values fall back field-by-field",
+      "input": {
+        "uiLanguage": "xx",
+        "theme": "neon",
+        "sideBarLocation": "top",
+        "dateFormat": "iso",
+        "timeFormat": "military",
+        "trayIcon": "custom",
+        "logLevel": "trace",
+        "alwaysOnTop": true
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": true,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    }
+  ],
+  "normalizeForPlatformCases": [
+    {
+      "platform": "win32",
+      "input": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": true,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": false,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": true,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": false,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "platform": "darwin",
+      "input": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": true,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": false,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": true,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": false,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    },
+    {
+      "platform": "linux",
+      "input": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": true,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": false,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      },
+      "expected": {
+        "settingsRevision": 1,
+        "uiLanguage": "en",
+        "theme": "system",
+        "sideBarLocation": "left",
+        "statusBarVisible": true,
+        "zoomLevel": 0,
+        "dateFormat": "dmy",
+        "timeFormat": "24-hour",
+        "launchAtStartup": false,
+        "hardwareAcceleration": true,
+        "alwaysOnTop": false,
+        "contentProtection": true,
+        "windowOpacity": 1,
+        "trayIcon": "default",
+        "showTaskbar": true,
+        "showTrayIcon": false,
+        "minimizeToTrayOnClose": false,
+        "startMinimized": false,
+        "autoUpdate": true,
+        "unattendedUpdates": false,
+        "telemetryEnabled": false,
+        "logLevel": "info"
+      }
+    }
+  ],
+  "filterPatchForPlatformCases": [
+    {
+      "platform": "win32",
+      "input": {
+        "theme": "dark",
+        "launchAtStartup": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "showTaskbar": false,
+        "zoomLevel": 1
+      },
+      "expected": {
+        "theme": "dark",
+        "launchAtStartup": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "showTaskbar": false,
+        "zoomLevel": 1
+      }
+    },
+    {
+      "platform": "darwin",
+      "input": {
+        "theme": "dark",
+        "launchAtStartup": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "showTaskbar": false,
+        "zoomLevel": 1
+      },
+      "expected": {
+        "theme": "dark",
+        "launchAtStartup": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "showTaskbar": false,
+        "zoomLevel": 1
+      }
+    },
+    {
+      "platform": "linux",
+      "input": {
+        "theme": "dark",
+        "launchAtStartup": true,
+        "showTrayIcon": true,
+        "minimizeToTrayOnClose": true,
+        "startMinimized": true,
+        "showTaskbar": false,
+        "zoomLevel": 1
+      },
+      "expected": {
+        "theme": "dark",
+        "zoomLevel": 1
+      }
+    }
+  ],
+  "patchSchemaCases": [
+    {
+      "name": "single valid key",
+      "input": {
+        "theme": "dark"
+      },
+      "ok": true,
+      "data": {
+        "theme": "dark"
+      }
+    },
+    {
+      "name": "multiple valid keys at boundaries",
+      "input": {
+        "zoomLevel": -8,
+        "windowOpacity": 0.1,
+        "uiLanguage": "ja",
+        "dateFormat": "ymd"
+      },
+      "ok": true,
+      "data": {
+        "uiLanguage": "ja",
+        "zoomLevel": -8,
+        "dateFormat": "ymd",
+        "windowOpacity": 0.1
+      }
+    },
+    {
+      "name": "upper boundary values",
+      "input": {
+        "zoomLevel": 8,
+        "windowOpacity": 1
+      },
+      "ok": true,
+      "data": {
+        "zoomLevel": 8,
+        "windowOpacity": 1
+      }
+    },
+    {
+      "name": "empty object rejected",
+      "input": {},
+      "ok": false
+    },
+    {
+      "name": "settingsRevision disallowed in patch",
+      "input": {
+        "settingsRevision": 1
+      },
+      "ok": false
+    },
+    {
+      "name": "unknown key rejected by strict",
+      "input": {
+        "theme": "dark",
+        "unknownKey": true
+      },
+      "ok": false
+    },
+    {
+      "name": "zoomLevel below min rejected",
+      "input": {
+        "zoomLevel": -9
+      },
+      "ok": false
+    },
+    {
+      "name": "zoomLevel above max rejected",
+      "input": {
+        "zoomLevel": 9
+      },
+      "ok": false
+    },
+    {
+      "name": "windowOpacity below min rejected",
+      "input": {
+        "windowOpacity": 0.05
+      },
+      "ok": false
+    },
+    {
+      "name": "windowOpacity above max rejected",
+      "input": {
+        "windowOpacity": 1.2
+      },
+      "ok": false
+    },
+    {
+      "name": "invalid theme rejected",
+      "input": {
+        "theme": "sepia"
+      },
+      "ok": false
+    },
+    {
+      "name": "invalid locale rejected",
+      "input": {
+        "uiLanguage": "it"
+      },
+      "ok": false
+    },
+    {
+      "name": "wrong type rejected",
+      "input": {
+        "alwaysOnTop": "yes"
+      },
+      "ok": false
+    }
+  ]
+}

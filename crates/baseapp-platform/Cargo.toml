@@ -1,0 +1,40 @@
+[package]
+name = "baseapp-platform"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+auto-launch.workspace = true
+baseapp-base.workspace = true
+chrono.workspace = true
+directories.workspace = true
+image.workspace = true
+open.workspace = true
+raw-window-handle.workspace = true
+rfd.workspace = true
+semver.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+ureq.workspace = true
+url.workspace = true
+uuid.workspace = true
+
+[target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies]
+tray-icon.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

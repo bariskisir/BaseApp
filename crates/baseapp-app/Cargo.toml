@@ -1,0 +1,38 @@
+[package]
+name = "baseapp-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "baseapp"
+path = "src/main.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+baseapp-base.workspace = true
+baseapp-platform.workspace = true
+baseapp-ui.workspace = true
+baseapp-workbench.workspace = true
+gpui.workspace = true
+gpui_platform.workspace = true
+raw-window-handle.workspace = true
+single-instance.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[target.'cfg(target_os = "linux")'.dependencies]
+gpui_platform = { workspace = true, features = ["x11", "wayland"] }
+
+[target.'cfg(windows)'.build-dependencies]
+winresource.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+gpui_platform = { workspace = true, features = ["test-support"] }
+tempfile.workspace = true

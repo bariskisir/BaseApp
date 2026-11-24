@@ -1,0 +1,629 @@
+{
+  "fromHexCases": [
+    {
+      "input": "#000000",
+      "ok": true,
+      "rgba": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "toString": "#000000",
+      "hex": "#000000",
+      "hexA": "#000000ff"
+    },
+    {
+      "input": "#ffffff",
+      "ok": true,
+      "rgba": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "toString": "#ffffff",
+      "hex": "#ffffff",
+      "hexA": "#ffffffff"
+    },
+    {
+      "input": "#FFFFFF",
+      "ok": true,
+      "rgba": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "toString": "#ffffff",
+      "hex": "#ffffff",
+      "hexA": "#ffffffff"
+    },
+    {
+      "input": "#1F1F1F",
+      "ok": true,
+      "rgba": {
+        "r": 31,
+        "g": 31,
+        "b": 31,
+        "a": 1
+      },
+      "toString": "#1f1f1f",
+      "hex": "#1f1f1f",
+      "hexA": "#1f1f1fff"
+    },
+    {
+      "input": "#181818",
+      "ok": true,
+      "rgba": {
+        "r": 24,
+        "g": 24,
+        "b": 24,
+        "a": 1
+      },
+      "toString": "#181818",
+      "hex": "#181818",
+      "hexA": "#181818ff"
+    },
+    {
+      "input": "#0078D4",
+      "ok": true,
+      "rgba": {
+        "r": 0,
+        "g": 120,
+        "b": 212,
+        "a": 1
+      },
+      "toString": "#0078d4",
+      "hex": "#0078d4",
+      "hexA": "#0078d4ff"
+    },
+    {
+      "input": "#005FB8",
+      "ok": true,
+      "rgba": {
+        "r": 0,
+        "g": 95,
+        "b": 184,
+        "a": 1
+      },
+      "toString": "#005fb8",
+      "hex": "#005fb8",
+      "hexA": "#005fb8ff"
+    },
+    {
+      "input": "  #2B2B2B  ",
+      "ok": true,
+      "rgba": {
+        "r": 43,
+        "g": 43,
+        "b": 43,
+        "a": 1
+      },
+      "toString": "#2b2b2b",
+      "hex": "#2b2b2b",
+      "hexA": "#2b2b2bff"
+    },
+    {
+      "input": "f8f8f8",
+      "ok": true,
+      "rgba": {
+        "r": 248,
+        "g": 248,
+        "b": 248,
+        "a": 1
+      },
+      "toString": "#f8f8f8",
+      "hex": "#f8f8f8",
+      "hexA": "#f8f8f8ff"
+    },
+    {
+      "input": "#53595D80",
+      "ok": true,
+      "rgba": {
+        "r": 83,
+        "g": 89,
+        "b": 93,
+        "a": 0.502
+      },
+      "toString": "rgba(83, 89, 93, 0.502)",
+      "hex": "#53595d",
+      "hexA": "#53595d80"
+    },
+    {
+      "input": "#2677CB2E",
+      "ok": true,
+      "rgba": {
+        "r": 38,
+        "g": 119,
+        "b": 203,
+        "a": 0.18
+      },
+      "toString": "rgba(38, 119, 203, 0.18)",
+      "hex": "#2677cb",
+      "hexA": "#2677cb2e"
+    },
+    {
+      "input": "#F1F1F133",
+      "ok": true,
+      "rgba": {
+        "r": 241,
+        "g": 241,
+        "b": 241,
+        "a": 0.2
+      },
+      "toString": "rgba(241, 241, 241, 0.2)",
+      "hex": "#f1f1f1",
+      "hexA": "#f1f1f133"
+    },
+    {
+      "input": "#1F1F1F11",
+      "ok": true,
+      "rgba": {
+        "r": 31,
+        "g": 31,
+        "b": 31,
+        "a": 0.067
+      },
+      "toString": "rgba(31, 31, 31, 0.067)",
+      "hex": "#1f1f1f",
+      "hexA": "#1f1f1f11"
+    },
+    {
+      "input": "#2A2D2E55",
+      "ok": true,
+      "rgba": {
+        "r": 42,
+        "g": 45,
+        "b": 46,
+        "a": 0.333
+      },
+      "toString": "rgba(42, 45, 46, 0.333)",
+      "hex": "#2a2d2e",
+      "hexA": "#2a2d2e55"
+    },
+    {
+      "input": "#F2F2F288",
+      "ok": true,
+      "rgba": {
+        "r": 242,
+        "g": 242,
+        "b": 242,
+        "a": 0.533
+      },
+      "toString": "rgba(242, 242, 242, 0.533)",
+      "hex": "#f2f2f2",
+      "hexA": "#f2f2f288"
+    },
+    {
+      "input": "#ff00aa00",
+      "ok": true,
+      "rgba": {
+        "r": 255,
+        "g": 0,
+        "b": 170,
+        "a": 0
+      },
+      "toString": "rgba(255, 0, 170, 0)",
+      "hex": "#ff00aa",
+      "hexA": "#ff00aa00"
+    },
+    {
+      "input": "#ff00aaff",
+      "ok": true,
+      "rgba": {
+        "r": 255,
+        "g": 0,
+        "b": 170,
+        "a": 1
+      },
+      "toString": "#ff00aa",
+      "hex": "#ff00aa",
+      "hexA": "#ff00aaff"
+    },
+    {
+      "input": "#abc",
+      "ok": true,
+      "rgba": {
+        "r": 170,
+        "g": 187,
+        "b": 204,
+        "a": 1
+      },
+      "toString": "#aabbcc",
+      "hex": "#aabbcc",
+      "hexA": "#aabbccff"
+    },
+    {
+      "input": "#abcd",
+      "ok": true,
+      "rgba": {
+        "r": 170,
+        "g": 187,
+        "b": 204,
+        "a": 0.867
+      },
+      "toString": "rgba(170, 187, 204, 0.867)",
+      "hex": "#aabbcc",
+      "hexA": "#aabbccdd"
+    },
+    {
+      "input": "0f8",
+      "ok": true,
+      "rgba": {
+        "r": 0,
+        "g": 255,
+        "b": 136,
+        "a": 1
+      },
+      "toString": "#00ff88",
+      "hex": "#00ff88",
+      "hexA": "#00ff88ff"
+    },
+    {
+      "input": "0f8c",
+      "ok": true,
+      "rgba": {
+        "r": 0,
+        "g": 255,
+        "b": 136,
+        "a": 0.8
+      },
+      "toString": "rgba(0, 255, 136, 0.8)",
+      "hex": "#00ff88",
+      "hexA": "#00ff88cc"
+    },
+    {
+      "input": "",
+      "ok": false,
+      "error": "Invalid hex color: "
+    },
+    {
+      "input": "   ",
+      "ok": false,
+      "error": "Invalid hex color:    "
+    },
+    {
+      "input": "#",
+      "ok": false,
+      "error": "Invalid hex color: #"
+    },
+    {
+      "input": "#12",
+      "ok": false,
+      "error": "Invalid hex color: #12"
+    },
+    {
+      "input": "#12345",
+      "ok": false,
+      "error": "Invalid hex color: #12345"
+    },
+    {
+      "input": "#1234567",
+      "ok": false,
+      "error": "Invalid hex color: #1234567"
+    },
+    {
+      "input": "#123456789",
+      "ok": false,
+      "error": "Invalid hex color: #123456789"
+    },
+    {
+      "input": "#zzzzzz",
+      "ok": false,
+      "error": "Invalid hex color: #zzzzzz"
+    },
+    {
+      "input": "#12345g",
+      "ok": false,
+      "error": "Invalid hex color: #12345g"
+    },
+    {
+      "input": "rgb(1,2,3)",
+      "ok": false,
+      "error": "Invalid hex color: rgb(1,2,3)"
+    }
+  ],
+  "transformCases": [
+    {
+      "op": "transparent",
+      "hex": "#0078d4",
+      "factor": 0.5,
+      "rgba": {
+        "r": 0,
+        "g": 120,
+        "b": 212,
+        "a": 0.5
+      },
+      "toString": "rgba(0, 120, 212, 0.5)",
+      "hexA": "#0078d480"
+    },
+    {
+      "op": "transparent",
+      "hex": "#53595d",
+      "factor": 0.5,
+      "rgba": {
+        "r": 83,
+        "g": 89,
+        "b": 93,
+        "a": 0.251
+      },
+      "toString": "rgba(83, 89, 93, 0.251)",
+      "hexA": "#53595d40"
+    },
+    {
+      "op": "transparent",
+      "hex": "#ffffff",
+      "factor": 0,
+      "rgba": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "toString": "rgba(255, 255, 255, 0)",
+      "hexA": "#ffffff00"
+    },
+    {
+      "op": "transparent",
+      "hex": "#ffffff",
+      "factor": 1.5,
+      "rgba": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "toString": "#ffffff",
+      "hexA": "#ffffffff"
+    },
+    {
+      "op": "lighten",
+      "hex": "#1198ff",
+      "factor": 0.2,
+      "rgba": {
+        "r": 17,
+        "g": 152,
+        "b": 255,
+        "a": 1
+      },
+      "toString": "#1198ff",
+      "hexA": "#1198ffff"
+    },
+    {
+      "op": "lighten",
+      "hex": "#8f8f8f",
+      "factor": 0.5,
+      "rgba": {
+        "r": 143,
+        "g": 143,
+        "b": 143,
+        "a": 1
+      },
+      "toString": "#8f8f8f",
+      "hexA": "#8f8f8fff"
+    },
+    {
+      "op": "lighten",
+      "hex": "#a0a0a0",
+      "factor": 0.25,
+      "rgba": {
+        "r": 160,
+        "g": 160,
+        "b": 160,
+        "a": 1
+      },
+      "toString": "#a0a0a0",
+      "hexA": "#a0a0a0ff"
+    },
+    {
+      "op": "darken",
+      "hex": "#0060aa",
+      "factor": 0.2,
+      "rgba": {
+        "r": 0,
+        "g": 96,
+        "b": 170,
+        "a": 1
+      },
+      "toString": "#0060aa",
+      "hexA": "#0060aaff"
+    },
+    {
+      "op": "darken",
+      "hex": "#808080",
+      "factor": 0.5,
+      "rgba": {
+        "r": 128,
+        "g": 128,
+        "b": 128,
+        "a": 1
+      },
+      "toString": "#808080",
+      "hexA": "#808080ff"
+    },
+    {
+      "op": "darken",
+      "hex": "#1e1e1e",
+      "factor": 0.3,
+      "rgba": {
+        "r": 30,
+        "g": 30,
+        "b": 30,
+        "a": 1
+      },
+      "toString": "#1e1e1e",
+      "hexA": "#1e1e1eff"
+    },
+    {
+      "op": "opaque",
+      "hex": "#53595d",
+      "rgba": {
+        "r": 83,
+        "g": 89,
+        "b": 93,
+        "a": 1
+      },
+      "toString": "#53595d",
+      "hexA": "#53595dff"
+    },
+    {
+      "op": "opaque",
+      "hex": "#1f1f1f",
+      "rgba": {
+        "r": 31,
+        "g": 31,
+        "b": 31,
+        "a": 1
+      },
+      "toString": "#1f1f1f",
+      "hexA": "#1f1f1fff"
+    },
+    {
+      "op": "mix",
+      "hex": "#80bcea",
+      "otherHex": "#FFFFFF",
+      "weight": 0.5,
+      "rgba": {
+        "r": 128,
+        "g": 188,
+        "b": 234,
+        "a": 1
+      },
+      "toString": "#80bcea",
+      "hexA": "#80bceaff"
+    },
+    {
+      "op": "mix",
+      "hex": "#4a4a4a",
+      "otherHex": "#CCCCCC",
+      "weight": 0.25,
+      "rgba": {
+        "r": 74,
+        "g": 74,
+        "b": 74,
+        "a": 1
+      },
+      "toString": "#4a4a4a",
+      "hexA": "#4a4a4aff"
+    },
+    {
+      "op": "mix",
+      "hex": "#808080",
+      "otherHex": "#FFFFFF",
+      "weight": 0.5,
+      "rgba": {
+        "r": 128,
+        "g": 128,
+        "b": 128,
+        "a": 0.751
+      },
+      "toString": "rgba(128, 128, 128, 0.751)",
+      "hexA": "#808080c0"
+    }
+  ],
+  "rgbaClampCases": [
+    {
+      "input": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "rgba": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "toString": "#000000",
+      "hex": "#000000",
+      "hexA": "#000000ff"
+    },
+    {
+      "input": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "rgba": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "toString": "#ffffff",
+      "hex": "#ffffff",
+      "hexA": "#ffffffff"
+    },
+    {
+      "input": {
+        "r": -10,
+        "g": 300,
+        "b": 127.6,
+        "a": 1.5
+      },
+      "rgba": {
+        "r": 0,
+        "g": 255,
+        "b": 128,
+        "a": 1
+      },
+      "toString": "#00ff80",
+      "hex": "#00ff80",
+      "hexA": "#00ff80ff"
+    },
+    {
+      "input": {
+        "r": 10.4,
+        "g": 20.5,
+        "b": 30.6,
+        "a": -0.5
+      },
+      "rgba": {
+        "r": 10,
+        "g": 21,
+        "b": 31,
+        "a": 0
+      },
+      "toString": "rgba(10, 21, 31, 0)",
+      "hex": "#0a151f",
+      "hexA": "#0a151f00"
+    },
+    {
+      "input": {
+        "r": 12,
+        "g": 34,
+        "b": 56,
+        "a": 0.12345
+      },
+      "rgba": {
+        "r": 12,
+        "g": 34,
+        "b": 56,
+        "a": 0.123
+      },
+      "toString": "rgba(12, 34, 56, 0.123)",
+      "hex": "#0c2238",
+      "hexA": "#0c22381f"
+    },
+    {
+      "input": {
+        "r": 12,
+        "g": 34,
+        "b": 56,
+        "a": 0.50196
+      },
+      "rgba": {
+        "r": 12,
+        "g": 34,
+        "b": 56,
+        "a": 0.502
+      },
+      "toString": "rgba(12, 34, 56, 0.502)",
+      "hex": "#0c2238",
+      "hexA": "#0c223880"
+    }
+  ]
+}

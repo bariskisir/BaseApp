@@ -2,55 +2,54 @@
 
 ## Project Structure & Architecture
 
-This is an Electron desktop-app starter built with pure TypeScript, direct DOM rendering, SCSS, and Vite (zero React, Ant Design, Lucide, or `react-i18next`), organized into a 4-tier layered architecture under `src/app/` (with `@app/*` path mapping):
+BaseApp `3.0.0` is a standalone native desktop application starter built in pure Rust (edition `2024`) and GPUI (`gpui-pre =0.3.14` + `gpui-pre-platform =0.3.14`), with zero third-party UI component frameworks, organized into a 5-crate layered Cargo workspace under `crates/`:
 
-- `src/app/base/`: Zero-domain-dependency primitives (`common/` lifecycle with `DisposableTracker`, events, async, color, formatters, number, platform; `node/` atomic file I/O and `FileOperationQueue`; `browser/` `dom.ts` `$` DOM builder, `browser.ts` zoom/fullscreen state, `codicons.ts` with 49 inline 16x16 SVG Codicons, `domStylesheets.ts`, and the reusable pure-DOM `ui/` widget library: `Widget`, `Button`, `InputBox`, `Checkbox`, `SelectBox`, `SegmentedControl`, `Slider`, `Sash`, `ActionBar`, `ContextMenu`, `Dialog`, `ProgressBar`, `Tooltip`), `parts/` (`ipc/` with `ProxyChannel`, `ValidatedIpcMain`, `ElectronIpcServer`, `ElectronIpcClient`; `sandbox/` with `preload.ts` exposing `window.baseapp` including `webFrame.setZoomLevel`), and co-located `test/` helpers and unit suites.
-- `src/app/platform/`: Reusable desktop platform services, schemas, IPC adapters, registries, and co-located `test/` suites (`instantiation/` including `TestInstantiationService`, `registry/`, `theme/` with `ColorRegistry`/`widgetColors`/`SizeRegistry`/`ThemingRegistry`/`ThemeMainService`, `configuration/`, `sessions/`, `state/`, `window/` with `1.2 ** zoomLevel` scaling, Primary/Secondary/Tertiary sidebar clamping with minimum defaults `170px` / `120px`, `35px` `titleBarOverlay`, and `electron-browser/window.ts` zoom helpers, `native/` with `getRuntimeInfo` and fullscreen IPC, `tray/`, `log/`, `update/`, `telemetry/`, `localization/` via `i18next`, `product/`, `environment/`, `lifecycle/`, `commands/`, `security/`).
-- `src/app/workbench/`: Sandboxed pure-DOM renderer workbench (`common/` contributions, `ViewsRegistry`, `SettingsRegistry`, and workbench theme tokens; `services/` DI singletons such as `WorkbenchThemeService`, `WorkbenchLayoutService`, `ViewDescriptorService`, `SessionsWorkbenchService`, `WorkbenchConfigurationService`, `WorkbenchLocalizationService`, `DialogService`, `ContextMenuService`, `NotificationService`, `WorkbenchUpdateService`, `WorkbenchLifecycleService`, `CommandService`; `browser/` `Component`/`Part`/`IViewPane` shell, `Workbench` with left/right sidebar placement and center editor + bottom tertiary bar column, `TitlebarPart` with top navigation and 3-sidebar layout controls, shared `AbstractSidebarPart` hosting Primary `SidebarPart`, Secondary `AuxiliaryBarPart`, and bottom Tertiary `TertiaryBarPart` with 3-way move menu, drag-and-drop & context-menu view relocation, `EditorPart` with Welcome & searchable `SettingsEditor` views including About link-list + bottom System & Runtime view, `StatusbarPart` with prominent Zoom entry, `NotificationsPart`, `StartupOverlay`; `contrib/` modular sessions/settings/window contributions; `electron-browser/` `DesktopMain` bootstrap; co-located `test/` suites).
-- `src/app/code/`: Thin application entrypoints for `electron-main/` (`index.ts`, `main.ts`, `app.ts`) and `electron-browser/` (`index.html`, `entry.ts`), plus co-located tests.
-- `src/app/test/`: Cross-cutting architectural boundary and repository hygiene tests.
-- `build/`: App icons and packaging assets.
+- `crates/baseapp-base/`: Zero-UI, zero-GPUI primitives (`color` RGBA/hex transforms, `number` clamp/snap math, `formatters` bytes and UTC/local date-time formatting, `platform` OS detection, and `fs` atomic temp-file writes + `FileOperationQueue`), plus golden-parity tests.
+- `crates/baseapp-platform/`: Reusable desktop platform services with zero GPUI dependency (`product` identity constants & `ProductInfo`, `environment` OS data paths, `security` `ExternalUrlPolicy`, `window` exponential `1.2 ** zoomLevel` math + Primary/Secondary/Tertiary sidebar clamping with `170px`/`120px` minimums + multi-display bounds fitting, `configuration` 22-key camelCase settings + legacy migration + validation, `sessions` local workspace CRUD/sorting/repository, `state` `WindowStateStore`, `theme` 101 color tokens & 12 shell metrics for Dark `#1F1F1F`/`#181818`/`#0078D4` and Light `#FFFFFF`/`#F8F8F8`/`#005FB8`, `localization` 10 embedded locale JSONs, `log` daily rotating logger, `update` GitHub Release client with host/size/SHA-256 verification, and `native` dialogs, startup launch, `TrayManager`, and Win32 window effects).
+- `crates/baseapp-ui/`: Custom pure-GPUI asset source and widget kit (`assets` `BaseAppAssets` serving 49 embedded 16x16 SVG Codicons + brand assets, `icon` `Codicon` enum + `codicon()`/`brand_logo()` helpers, `theme` `ActiveTheme` global + `scaled_rem_size` / `rem_px` helpers, and `widgets`: `Button`, `InputBox`, `Checkbox`, `SelectBox`, `SegmentedControl`, `Slider`, `Sash`, `ActionBar`, `ContextMenuOverlay`, `DialogOverlay`, `ProgressBar`, `BaseAppTooltip`).
+- `crates/baseapp-workbench/`: Reactive GPUI workbench state and shell (`state`: `WorkbenchServices`, `WorkbenchState`, `WorkbenchEvent`, `LayoutState`, `ViewDescriptorState`, `NotificationStore`, `SettingsCategoryId`, and 18 `baseapp::*` GPUI actions/keybindings; `parts`: `WorkbenchView`, `TitlebarPart`, shared 3-sidebar shell hosting Primary/Secondary/bottom Tertiary sidebars with drag-and-drop and context-menu view relocation, `SessionsView`, `EditorPart` with `WelcomeView` and searchable 7-section `SettingsEditorView` including `200px` TOC and About System & Runtime view, `StatusbarPart` with prominent Zoom entry, and notification/startup overlays).
+- `crates/baseapp-app/`: Thin native desktop binary (`build.rs` build-time rustc/GPUI env metadata and Windows icon/version resources without duplicating GPUI's manifest, `src/main.rs` single-instance lock, bounds restoration, Win32 window effects, `TrayManager` polling, and lifecycle hooks, plus `tests/architecture_boundaries.rs`).
+- `build/`: Application icons (`.ico`, `.png`, `.svg`) and system tray icon presets.
+- `rust/`: Rewrite architecture decisions (`DECISIONS.md`), domain glossary (`GLOSSARY.md`), wave tracker (`MAP.md`), and golden parity fixtures (`fixtures/*.json`).
 
-## Layer Rules & Dependency Injection
+## Crate Layer Rules & Safety Boundaries
 
-Keep vertical and runtime layer boundaries strict (automatically enforced by `src/app/test/architecture/layerBoundaries.test.ts`):
+Keep vertical crate layering and safety invariants strict (enforced both by Cargo and by `crates/baseapp-app/tests/architecture_boundaries.rs`):
 
-- **Vertical dependencies:** `base` -> `platform` -> `workbench` -> `code` only. Higher layers may depend on lower layers; never import upward.
-- **Runtime isolation:**
-  - `*/common/*`: Pure TypeScript only — never import `node:*`, `electron`, `*/node/*`, `*/browser/*`, `*/electron-main/*`, or `*/electron-browser/*`.
-  - `*/node/*`: Node.js only — never import `electron`, `*/browser/*`, `*/electron-main/*`, or `*/electron-browser/*`.
-  - `*/browser/*`: Browser/UI only — never import `node:*`, `electron`, `*/node/*`, or `*/electron-main/*`.
-- **Zero third-party UI frameworks:** Never import or declare dependencies on `react`, `react-dom`, `antd`, `@ant-design/*`, `lucide-react`, or `react-i18next` anywhere in `src/app/` or `package.json`. Build renderer UI strictly with `src/app/base/browser/dom.ts`, `codicons.ts`, and `src/app/base/browser/ui/` widgets.
-- **Validated IPC exclusivity:** Only `src/app/base/parts/ipc/electron-main/validatedIpcMain.ts` may import `ipcMain` from `'electron'`. All privileged features must expose typed contracts via `ProxyChannel` with Zod validators on the main-process server channel and never grant the renderer direct Node.js or filesystem access.
-- **DI & registries:** Define service tokens with `createDecorator<IService>(id)`, inject dependencies with `@IService` constructor parameter decorators, register workbench singletons via `registerSingleton(..., InstantiationType.Eager | Delayed)`, register movable sidebar views via `registerView(...)` in `ViewsRegistry`, register settings views via `registerSettingsCategory(...)`, and instantiate workbench parts and views through `IInstantiationService.createInstance(...)`. Do not reintroduce Redux or React.
-- **Dynamic theming & typography:** Register color and size tokens in `ColorRegistry` / `SizeRegistry` following BaseApp's Dark (`#1F1F1F` workbench/editor, `#181818` chrome, `#0078D4` accent) and Light (`#FFFFFF` workbench/editor, `#F8F8F8` chrome, `#005FB8` accent) palettes, native platform/CJK/monospace font stacks, and shell chrome dimensions (`35px` titlebar/tabs/sidebar header, `22px` statusbar, `200px` settings TOC), and register dynamic styling participants in `ThemingRegistry`. Consume generated `--baseapp-*` CSS variables in SCSS stylesheets instead of duplicating static color tokens.
+- **Vertical dependencies:** `baseapp-base` -> `baseapp-platform` -> `baseapp-ui` -> `baseapp-workbench` -> `baseapp-app` only. Higher crates may depend on lower crates; never depend upward.
+- **GPUI isolation:** Neither `baseapp-base` nor `baseapp-platform` may depend on `gpui` or `gpui_platform`.
+- **Zero external UI kits:** Never depend on `gpui-component`, `gpui-kit`, or any third-party widget library. Build all UI widgets inside `crates/baseapp-ui/` directly on GPUI primitives.
+- **Unsafe exclusivity:** Workspace lints enforce `unsafe_code = "deny"`. The sole permitted location for `unsafe` code is `crates/baseapp-platform/src/native/win32.rs` for direct Win32 User32 FFI calls, each paired with a `// SAFETY:` comment and `#[allow(unsafe_code)]`.
+- **No unguarded panics in production:** Workspace Clippy lints warn (and CI denies via `-D warnings`) on `unwrap_used`, `expect_used`, `panic`, `todo`, and `unimplemented` across all non-test library, binary, and `build.rs` code (`clippy.toml` permits `unwrap`/`expect`/`panic` in test code only).
+- **Theming & shell metrics:** Define color and metric tokens centrally in `crates/baseapp-platform/src/theme.rs` and consume them in GPUI views via `ActiveTheme` and `rem_px(...)` (`35px` titlebar/tabs/sidebar header, `22px` statusbar, `200px` settings TOC, `170px` / `120px` sidebar minimums).
 
 ## Build, Test, and Development Commands
 
-- `npm ci` installs locked dependencies (Node 24+ and npm 11+).
-- `npm run dev` starts Electron with Vite hot reload.
-- `npm start` builds and launches the production Electron bundles locally.
-- `npm run typecheck` runs `tsc --noEmit` across `tsconfig.node.json`, `tsconfig.web.json`, and `tsconfig.test.json`.
-- `npm run build` type-checks and produces production bundles in `out/`.
-- `npm run test` runs the co-located Vitest suite once; use `npm run test:coverage` for V8 coverage reports and `npm run test:watch` during development.
-- `npm run lint` runs Biome over `src`, `vite.config.mts`, and `vitest.config.mts`.
-- `npm run format` applies Prettier across `src/**/*.{ts,scss,html}`, `vite.config.mts`, and `vitest.config.mts`; `npm run format:check` verifies formatting.
-- `npm run verify` runs linting, tests, format checking, type checking, and a production build.
+- `cargo run --bin baseapp` builds and launches BaseApp locally in debug mode.
+- `cargo build --release --bin baseapp` builds the optimized native release binary.
+- `cargo fmt --all` formats the workspace; `cargo fmt --all -- --check` verifies formatting.
+- `cargo clippy --workspace --all-targets -- -D warnings` runs strict lints across all crates, binaries, and tests.
+- `cargo test --workspace` runs all unit, integration, golden-parity, architecture-boundary, and headless `#[gpui::test]` suites.
 
 ## Coding Style & Hygiene Policy
 
-- **Zero-comment policy:** Do NOT write comments (`//`, `/* */`, `/** */`, `<!-- -->`) anywhere in `.ts`, `.tsx`, `.mts`, `.scss`, or `.html` files under `src/app/`, `vite.config.mts`, or `vitest.config.mts`. Write self-explanatory identifiers and small, focused modules. This rule is enforced in CI by `src/app/test/architecture/layerBoundaries.test.ts`.
-- **Strict TypeScript:** Follow `strict`, `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, and `experimentalDecorators`. Run Biome (`npm run lint`) and Prettier (`npm run format:check`) before finishing.
-- **Naming & UI conventions:** Use PascalCase for classes, parts, and widgets (`TitlebarPart`, `AuxiliaryBarPart`, `TertiaryBarPart`, `SettingsEditorView`, `SelectBox`), and camelCase for services, functions, `.ts` modules, and co-located `.scss` stylesheets (`titlebarPart.ts`, `titlebarPart.scss`, `workbenchThemeService.ts`). Render UI icons using bundled SVG Codicons (`renderCodicon` / `setCodicon` from `@app/base/browser/codicons`, e.g. `'settings-gear'`) and never reference `Settings2` (enforced by `src/app/test/architecture/layerBoundaries.test.ts`).
+- **Zero-comment policy:** Do NOT write comments (`//`, `/* */`, `///`, `//!`) in any `.rs` file under `crates/**`, with one narrow exception: `// SAFETY:` comments immediately documenting unavoidable Win32 FFI `unsafe` blocks inside `crates/baseapp-platform/src/native/win32.rs`. Write self-explanatory identifiers and small, focused modules. Enforced automatically by `crates/baseapp-app/tests/architecture_boundaries.rs`.
+- **Icons & naming:** Render UI icons using `Codicon` (`codicon(Codicon::SettingsGear, ...)` / `"settings-gear"`) from `baseapp-ui`. Never reference external editor brand names anywhere in `crates/`, `README.md`, `AGENTS.md`, `SECURITY.md`, or `.github/workflows/`.
+- **JSON compatibility:** Keep persisted configuration (`config.json`), window state (`window-state.json`), and session documents (`sessions/<uuid>.json`) strictly camelCase-compatible with the recorded golden schemas in `rust/fixtures/`.
 
 ## Testing Guidelines
 
-Write co-located Vitest suites under `src/app/**/test/{common,node,browser,electron-main,electron-browser}/*.test.ts` (and architectural checks under `src/app/test/architecture/`). Guard suites with `ensureNoDisposablesAreLeakedInTestSuite()` from `@app/base/test/common/utils`, use `TestInstantiationService` from `@app/platform/instantiation/test/common/instantiationServiceMock` for DI service/part tests, and use the lightweight Node fake-DOM harness (`@app/base/test/browser/fakeDom`) for pure-DOM widget and workbench UI tests without adding external DOM packages. Cover architectural invariants, pure-DOM widgets and Codicons, DI/registry behavior, movable views and 3-sidebar layout (Primary/Secondary/Tertiary), window zoom calculations, IPC proxy/validation boundaries, persistence, security policies, theme tokens, localization parity, workbench services, and workbench parts. Run `npm run test`, `npm run test:coverage`, and `npm run typecheck` while iterating, and run `npm run verify` before opening a PR.
+Write unit tests alongside modules and integration or headless GPUI tests under `crates/<crate>/tests/*.rs`:
+
+- Use `tempfile::TempDir` for filesystem, persistence, session, configuration, and log tests so suites never touch user application data.
+- Verify deterministic core and platform behavior against the golden fixtures in `rust/fixtures/*.json`.
+- Test pure-GPUI widgets and workbench views headlessly using `#[gpui::test]` and `TestAppContext`.
+- Run `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, and `cargo build --release --bin baseapp` before opening a PR.
 
 ## Commit & Pull Request Guidelines
 
-Use concise imperative commit subjects with Conventional Commit scopes (e.g., `fix(ipc): validate channel sender origin`). Keep commits focused without unrelated churn. PRs should describe behavioral changes, verification performed, and security impact, with screenshots for UI changes.
+Use concise imperative commit subjects with Conventional Commit scopes (e.g., `fix(platform): clamp offscreen window bounds`). Keep commits focused without unrelated churn. PRs should describe behavioral changes, verification performed, and security impact, with screenshots for UI changes.
 
 ## Security & Configuration
 
-Preserve renderer sandboxing, context isolation, `ValidatedIpcMain` sender/origin checks, navigation allow-lists, external URL allow-lists, and Zod schema validation. Keep credentials out of the repository and prefer runtime environment variables such as `APPLICATION_INSIGHTS_CONNECTION_STRING`. Review `SECURITY.md` before handling vulnerability reports.
+Preserve `ExternalUrlPolicy` allow-lists, trusted GitHub Release download host checks, asset size and SHA-256 verification, atomic file writes, strict configuration validation, and `unsafe_code = "deny"`. Keep credentials out of the repository and prefer runtime environment variables such as `APPLICATION_INSIGHTS_CONNECTION_STRING`. Review `SECURITY.md` before handling vulnerability reports.

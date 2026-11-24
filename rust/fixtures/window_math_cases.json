@@ -1,0 +1,813 @@
+{
+  "constants": {
+    "minZoomLevel": -8,
+    "maxZoomLevel": 8,
+    "defaultZoomLevel": 0,
+    "zoomLevelStep": 1,
+    "defaultWindowSize": {
+      "width": 1180,
+      "height": 760
+    },
+    "sidebarLimits": {
+      "min": 170,
+      "default": 170,
+      "minWorkspace": 360
+    },
+    "tertiaryBarLimits": {
+      "min": 120,
+      "default": 120,
+      "minWorkspace": 220
+    },
+    "defaultSidebarState": {
+      "open": true,
+      "width": 170,
+      "compact": false,
+      "auxiliaryOpen": false,
+      "auxiliaryWidth": 170,
+      "tertiaryOpen": false,
+      "tertiaryHeight": 120
+    },
+    "defaultAuxiliaryBarState": {
+      "open": false,
+      "width": 170
+    },
+    "defaultTertiaryBarState": {
+      "open": false,
+      "height": 120
+    }
+  },
+  "zoomLevelToFactorCases": [
+    {
+      "zoomLevel": -8,
+      "expected": 0.2325680393613779
+    },
+    {
+      "zoomLevel": -5,
+      "expected": 0.40187757201646096
+    },
+    {
+      "zoomLevel": -2,
+      "expected": 0.6944444444444445
+    },
+    {
+      "zoomLevel": -1,
+      "expected": 0.8333333333333334
+    },
+    {
+      "zoomLevel": -0.5,
+      "expected": 0.9128709291752769
+    },
+    {
+      "zoomLevel": 0,
+      "expected": 1
+    },
+    {
+      "zoomLevel": 0.5,
+      "expected": 1.0954451150103321
+    },
+    {
+      "zoomLevel": 1,
+      "expected": 1.2
+    },
+    {
+      "zoomLevel": 2,
+      "expected": 1.44
+    },
+    {
+      "zoomLevel": 5,
+      "expected": 2.4883199999999994
+    },
+    {
+      "zoomLevel": 8,
+      "expected": 4.2998169599999985
+    }
+  ],
+  "clampZoomLevelCases": [
+    {
+      "level": -12,
+      "expected": -8
+    },
+    {
+      "level": -8.1,
+      "expected": -8
+    },
+    {
+      "level": -8,
+      "expected": -8
+    },
+    {
+      "level": -1.26,
+      "expected": -1.3
+    },
+    {
+      "level": -1.25,
+      "expected": -1.2
+    },
+    {
+      "level": -0.04,
+      "expected": 0
+    },
+    {
+      "level": 0,
+      "expected": 0
+    },
+    {
+      "level": 0.04,
+      "expected": 0
+    },
+    {
+      "level": 1.24,
+      "expected": 1.2
+    },
+    {
+      "level": 1.25,
+      "expected": 1.3
+    },
+    {
+      "level": 1.26,
+      "expected": 1.3
+    },
+    {
+      "level": 7.96,
+      "expected": 8
+    },
+    {
+      "level": 8,
+      "expected": 8
+    },
+    {
+      "level": 8.1,
+      "expected": 8
+    },
+    {
+      "level": 12,
+      "expected": 8
+    },
+    {
+      "level": "NaN",
+      "expected": 0
+    },
+    {
+      "level": "Infinity",
+      "expected": 0
+    },
+    {
+      "level": "-Infinity",
+      "expected": 0
+    }
+  ],
+  "zoomFactorToLevelCases": [
+    {
+      "zoomFactor": -1,
+      "expected": 0
+    },
+    {
+      "zoomFactor": 0,
+      "expected": 0
+    },
+    {
+      "zoomFactor": 0.1,
+      "expected": -8
+    },
+    {
+      "zoomFactor": 0.25,
+      "expected": -8
+    },
+    {
+      "zoomFactor": 0.5,
+      "expected": -4
+    },
+    {
+      "zoomFactor": 0.8,
+      "expected": -1
+    },
+    {
+      "zoomFactor": 0.8333333,
+      "expected": -1
+    },
+    {
+      "zoomFactor": 1,
+      "expected": 0
+    },
+    {
+      "zoomFactor": 1.1,
+      "expected": 1
+    },
+    {
+      "zoomFactor": 1.2,
+      "expected": 1
+    },
+    {
+      "zoomFactor": 1.44,
+      "expected": 2
+    },
+    {
+      "zoomFactor": 1.728,
+      "expected": 3
+    },
+    {
+      "zoomFactor": 2,
+      "expected": 4
+    },
+    {
+      "zoomFactor": 4.29981696,
+      "expected": 8
+    },
+    {
+      "zoomFactor": 10,
+      "expected": 8
+    },
+    {
+      "zoomFactor": "NaN",
+      "expected": 0
+    },
+    {
+      "zoomFactor": "Infinity",
+      "expected": 0
+    },
+    {
+      "zoomFactor": "-Infinity",
+      "expected": 0
+    }
+  ],
+  "maxSidebarWidthCases": [
+    {
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 920
+    },
+    {
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 170,
+      "expected": 750
+    },
+    {
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 300,
+      "expected": 620
+    },
+    {
+      "viewportWidth": 600,
+      "otherSidebarWidth": 0,
+      "expected": 240
+    },
+    {
+      "viewportWidth": 500,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "viewportWidth": 500,
+      "otherSidebarWidth": 200,
+      "expected": 170
+    },
+    {
+      "viewportWidth": 0,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "viewportWidth": -100,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "viewportWidth": 1000.9,
+      "otherSidebarWidth": 200.7,
+      "expected": 440
+    },
+    {
+      "viewportWidth": "NaN",
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "viewportWidth": "Infinity",
+      "otherSidebarWidth": 100,
+      "expected": 170
+    },
+    {
+      "viewportWidth": 1280,
+      "otherSidebarWidth": "NaN",
+      "expected": 920
+    },
+    {
+      "viewportWidth": 1280,
+      "otherSidebarWidth": -50,
+      "expected": 920
+    }
+  ],
+  "clampSidebarWidthCases": [
+    {
+      "width": 100,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "width": 170,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "width": 280,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 280
+    },
+    {
+      "width": 950,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 920
+    },
+    {
+      "width": 800,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 200,
+      "expected": 720
+    },
+    {
+      "width": 240.6,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 241
+    },
+    {
+      "width": 240.4,
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 240
+    },
+    {
+      "width": 300,
+      "viewportWidth": 400,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "width": "NaN",
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    },
+    {
+      "width": "Infinity",
+      "viewportWidth": 1280,
+      "otherSidebarWidth": 0,
+      "expected": 170
+    }
+  ],
+  "maxTertiaryBarHeightCases": [
+    {
+      "viewportHeight": 800,
+      "expected": 580
+    },
+    {
+      "viewportHeight": 600,
+      "expected": 380
+    },
+    {
+      "viewportHeight": 340,
+      "expected": 120
+    },
+    {
+      "viewportHeight": 300,
+      "expected": 120
+    },
+    {
+      "viewportHeight": 100,
+      "expected": 120
+    },
+    {
+      "viewportHeight": 0,
+      "expected": 120
+    },
+    {
+      "viewportHeight": -50,
+      "expected": 120
+    },
+    {
+      "viewportHeight": 799.9,
+      "expected": 579
+    },
+    {
+      "viewportHeight": "NaN",
+      "expected": 120
+    },
+    {
+      "viewportHeight": "Infinity",
+      "expected": 120
+    }
+  ],
+  "clampTertiaryBarHeightCases": [
+    {
+      "height": 80,
+      "viewportHeight": 800,
+      "expected": 120
+    },
+    {
+      "height": 120,
+      "viewportHeight": 800,
+      "expected": 120
+    },
+    {
+      "height": 250,
+      "viewportHeight": 800,
+      "expected": 250
+    },
+    {
+      "height": 700,
+      "viewportHeight": 800,
+      "expected": 580
+    },
+    {
+      "height": 180.6,
+      "viewportHeight": 800,
+      "expected": 181
+    },
+    {
+      "height": 180.4,
+      "viewportHeight": 800,
+      "expected": 180
+    },
+    {
+      "height": 200,
+      "viewportHeight": 250,
+      "expected": 120
+    },
+    {
+      "height": "NaN",
+      "viewportHeight": 800,
+      "expected": 120
+    },
+    {
+      "height": "Infinity",
+      "viewportHeight": 800,
+      "expected": 120
+    }
+  ],
+  "fitWindowBoundsCases": [
+    {
+      "name": "empty displays",
+      "bounds": {
+        "x": 100,
+        "y": 100,
+        "width": 1000,
+        "height": 700
+      },
+      "workAreas": [],
+      "expected": null
+    },
+    {
+      "name": "inside single primary display",
+      "bounds": {
+        "x": 100,
+        "y": 80,
+        "width": 1180,
+        "height": 760
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": {
+        "x": 100,
+        "y": 80,
+        "width": 1180,
+        "height": 760
+      }
+    },
+    {
+      "name": "partially off right and bottom",
+      "bounds": {
+        "x": 1400,
+        "y": 600,
+        "width": 1180,
+        "height": 760
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": {
+        "x": 740,
+        "y": 280,
+        "width": 1180,
+        "height": 760
+      }
+    },
+    {
+      "name": "partially off left and top",
+      "bounds": {
+        "x": -200,
+        "y": -150,
+        "width": 1180,
+        "height": 760
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": {
+        "x": 0,
+        "y": 0,
+        "width": 1180,
+        "height": 760
+      }
+    },
+    {
+      "name": "oversized window clamped to work area size",
+      "bounds": {
+        "x": 50,
+        "y": 50,
+        "width": 2560,
+        "height": 1440
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 40,
+          "width": 1440,
+          "height": 860
+        }
+      ],
+      "expected": {
+        "x": 0,
+        "y": 40,
+        "width": 1440,
+        "height": 860
+      }
+    },
+    {
+      "name": "completely off-screen returns null",
+      "bounds": {
+        "x": 3000,
+        "y": 2000,
+        "width": 800,
+        "height": 600
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": null
+    },
+    {
+      "name": "dual monitor chooses larger intersection area",
+      "bounds": {
+        "x": 1700,
+        "y": 100,
+        "width": 1000,
+        "height": 700
+      },
+      "workAreas": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        },
+        {
+          "x": 1920,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": {
+        "x": 1920,
+        "y": 100,
+        "width": 1000,
+        "height": 700
+      }
+    },
+    {
+      "name": "negative coordinates left monitor",
+      "bounds": {
+        "x": -1600,
+        "y": 100,
+        "width": 1180,
+        "height": 760
+      },
+      "workAreas": [
+        {
+          "x": -1920,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1040
+        }
+      ],
+      "expected": {
+        "x": -1600,
+        "y": 100,
+        "width": 1180,
+        "height": 760
+      }
+    }
+  ],
+  "parsePersistedWindowStateCases": [
+    {
+      "name": "minimal valid v1",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": 100,
+          "y": 100,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false
+      },
+      "expected": {
+        "revision": 1,
+        "bounds": {
+          "x": 100,
+          "y": 100,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false
+      }
+    },
+    {
+      "name": "full valid v1",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": -500,
+          "y": 40,
+          "width": 1280,
+          "height": 800
+        },
+        "maximized": true,
+        "fullScreen": false,
+        "sidebar": {
+          "open": true,
+          "width": 260
+        },
+        "auxiliaryBar": {
+          "open": true,
+          "width": 220
+        },
+        "tertiaryBar": {
+          "open": true,
+          "height": 180
+        },
+        "compactMode": false,
+        "activeSessionId": "550e8400-e29b-41d4-a716-446655440000",
+        "viewLocations": {
+          "workbench.view.sessions": "auxiliarybar"
+        },
+        "activePrimaryViewId": "workbench.view.sessions",
+        "activeAuxiliaryViewId": "workbench.view.sessions",
+        "activeTertiaryViewId": "workbench.view.sessions"
+      },
+      "expected": {
+        "revision": 1,
+        "bounds": {
+          "x": -500,
+          "y": 40,
+          "width": 1280,
+          "height": 800
+        },
+        "maximized": true,
+        "fullScreen": false,
+        "sidebar": {
+          "open": true,
+          "width": 260
+        },
+        "auxiliaryBar": {
+          "open": true,
+          "width": 220
+        },
+        "tertiaryBar": {
+          "open": true,
+          "height": 180
+        },
+        "compactMode": false,
+        "activeSessionId": "550e8400-e29b-41d4-a716-446655440000",
+        "viewLocations": {
+          "workbench.view.sessions": "auxiliarybar"
+        },
+        "activePrimaryViewId": "workbench.view.sessions",
+        "activeAuxiliaryViewId": "workbench.view.sessions",
+        "activeTertiaryViewId": "workbench.view.sessions"
+      }
+    },
+    {
+      "name": "wrong revision",
+      "input": {
+        "revision": 2,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false
+      },
+      "expected": null
+    },
+    {
+      "name": "non-integer bounds",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": 10.5,
+          "y": 0,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false
+      },
+      "expected": null
+    },
+    {
+      "name": "zero width bounds",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false
+      },
+      "expected": null
+    },
+    {
+      "name": "invalid activeSessionId uuid",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false,
+        "activeSessionId": "not-a-uuid"
+      },
+      "expected": null
+    },
+    {
+      "name": "invalid viewLocations target",
+      "input": {
+        "revision": 1,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 1180,
+          "height": 760
+        },
+        "maximized": false,
+        "fullScreen": false,
+        "viewLocations": {
+          "workbench.view.sessions": "unknownbar"
+        }
+      },
+      "expected": null
+    },
+    {
+      "name": "null input",
+      "input": null,
+      "expected": null
+    },
+    {
+      "name": "string input",
+      "input": "invalid",
+      "expected": null
+    }
+  ]
+}

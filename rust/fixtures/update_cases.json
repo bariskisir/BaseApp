@@ -1,0 +1,235 @@
+{
+  "isNewerVersionCases": [
+    {
+      "candidate": "2.0.1",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "v2.1.0",
+      "installed": "2.0.9",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "3.0.0",
+      "installed": "2.9.9",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "2.0.0",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "candidate": "v2.0.0",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "candidate": "1.9.9",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "candidate": "2.0.0",
+      "installed": "2.0.1",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "candidate": "2.0.0-beta.1",
+      "installed": "1.9.9",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "2.0.0",
+      "installed": "2.0.0-beta.1",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "candidate": "2.0.1+build.5",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": " v2.0.1 ",
+      "installed": "2.0.0",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "0.0.1",
+      "installed": "0.0.0",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "10.0.0",
+      "installed": "9.99.99",
+      "ok": true,
+      "expected": true
+    },
+    {
+      "candidate": "invalid",
+      "installed": "2.0.0",
+      "ok": false,
+      "error": "Unsupported release version: invalid"
+    },
+    {
+      "candidate": "2.0.0",
+      "installed": "not-semver",
+      "ok": false,
+      "error": "Unsupported release version: not-semver"
+    },
+    {
+      "candidate": "2.0",
+      "installed": "1.0.0",
+      "ok": false,
+      "error": "Unsupported release version: 2.0"
+    }
+  ],
+  "selectWindowsInstallerCases": [
+    {
+      "name": "windows x64 exact match",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": [
+          {
+            "name": "baseapp-3.0.0-windows-x64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/baseapp-3.0.0-windows-x64-setup.exe",
+            "size": 12345678
+          },
+          {
+            "name": "BaseApp-3.0.0-windows-arm64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/BaseApp-3.0.0-windows-arm64-setup.exe",
+            "size": 12345679
+          }
+        ]
+      },
+      "arch": "x64",
+      "slug": "baseapp",
+      "ok": true,
+      "expectedAssetName": "baseapp-3.0.0-windows-x64-setup.exe"
+    },
+    {
+      "name": "windows arm64 case-insensitive match",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": [
+          {
+            "name": "baseapp-3.0.0-windows-x64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/baseapp-3.0.0-windows-x64-setup.exe",
+            "size": 12345678
+          },
+          {
+            "name": "BaseApp-3.0.0-windows-arm64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/BaseApp-3.0.0-windows-arm64-setup.exe",
+            "size": 12345679
+          }
+        ]
+      },
+      "arch": "arm64",
+      "slug": "baseapp",
+      "ok": true,
+      "expectedAssetName": "BaseApp-3.0.0-windows-arm64-setup.exe"
+    },
+    {
+      "name": "unsupported arch ia32",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": [
+          {
+            "name": "baseapp-3.0.0-windows-x64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/baseapp-3.0.0-windows-x64-setup.exe",
+            "size": 12345678
+          },
+          {
+            "name": "BaseApp-3.0.0-windows-arm64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/BaseApp-3.0.0-windows-arm64-setup.exe",
+            "size": 12345679
+          }
+        ]
+      },
+      "arch": "ia32",
+      "slug": "baseapp",
+      "ok": false,
+      "error": "Application updates are not available for ia32 builds."
+    },
+    {
+      "name": "unsupported arch arm",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": [
+          {
+            "name": "baseapp-3.0.0-windows-x64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/baseapp-3.0.0-windows-x64-setup.exe",
+            "size": 12345678
+          },
+          {
+            "name": "BaseApp-3.0.0-windows-arm64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/BaseApp-3.0.0-windows-arm64-setup.exe",
+            "size": 12345679
+          }
+        ]
+      },
+      "arch": "arm",
+      "slug": "baseapp",
+      "ok": false,
+      "error": "Application updates are not available for arm builds."
+    },
+    {
+      "name": "missing asset",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": []
+      },
+      "arch": "x64",
+      "slug": "baseapp",
+      "ok": false,
+      "error": "Release 3.0.0 does not contain baseapp-3.0.0-windows-x64-setup.exe."
+    },
+    {
+      "name": "mismatched slug",
+      "release": {
+        "version": "3.0.0",
+        "name": "BaseApp v3.0.0",
+        "pageUrl": "https://github.com/bariskisir/BaseApp/releases/tag/v3.0.0",
+        "assets": [
+          {
+            "name": "baseapp-3.0.0-windows-x64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/baseapp-3.0.0-windows-x64-setup.exe",
+            "size": 12345678
+          },
+          {
+            "name": "BaseApp-3.0.0-windows-arm64-setup.exe",
+            "downloadUrl": "https://github.com/bariskisir/BaseApp/releases/download/v3.0.0/BaseApp-3.0.0-windows-arm64-setup.exe",
+            "size": 12345679
+          }
+        ]
+      },
+      "arch": "x64",
+      "slug": "otherapp",
+      "ok": false,
+      "error": "Release 3.0.0 does not contain otherapp-3.0.0-windows-x64-setup.exe."
+    }
+  ]
+}

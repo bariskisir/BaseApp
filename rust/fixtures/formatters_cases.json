@@ -1,0 +1,581 @@
+{
+  "timezone": "UTC",
+  "formatBytesCases": [
+    {
+      "input": 0,
+      "expected": "0 B"
+    },
+    {
+      "input": -1,
+      "expected": "0 B"
+    },
+    {
+      "input": -50,
+      "expected": "0 B"
+    },
+    {
+      "input": -1024,
+      "expected": "0 B"
+    },
+    {
+      "input": "NaN",
+      "expected": "0 B"
+    },
+    {
+      "input": "Infinity",
+      "expected": "0 B"
+    },
+    {
+      "input": "-Infinity",
+      "expected": "0 B"
+    },
+    {
+      "input": 0.4,
+      "expected": "410 B"
+    },
+    {
+      "input": 0.6,
+      "expected": "614 B"
+    },
+    {
+      "input": 1,
+      "expected": "1 B"
+    },
+    {
+      "input": 512,
+      "expected": "512 B"
+    },
+    {
+      "input": 1023,
+      "expected": "1023 B"
+    },
+    {
+      "input": 1024,
+      "expected": "1 KB"
+    },
+    {
+      "input": 1025,
+      "expected": "1 KB"
+    },
+    {
+      "input": 1536,
+      "expected": "1.5 KB"
+    },
+    {
+      "input": 10240,
+      "expected": "10 KB"
+    },
+    {
+      "input": 102338.56,
+      "expected": "99.9 KB"
+    },
+    {
+      "input": 102400,
+      "expected": "100 KB"
+    },
+    {
+      "input": 153600,
+      "expected": "150 KB"
+    },
+    {
+      "input": 1048576,
+      "expected": "1 MB"
+    },
+    {
+      "input": 1625292.8,
+      "expected": "1.6 MB"
+    },
+    {
+      "input": 2097152,
+      "expected": "2 MB"
+    },
+    {
+      "input": 104857600,
+      "expected": "100 MB"
+    },
+    {
+      "input": 269169459.2,
+      "expected": "257 MB"
+    },
+    {
+      "input": 1073741824,
+      "expected": "1 GB"
+    },
+    {
+      "input": 3758096384,
+      "expected": "3.5 GB"
+    },
+    {
+      "input": 1099511627776,
+      "expected": "1024 GB"
+    },
+    {
+      "input": 2748779069440,
+      "expected": "2560 GB"
+    }
+  ],
+  "formatDateCases": [
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 00:05"
+    },
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 12:05 AM"
+    },
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 00:05"
+    },
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 12:05 AM"
+    },
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 00:05"
+    },
+    {
+      "isoDate": "2026-03-05T00:05:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 12:05 AM"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 09:07"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 09:07 AM"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 09:07"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 09:07 AM"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 09:07"
+    },
+    {
+      "isoDate": "2026-03-05T09:07:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 09:07 AM"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 12:00"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 12:00 PM"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 12:00"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 12:00 PM"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 12:00"
+    },
+    {
+      "isoDate": "2026-03-05T12:00:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 12:00 PM"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 13:30"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 01:30 PM"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 13:30"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 01:30 PM"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 13:30"
+    },
+    {
+      "isoDate": "2026-03-05T13:30:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 01:30 PM"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 18:45"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 06:45 PM"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 18:45"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 06:45 PM"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 18:45"
+    },
+    {
+      "isoDate": "2026-03-05T18:45:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 06:45 PM"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "05.03.2026 23:59"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "05.03.2026 11:59 PM"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "03/05/2026 23:59"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "03/05/2026 11:59 PM"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-03-05 23:59"
+    },
+    {
+      "isoDate": "2026-03-05T23:59:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-03-05 11:59 PM"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "29.02.2024 14:30"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "29.02.2024 02:30 PM"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "02/29/2024 14:30"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "02/29/2024 02:30 PM"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2024-02-29 14:30"
+    },
+    {
+      "isoDate": "2024-02-29T14:30:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2024-02-29 02:30 PM"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "24.11.2026 08:09"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "24.11.2026 08:09 AM"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "11/24/2026 08:09"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "11/24/2026 08:09 AM"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": "2026-11-24 08:09"
+    },
+    {
+      "isoDate": "2026-11-24T08:09:10.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": "2026-11-24 08:09 AM"
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "not-a-date",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "dmy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "mdy",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "24-hour",
+      "locale": "en",
+      "expected": ""
+    },
+    {
+      "isoDate": "2026-13-45T99:99:00.000Z",
+      "dateFormat": "ymd",
+      "timeFormat": "12-hour",
+      "locale": "en",
+      "expected": ""
+    }
+  ]
+}

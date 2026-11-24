@@ -1,0 +1,341 @@
+{
+  "maxSessionTitleLength": 200,
+  "toSessionSummaryCase": {
+    "input": {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Design Notes",
+      "isDefaultTitle": false,
+      "pinned": true,
+      "createdAt": "2026-03-01T10:00:00.000Z",
+      "updatedAt": "2026-03-05T12:00:00.000Z",
+      "data": {
+        "draft": "hello",
+        "count": 3
+      }
+    },
+    "expected": {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Design Notes",
+      "isDefaultTitle": false,
+      "pinned": true,
+      "createdAt": "2026-03-01T10:00:00.000Z",
+      "updatedAt": "2026-03-05T12:00:00.000Z"
+    }
+  },
+  "comparePairs": [
+    {
+      "name": "pinned before unpinned",
+      "left": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "title": "Pinned Old",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-01T10:00:00.000Z",
+        "updatedAt": "2026-01-02T10:00:00.000Z"
+      },
+      "right": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      "sign": -1
+    },
+    {
+      "name": "unpinned after pinned",
+      "left": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      "right": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "title": "Pinned Old",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-01T10:00:00.000Z",
+        "updatedAt": "2026-01-02T10:00:00.000Z"
+      },
+      "sign": 1
+    },
+    {
+      "name": "both pinned newer updatedAt first",
+      "left": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "title": "Pinned Old",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-01T10:00:00.000Z",
+        "updatedAt": "2026-01-02T10:00:00.000Z"
+      },
+      "right": {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "title": "Pinned New",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-05T10:00:00.000Z",
+        "updatedAt": "2026-02-01T10:00:00.000Z"
+      },
+      "sign": 1
+    },
+    {
+      "name": "both unpinned newer updatedAt first",
+      "left": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      "right": {
+        "id": "44444444-4444-4444-8444-444444444444",
+        "title": "Unpinned Same Updated Newer Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-10T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      "sign": -1
+    },
+    {
+      "name": "same updatedAt newer createdAt first",
+      "left": {
+        "id": "44444444-4444-4444-8444-444444444444",
+        "title": "Unpinned Same Updated Newer Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-10T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      "right": {
+        "id": "55555555-5555-4555-8555-555555555555",
+        "title": "Unpinned Same Updated Older Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-01T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      "sign": -1
+    },
+    {
+      "name": "same updatedAt older createdAt second",
+      "left": {
+        "id": "55555555-5555-4555-8555-555555555555",
+        "title": "Unpinned Same Updated Older Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-01T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      "right": {
+        "id": "44444444-4444-4444-8444-444444444444",
+        "title": "Unpinned Same Updated Newer Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-10T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      "sign": 1
+    },
+    {
+      "name": "identical summary",
+      "left": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      "right": {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      "sign": 0
+    }
+  ],
+  "sortOrderCase": {
+    "input": [
+      {
+        "id": "55555555-5555-4555-8555-555555555555",
+        "title": "Unpinned Same Updated Older Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-01T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "title": "Unpinned Newest",
+        "isDefaultTitle": true,
+        "pinned": false,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-05T10:00:00.000Z"
+      },
+      {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "title": "Pinned Old",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-01T10:00:00.000Z",
+        "updatedAt": "2026-01-02T10:00:00.000Z"
+      },
+      {
+        "id": "44444444-4444-4444-8444-444444444444",
+        "title": "Unpinned Same Updated Newer Created",
+        "isDefaultTitle": false,
+        "pinned": false,
+        "createdAt": "2026-02-10T10:00:00.000Z",
+        "updatedAt": "2026-02-15T10:00:00.000Z"
+      },
+      {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "title": "Pinned New",
+        "isDefaultTitle": false,
+        "pinned": true,
+        "createdAt": "2026-01-05T10:00:00.000Z",
+        "updatedAt": "2026-02-01T10:00:00.000Z"
+      }
+    ],
+    "expectedIds": [
+      "22222222-2222-4222-8222-222222222222",
+      "11111111-1111-4111-8111-111111111111",
+      "33333333-3333-4333-8333-333333333333",
+      "44444444-4444-4444-8444-444444444444",
+      "55555555-5555-4555-8555-555555555555"
+    ]
+  },
+  "sessionIdCases": [
+    {
+      "input": "550e8400-e29b-41d4-a716-446655440000",
+      "ok": true
+    },
+    {
+      "input": "11111111-1111-4111-8111-111111111111",
+      "ok": true
+    },
+    {
+      "input": "not-a-uuid",
+      "ok": false
+    },
+    {
+      "input": "",
+      "ok": false
+    },
+    {
+      "input": 12345,
+      "ok": false
+    }
+  ],
+  "sessionRenameCases": [
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "Valid Title"
+      },
+      "ok": true,
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "Valid Title"
+      }
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "  Trimmed Title  "
+      },
+      "ok": true,
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "Trimmed Title"
+      }
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "ok": true,
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "ok": false
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": "   "
+      },
+      "ok": false
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "title": ""
+      },
+      "ok": false
+    },
+    {
+      "input": {
+        "id": "bad-id",
+        "title": "Valid Title"
+      },
+      "ok": false
+    }
+  ],
+  "sessionPinCases": [
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "pinned": true
+      },
+      "ok": true,
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "pinned": true
+      }
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "pinned": false
+      },
+      "ok": true,
+      "data": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "pinned": false
+      }
+    },
+    {
+      "input": {
+        "id": "bad-id",
+        "pinned": true
+      },
+      "ok": false
+    },
+    {
+      "input": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "pinned": "true"
+      },
+      "ok": false
+    }
+  ]
+}

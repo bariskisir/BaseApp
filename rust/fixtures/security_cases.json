@@ -1,0 +1,134 @@
+{
+  "allowedHosts": [
+    "github.com",
+    "www.bariskisir.com"
+  ],
+  "cases": [
+    {
+      "url": "https://github.com/bariskisir/BaseApp",
+      "allowed": true,
+      "normalizedUrl": "https://github.com/bariskisir/BaseApp",
+      "error": null
+    },
+    {
+      "url": "https://github.com/bariskisir/BaseApp/releases",
+      "allowed": true,
+      "normalizedUrl": "https://github.com/bariskisir/BaseApp/releases",
+      "error": null
+    },
+    {
+      "url": "https://github.com/bariskisir/BaseApp/issues",
+      "allowed": true,
+      "normalizedUrl": "https://github.com/bariskisir/BaseApp/issues",
+      "error": null
+    },
+    {
+      "url": "https://GITHUB.COM/bariskisir/BaseApp",
+      "allowed": true,
+      "normalizedUrl": "https://github.com/bariskisir/BaseApp",
+      "error": null
+    },
+    {
+      "url": "https://www.bariskisir.com",
+      "allowed": true,
+      "normalizedUrl": "https://www.bariskisir.com/",
+      "error": null
+    },
+    {
+      "url": "https://www.bariskisir.com/projects?ref=baseapp#top",
+      "allowed": true,
+      "normalizedUrl": "https://www.bariskisir.com/projects?ref=baseapp#top",
+      "error": null
+    },
+    {
+      "url": "https://github.com:443/bariskisir/BaseApp",
+      "allowed": true,
+      "normalizedUrl": "https://github.com/bariskisir/BaseApp",
+      "error": null
+    },
+    {
+      "url": "https://github.com:8443/bariskisir/BaseApp",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "http://github.com/bariskisir/BaseApp",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "http://www.bariskisir.com",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://user:pass@github.com/bariskisir/BaseApp",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://user@www.bariskisir.com",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://bariskisir.com",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://evil.github.com/bariskisir/BaseApp",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://github.com.evil.example/bariskisir/BaseApp",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "https://example.com",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "javascript:alert(1)",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "file:///C:/Windows/System32/calc.exe",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "mailto:test@example.com",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "This URL is not allowed."
+    },
+    {
+      "url": "not a valid url",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "Invalid external URL."
+    },
+    {
+      "url": "",
+      "allowed": false,
+      "normalizedUrl": null,
+      "error": "Invalid external URL."
+    }
+  ]
+}
