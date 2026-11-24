@@ -1,0 +1,71 @@
+.monaco-inputbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 26px;
+  padding: 0 6px;
+  background-color: var(--baseapp-input-background);
+  color: var(--baseapp-input-foreground);
+  border: var(--baseapp-border-width) solid var(--baseapp-input-border);
+  border-radius: var(--baseapp-cornerRadius-small);
+  transition: border-color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-inputbox:focus-within {
+  border-color: var(--baseapp-focusBorder);
+}
+
+.monaco-inputbox.disabled {
+  opacity: 0.45;
+}
+
+.monaco-inputbox-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--baseapp-input-placeholderForeground);
+}
+
+.monaco-inputbox-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 24px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--baseapp-input-foreground);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.monaco-inputbox-input::placeholder {
+  color: var(--baseapp-input-placeholderForeground);
+}
+
+.monaco-inputbox-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: var(--baseapp-cornerRadius-small);
+  background-color: transparent;
+  color: var(--baseapp-icon-foreground);
+  cursor: pointer;
+}
+
+.monaco-inputbox-clear:hover {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+}
+
+.monaco-inputbox-clear.hidden {
+  display: none;
+}

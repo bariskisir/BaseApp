@@ -1,0 +1,64 @@
+.monaco-action-bar {
+  display: inline-flex;
+  align-items: center;
+}
+
+.monaco-action-bar .actions-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.monaco-action-bar.vertical .actions-container {
+  flex-direction: column;
+}
+
+.monaco-action-bar .action-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monaco-action-bar .action-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--baseapp-cornerRadius-medium);
+  background-color: transparent;
+  color: var(--baseapp-icon-foreground);
+  cursor: pointer;
+  transition:
+    background-color var(--baseapp-transition-fast) ease,
+    color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-action-bar .action-label:hover:not(:disabled) {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+}
+
+.monaco-action-bar .action-label.active {
+  background-color: var(--baseapp-toolbar-activeBackground);
+  color: var(--baseapp-foreground);
+}
+
+.monaco-action-bar .action-label.danger:hover:not(:disabled) {
+  color: var(--baseapp-errorForeground);
+}
+
+.monaco-action-bar .action-label:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+}
+
+.monaco-action-bar .action-label:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

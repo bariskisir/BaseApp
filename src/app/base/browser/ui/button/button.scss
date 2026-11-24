@@ -1,0 +1,107 @@
+.monaco-text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  min-height: 26px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  border: var(--baseapp-border-width) solid var(--baseapp-button-border);
+  border-radius: var(--baseapp-cornerRadius-medium);
+  background-color: var(--baseapp-button-background);
+  color: var(--baseapp-button-foreground);
+  transition:
+    background-color var(--baseapp-transition-fast) ease,
+    border-color var(--baseapp-transition-fast) ease,
+    color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-text-button:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: 1px;
+}
+
+.monaco-text-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.monaco-button-primary:hover:not(:disabled) {
+  background-color: var(--baseapp-button-hoverBackground);
+}
+
+.monaco-button-secondary {
+  background-color: var(--baseapp-button-secondaryBackground);
+  color: var(--baseapp-button-secondaryForeground);
+  border-color: var(--baseapp-button-border);
+}
+
+.monaco-button-secondary:hover:not(:disabled) {
+  background-color: var(--baseapp-button-secondaryHoverBackground);
+}
+
+.monaco-button-danger {
+  background-color: var(--baseapp-button-dangerBackground);
+  color: var(--baseapp-button-foreground);
+  border-color: transparent;
+}
+
+.monaco-button-danger:hover:not(:disabled) {
+  background-color: var(--baseapp-button-dangerHoverBackground);
+}
+
+.monaco-button-icon {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 3px;
+  background-color: transparent;
+  color: var(--baseapp-icon-foreground);
+  border-color: transparent;
+}
+
+.monaco-button-icon:hover:not(:disabled) {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+}
+
+.monaco-button-icon[aria-pressed='true'] {
+  background-color: var(--baseapp-toolbar-activeBackground);
+}
+
+.monaco-button-small {
+  min-height: 22px;
+  padding: 2px 8px;
+  gap: 4px;
+}
+
+.monaco-button-icon.monaco-button-small {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 2px;
+}
+
+.monaco-button-label {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monaco-button-label.hidden {
+  display: none;
+}
+
+.monaco-button-icon-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monaco-button-icon-slot.hidden {
+  display: none;
+}

@@ -1,4 +1,4 @@
 {
-  "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+  "extends": "./tsconfig.test.json",
+  "include": ["src/app/**/*.ts", "vite.config.mts", "vitest.config.mts"]
 }

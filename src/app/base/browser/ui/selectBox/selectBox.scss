@@ -1,0 +1,103 @@
+.monaco-select-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+  min-width: 140px;
+  min-height: 26px;
+  padding: 2px 6px 2px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  color: var(--baseapp-dropdown-foreground);
+  background-color: var(--baseapp-dropdown-background);
+  border: var(--baseapp-border-width) solid var(--baseapp-dropdown-border);
+  border-radius: var(--baseapp-cornerRadius-small);
+  transition: border-color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-select-box:focus-visible {
+  outline: none;
+  border-color: var(--baseapp-focusBorder);
+}
+
+.monaco-select-box.open {
+  border-color: var(--baseapp-focusBorder);
+}
+
+.monaco-select-box:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.monaco-select-box-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monaco-select-box-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--baseapp-icon-foreground);
+}
+
+.monaco-select-box-dropdown {
+  position: fixed;
+  z-index: 2500;
+  box-sizing: border-box;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 2px 0;
+  background-color: var(--baseapp-dropdown-listBackground);
+  color: var(--baseapp-dropdown-foreground);
+  border: var(--baseapp-border-width) solid var(--baseapp-dropdown-border);
+  border-radius: var(--baseapp-cornerRadius-small);
+  box-shadow: 0 4px 12px var(--baseapp-widget-shadow);
+}
+
+.monaco-select-box-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--baseapp-dropdown-foreground);
+}
+
+.monaco-select-box-option-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monaco-select-box-option-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.monaco-select-box-option.selected .monaco-select-box-option-check {
+  opacity: 1;
+}
+
+.monaco-select-box-option.focused {
+  background-color: var(--baseapp-menu-selectionBackground);
+  color: var(--baseapp-menu-selectionForeground);
+}

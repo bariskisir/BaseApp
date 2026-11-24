@@ -1,23 +1,11 @@
-/**
- * Builds the Electron main, preload, and React renderer processes with Vite.
- */
-
 import { resolve } from 'node:path'
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import electron from 'vite-plugin-electron/simple'
 import { notBundle } from 'vite-plugin-electron/plugin'
+import electron from 'vite-plugin-electron/simple'
 
-const repositoryRoot = resolve('.')
+const root = resolve('.')
+const alias = { '@app': resolve(root, 'src/app') }
 
-/** Keeps every process bundle resolving the same source aliases as the TypeScript projects. */
-const alias = {
-  '@main': resolve(repositoryRoot, 'src/main'),
-  '@shared': resolve(repositoryRoot, 'src/shared'),
-  '@renderer': resolve(repositoryRoot, 'src/renderer/src'),
-}
-
-/** Starts Electron from the repository root without weakening its sandbox flags. */
 const startElectron = async ({
   startup,
 }: {
@@ -26,60 +14,40 @@ const startElectron = async ({
     options?: import('node:child_process').SpawnOptions,
   ) => Promise<boolean>
 }): Promise<void> => {
-  await startup(['.'], { cwd: repositoryRoot })
+  await startup(['.'], { cwd: root })
 }
 
+const electronVite = (outDir: string) => ({
+  root,
+  plugins: [notBundle({})],
+  resolve: { alias },
+  build: {
+    outDir: resolve(root, outDir),
+    emptyOutDir: true,
+  },
+})
+
 export default defineConfig({
-  root: resolve(repositoryRoot, 'src/renderer'),
+  root: resolve(root, 'src/app/code/electron-browser'),
   base: './',
   publicDir: false,
   plugins: [
-    react({}),
     electron({
       main: {
-        entry: resolve(repositoryRoot, 'src/main/index.ts'),
+        entry: resolve(root, 'src/app/code/electron-main/index.ts'),
         onstart: startElectron,
-        vite: {
-          root: repositoryRoot,
-          plugins: [notBundle({})],
-          resolve: { alias },
-          build: {
-            outDir: resolve(repositoryRoot, 'out/main'),
-            emptyOutDir: true,
-          },
-        },
+        vite: electronVite('out/main'),
       },
       preload: {
-        input: resolve(repositoryRoot, 'src/preload/index.ts'),
+        input: resolve(root, 'src/app/base/parts/sandbox/electron-browser/preload.ts'),
         onstart: startElectron,
-        vite: {
-          root: repositoryRoot,
-          plugins: [notBundle({})],
-          resolve: { alias },
-          build: {
-            outDir: resolve(repositoryRoot, 'out/preload'),
-            emptyOutDir: true,
-          },
-        },
+        vite: electronVite('out/preload'),
       },
     }),
   ],
   resolve: { alias },
   build: {
-    outDir: resolve(repositoryRoot, 'out/renderer'),
+    outDir: resolve(root, 'out/renderer'),
     emptyOutDir: true,
-    chunkSizeWarningLimit: 1_500,
-    rolldownOptions: {
-      output: {
-        codeSplitting: {
-          groups: [
-            {
-              name: 'vendor',
-              test: /node_modules/,
-            },
-          ],
-        },
-      },
-    },
   },
 })

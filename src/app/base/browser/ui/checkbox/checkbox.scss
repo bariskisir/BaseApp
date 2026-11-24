@@ -1,0 +1,54 @@
+.monaco-checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--baseapp-foreground);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.monaco-checkbox-container.disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.monaco-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  background-color: var(--baseapp-checkbox-background);
+  border: var(--baseapp-border-width) solid var(--baseapp-checkbox-border);
+  color: var(--baseapp-checkbox-foreground);
+  transition:
+    border-color var(--baseapp-transition-fast) ease,
+    background-color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-checkbox:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: 1px;
+}
+
+.monaco-checkbox .codicon {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--baseapp-transition-fast) ease,
+    transform var(--baseapp-transition-fast) ease;
+}
+
+.monaco-checkbox.checked .codicon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.monaco-checkbox-label {
+  color: inherit;
+}

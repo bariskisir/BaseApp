@@ -1,38 +1,22 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2023",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2023"],
-    "types": ["node", "vitest/globals"],
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "composite": true,
-    "tsBuildInfoFile": "./node_modules/.cache/typescript/tsconfig.node.tsbuildinfo",
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "@main/*": ["./src/main/*"],
-      "@renderer/*": ["./src/renderer/src/*"],
-      "@shared/*": ["./src/shared/*"]
-    }
+    "types": ["node"]
   },
   "include": [
     "vite.config.mts",
     "vitest.config.mts",
-    "src/main/**/*.ts",
-    "src/preload/**/*.ts",
-    "src/renderer/src/i18n/index.ts",
-    "src/renderer/src/i18n/locales/*.ts",
-    "src/renderer/src/store/appSlice.ts",
-    "src/renderer/src/services/SettingsPersistenceQueue.ts",
-    "src/renderer/src/utils/classNames.ts",
-    "src/renderer/src/utils/formatters.ts",
-    "src/renderer/src/utils/sidebarSizing.ts",
-    "src/shared/**/*.ts",
-    "tests/**/*.ts"
-  ]
+    "src/app/base/common/**/*.ts",
+    "src/app/base/node/**/*.ts",
+    "src/app/base/parts/ipc/common/**/*.ts",
+    "src/app/base/parts/ipc/electron-main/**/*.ts",
+    "src/app/base/parts/sandbox/common/**/*.ts",
+    "src/app/base/parts/sandbox/electron-browser/preload.ts",
+    "src/app/platform/**/*.ts",
+    "src/app/code/electron-main/**/*.ts"
+  ],
+  "exclude": ["src/app/platform/**/electron-browser/**/*.ts", "src/app/**/test/**/*.ts"]
 }

@@ -1,0 +1,124 @@
+.part.editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--baseapp-editor-background);
+}
+
+.editor-tabs-bar {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: var(--baseapp-layout-tabHeight);
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: var(--baseapp-editorGroupHeader-tabsBackground);
+  box-shadow: inset 0 calc(var(--baseapp-border-width) * -1) 0
+    var(--baseapp-editorGroupHeader-tabsBorder);
+}
+
+.editor-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  max-width: 240px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 13px;
+  line-height: 22px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--baseapp-tab-inactiveForeground);
+  background-color: var(--baseapp-tab-inactiveBackground);
+  border-right: var(--baseapp-border-width) solid var(--baseapp-tab-border);
+  border-top: var(--baseapp-border-width) solid transparent;
+  border-bottom: var(--baseapp-border-width) solid var(--baseapp-editorGroupHeader-tabsBorder);
+  transition:
+    background-color var(--baseapp-transition-fast) ease,
+    color var(--baseapp-transition-fast) ease;
+}
+
+.editor-tab:hover {
+  background-color: var(--baseapp-tab-hoverBackground);
+}
+
+.editor-tab:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+}
+
+.editor-tab.hidden {
+  display: none;
+}
+
+.editor-tab-settings {
+  padding-right: 6px;
+}
+
+.editor-tab.active {
+  background-color: var(--baseapp-tab-activeBackground);
+  color: var(--baseapp-tab-activeForeground);
+  border-top-color: var(--baseapp-tab-activeBorderTop);
+  border-bottom-color: var(--baseapp-tab-activeBackground);
+}
+
+.editor-tab.active:hover {
+  background-color: var(--baseapp-tab-activeBackground);
+}
+
+.editor-tab-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.editor-tab-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--baseapp-cornerRadius-medium);
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    background-color var(--baseapp-transition-fast) ease,
+    opacity var(--baseapp-transition-fast) ease;
+}
+
+.editor-tab-close:hover {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+  opacity: 1;
+}
+
+.editor-tab-close:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+  opacity: 1;
+}
+
+.editor-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--baseapp-editor-background);
+}
+
+.editor-content > .hidden {
+  display: none;
+}

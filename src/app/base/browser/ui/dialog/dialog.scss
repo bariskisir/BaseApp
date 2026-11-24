@@ -1,0 +1,123 @@
+.monaco-dialog-modal-block {
+  position: fixed;
+  inset: 0;
+  z-index: 2900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.monaco-dialog-modal-block.dimmed {
+  background-color: var(--baseapp-widget-shadow);
+  backdrop-filter: blur(1px);
+}
+
+.monaco-dialog-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  min-width: 300px;
+  box-sizing: border-box;
+  outline: none;
+  background-color: var(--baseapp-dialog-background);
+  color: var(--baseapp-foreground);
+  border: var(--baseapp-border-width) solid var(--baseapp-dialog-border);
+  border-radius: var(--baseapp-cornerRadius-large);
+  box-shadow: 0 10px 32px var(--baseapp-widget-shadow);
+}
+
+.monaco-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--baseapp-cornerRadius-medium);
+  background-color: transparent;
+  color: var(--baseapp-icon-foreground);
+  cursor: pointer;
+}
+
+.monaco-dialog-close:hover {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+}
+
+.monaco-dialog-close:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: 1px;
+}
+
+.monaco-dialog-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px 16px;
+}
+
+.monaco-dialog-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--baseapp-infoForeground);
+}
+
+.monaco-dialog-icon.severity-info {
+  color: var(--baseapp-infoForeground);
+}
+
+.monaco-dialog-icon.severity-warning {
+  color: var(--baseapp-warningForeground);
+}
+
+.monaco-dialog-icon.severity-error {
+  color: var(--baseapp-errorForeground);
+}
+
+.monaco-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.monaco-dialog-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--baseapp-foreground);
+}
+
+.monaco-dialog-detail {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--baseapp-descriptionForeground);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.monaco-dialog-input-container {
+  margin-top: 4px;
+}
+
+.monaco-dialog-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 18px;
+}

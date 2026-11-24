@@ -1,0 +1,222 @@
+.part.sidebar,
+.part.auxiliarybar,
+.part.tertiarybar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background: var(--baseapp-sideBar-background);
+  color: var(--baseapp-sideBar-foreground);
+  user-select: none;
+}
+
+.part.sidebar,
+.part.auxiliarybar {
+  height: 100%;
+}
+
+.part.tertiarybar {
+  width: 100%;
+}
+
+.part.sidebar.hidden,
+.part.auxiliarybar.hidden,
+.part.tertiarybar.hidden {
+  display: none;
+}
+
+.part.sidebar.sidebar-edge-left,
+.part.auxiliarybar.sidebar-edge-left {
+  border-right: var(--baseapp-border-width) solid var(--baseapp-sideBar-border);
+}
+
+.part.sidebar.sidebar-edge-right,
+.part.auxiliarybar.sidebar-edge-right {
+  border-left: var(--baseapp-border-width) solid var(--baseapp-sideBar-border);
+}
+
+.part.tertiarybar.sidebar-edge-bottom {
+  border-top: var(--baseapp-border-width) solid var(--baseapp-sideBar-border);
+}
+
+.part.sidebar.sidebar-edge-left > .monaco-sash.vertical,
+.part.auxiliarybar.sidebar-edge-left > .monaco-sash.vertical {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: 0;
+}
+
+.part.sidebar.sidebar-edge-right > .monaco-sash.vertical,
+.part.auxiliarybar.sidebar-edge-right > .monaco-sash.vertical {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  bottom: 0;
+}
+
+.part.tertiarybar.sidebar-edge-bottom > .monaco-sash.horizontal {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  flex-shrink: 0;
+  height: var(--baseapp-layout-sidebarHeaderHeight);
+  padding: 0 8px 0 16px;
+}
+
+.sidebar-title-slot {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+}
+
+.sidebar-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--baseapp-sideBarTitle-foreground);
+}
+
+.sidebar-draggable-view {
+  cursor: grab;
+}
+
+.sidebar-draggable-view:active {
+  cursor: grabbing;
+}
+
+.sidebar-view-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 0;
+  height: 100%;
+  overflow-x: auto;
+}
+
+.sidebar-view-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--baseapp-descriptionForeground);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--baseapp-transition-fast) ease,
+    border-color var(--baseapp-transition-fast) ease;
+}
+
+.sidebar-view-tab:hover {
+  color: var(--baseapp-sideBarTitle-foreground);
+}
+
+.sidebar-view-tab.active {
+  color: var(--baseapp-sideBarTitle-foreground);
+  border-bottom-color: var(--baseapp-sideBar-activeBorder);
+}
+
+.sidebar-view-tab:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+}
+
+.sidebar-view-tab-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sidebar-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sidebar-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--baseapp-descriptionForeground);
+}
+
+.part.tertiarybar .sidebar-empty {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 10px 16px;
+}
+
+.sidebar-empty-hint {
+  max-width: 220px;
+}
+
+.part.tertiarybar .sidebar-empty-hint {
+  max-width: none;
+}
+
+.sidebar-empty-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.part.tertiarybar .sidebar-empty-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 0;
+}
+
+.sidebar-drop-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: var(--baseapp-sideBar-dropBackground);
+  border: 1px dashed var(--baseapp-sideBar-activeBorder);
+  pointer-events: none;
+}
+
+.sidebar-drop-overlay.hidden {
+  display: none;
+}

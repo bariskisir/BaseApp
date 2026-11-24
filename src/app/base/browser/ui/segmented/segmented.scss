@@ -1,0 +1,61 @@
+.monaco-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  box-sizing: border-box;
+  background-color: var(--baseapp-input-background);
+  border: var(--baseapp-border-width) solid var(--baseapp-input-border);
+  border-radius: var(--baseapp-cornerRadius-medium);
+}
+
+.monaco-segmented.disabled {
+  opacity: 0.45;
+}
+
+.monaco-segmented-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-sizing: border-box;
+  min-height: 22px;
+  padding: 2px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  color: var(--baseapp-input-foreground);
+  background-color: transparent;
+  border: var(--baseapp-border-width) solid transparent;
+  border-radius: var(--baseapp-cornerRadius-small);
+  transition:
+    background-color var(--baseapp-transition-fast) ease,
+    border-color var(--baseapp-transition-fast) ease,
+    color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-segmented-option:hover:not(:disabled) {
+  background-color: var(--baseapp-toolbar-hoverBackground);
+}
+
+.monaco-segmented-option.active {
+  background-color: var(--baseapp-inputOption-activeBackground);
+  border-color: var(--baseapp-inputOption-activeBorder);
+  color: var(--baseapp-inputOption-activeForeground);
+}
+
+.monaco-segmented-option.active:hover:not(:disabled) {
+  background-color: var(--baseapp-inputOption-activeBackground);
+}
+
+.monaco-segmented-option:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: 1px;
+}
+
+.monaco-segmented-option:disabled {
+  cursor: default;
+}

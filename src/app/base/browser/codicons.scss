@@ -1,0 +1,28 @@
+@keyframes codicon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.codicon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  color: inherit;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.codicon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.codicon-loading svg {
+  animation: codicon-spin 1s linear infinite;
+}

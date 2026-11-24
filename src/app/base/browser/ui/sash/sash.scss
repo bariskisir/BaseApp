@@ -1,0 +1,47 @@
+.monaco-sash {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 35;
+  touch-action: none;
+  user-select: none;
+  background-color: transparent;
+  transition: background-color var(--baseapp-transition-fast) ease;
+}
+
+.monaco-sash.vertical {
+  width: var(--baseapp-sash-size);
+  height: 100%;
+  cursor: ew-resize;
+}
+
+.monaco-sash.horizontal {
+  width: 100%;
+  height: var(--baseapp-sash-size);
+  cursor: ns-resize;
+}
+
+.monaco-sash:hover:not(.disabled),
+.monaco-sash.active:not(.disabled) {
+  background-color: var(--baseapp-sash-hoverBorder);
+}
+
+.monaco-sash:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+  background-color: var(--baseapp-sash-hoverBorder);
+}
+
+.monaco-sash.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+body.monaco-sash-dragging-vertical {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+body.monaco-sash-dragging-horizontal {
+  cursor: ns-resize;
+  user-select: none;
+}

@@ -1,23 +1,21 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "jsx": "react-jsx",
-    "types": ["vite/client"],
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "paths": {
-      "@renderer/*": ["./src/renderer/src/*"],
-      "@shared/*": ["./src/shared/*"]
-    }
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"]
   },
-  "include": ["src/shared/**/*.ts", "src/renderer/src/**/*.ts", "src/renderer/src/**/*.tsx"]
+  "include": [
+    "src/app/base/common/**/*.ts",
+    "src/app/base/browser/**/*.ts",
+    "src/app/base/parts/ipc/common/**/*.ts",
+    "src/app/base/parts/ipc/electron-browser/**/*.ts",
+    "src/app/base/parts/sandbox/common/**/*.ts",
+    "src/app/platform/**/common/**/*.ts",
+    "src/app/platform/**/electron-browser/**/*.ts",
+    "src/app/workbench/**/*.ts",
+    "src/app/code/electron-browser/**/*.ts"
+  ],
+  "exclude": ["src/app/**/test/**/*.ts"]
 }

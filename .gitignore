@@ -1,14 +1,10 @@
 node_modules/
 out/
-dist/
 release/
 coverage/
 *.log
+*.tsbuildinfo
 .DS_Store
 Thumbs.db
-.idea/
-.vscode/
-*.tsbuildinfo
 .env
 .env.*
-!.env.example

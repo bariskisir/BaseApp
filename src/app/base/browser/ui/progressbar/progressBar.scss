@@ -1,0 +1,45 @@
+@keyframes monaco-progress-indeterminate {
+  0% {
+    left: -35%;
+    width: 35%;
+  }
+  50% {
+    left: 35%;
+    width: 45%;
+  }
+  100% {
+    left: 100%;
+    width: 35%;
+  }
+}
+
+.monaco-progress-container {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--baseapp-transition-fast) ease;
+}
+
+.monaco-progress-container.active {
+  opacity: 1;
+}
+
+.monaco-progress-bit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: var(--baseapp-progressBar-background);
+}
+
+.monaco-progress-container.discrete .monaco-progress-bit {
+  transition: width var(--baseapp-transition-base) ease;
+}
+
+.monaco-progress-container.infinite .monaco-progress-bit {
+  animation: monaco-progress-indeterminate 1.6s linear infinite;
+}

@@ -1,0 +1,131 @@
+@keyframes notification-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.part.notifications {
+  position: fixed;
+  right: 8px;
+  bottom: 26px;
+  z-index: 2545;
+  width: 380px;
+  max-width: calc(100vw - 16px);
+  pointer-events: none;
+}
+
+.notifications-toasts {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  width: 100%;
+}
+
+.notifications-update-slot,
+.notifications-transient-slot {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  width: 100%;
+}
+
+.notifications-update-slot:empty,
+.notifications-transient-slot:empty {
+  display: none;
+}
+
+.notification-toast {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--baseapp-notifications-background);
+  color: var(--baseapp-notifications-foreground);
+  border: var(--baseapp-border-width) solid var(--baseapp-notifications-border);
+  border-radius: var(--baseapp-cornerRadius-medium);
+  box-shadow: 0 2px 8px var(--baseapp-widget-shadow);
+  pointer-events: auto;
+  animation: notification-toast-in var(--baseapp-transition-base) ease-out;
+}
+
+.notification-toast-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.notification-toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.notification-toast-icon.severity-info {
+  color: var(--baseapp-infoForeground);
+}
+
+.notification-toast-icon.severity-success {
+  color: var(--baseapp-successForeground);
+}
+
+.notification-toast-icon.severity-warning {
+  color: var(--baseapp-warningForeground);
+}
+
+.notification-toast-icon.severity-error {
+  color: var(--baseapp-errorForeground);
+}
+
+.notification-toast-message {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+  user-select: text;
+}
+
+.notification-toast-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--baseapp-cornerRadius-medium);
+  background: transparent;
+  color: var(--baseapp-icon-foreground);
+  cursor: pointer;
+  transition: background-color var(--baseapp-transition-fast) ease;
+}
+
+.notification-toast-dismiss:hover {
+  background: var(--baseapp-toolbar-hoverBackground);
+}
+
+.notification-toast-dismiss:focus-visible {
+  outline: 1px solid var(--baseapp-focusBorder);
+  outline-offset: -1px;
+}
+
+.notification-toast-progress {
+  width: 100%;
+  padding-left: 24px;
+}
+
+.notification-toast-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}

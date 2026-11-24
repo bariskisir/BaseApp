@@ -1,0 +1,24 @@
+.monaco-tooltip {
+  position: fixed;
+  z-index: 3000;
+  pointer-events: none;
+  max-width: 320px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--baseapp-foreground);
+  background-color: var(--baseapp-tooltip-background);
+  border: var(--baseapp-border-width) solid var(--baseapp-tooltip-border);
+  border-radius: var(--baseapp-cornerRadius-medium);
+  box-shadow: 0 2px 8px var(--baseapp-widget-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--baseapp-transition-fast) ease;
+}
+
+.monaco-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
